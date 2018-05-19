@@ -1,0 +1,50 @@
+<form bindsubmit="formSubmit" bindreset="formReset">
+  <view class='form_container'>
+    <view class="section section_gap flex_between">
+      <view class="section__title flex_start">
+        平台补偿比例
+      </view>
+      <input name="coupon_name" maxlength='10' value="50%" />
+    </view>
+    <!--优惠券金额-->
+    <view class="section flex_between">
+      <view class="section__title flex_start">
+        平台补偿限额</view>
+      <input name="discount_price" value='300元/位' />
+    </view>
+    <view class="section flex_between" bindtap='open_object'>
+      <view class="section__title flex_start">
+        发放对象
+      </view>
+      <view class='section__title flex_end'>
+        <input name="obj_name" value='{{current_obj_name}}'></input>
+        <image class='image_r' src='{{imgUrl}}/icon-details.png'></image>
+      </view>
+    </view>
+    <view class="section flex_between">
+      <view class="section__title flex_start">
+        限领次数
+      </view>
+      <input name="limit_num" value='{{limit_num}}' value='1次/位' />
+    </view>
+    <button class='sure' formType="submit">生成优惠券</button>
+  </view>
+  <view class="header">
+    <view class='title'>
+       请输入店铺提供的券额
+    </view>
+    <view class='input flex_center'>
+       <input placeholder='请输入不超过600的整数' bindinput='input'></input>
+       <view class='right'>
+         元/位
+       </view>
+    </view>
+    <view class='title'>
+      用户消费后平台补偿金
+    </view>
+    <view class='money'>
+      {{money}}元/位
+    </view>
+
+  </view>
+</form>

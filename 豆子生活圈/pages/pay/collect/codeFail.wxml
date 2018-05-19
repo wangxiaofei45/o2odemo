@@ -1,0 +1,14 @@
+<view class="title">
+  <image src='../../../image/fail.png'></image>
+  <view class='success_text'>
+    支付失败
+  </view>
+</view>
+<view class='pointout'>
+  对不起，对方余额不足，请对方充值或使用其他方式支付！
+
+</view>
+
+<button class='paymoney'>
+  关闭
+</button>

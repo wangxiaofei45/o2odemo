@@ -1,0 +1,69 @@
+<block wx:if='{{address_list.length>0}}'>
+  <view class="list" wx:for="{{address_list}}" wx:key="address" wx:for-index="index" wx:for-item="addr">
+    <view class='lists_con'>
+      <view class='title flex_start'>
+        <view class='name'>
+          {{addr.true_name}}
+        </view>
+        <view class='phone'>
+          {{addr.mob_phone}}
+          <block wx:if="{{addr.tel_phone}}">
+             {{addr.tel_phone}}
+           </block>
+        </view>
+      </view>
+      <view class='address'>
+       {{addr.area_info}} {{addr.address}}
+      </view>
+      <view class='operation flex_between'>
+        <view class='left flex_start'>
+          <block wx:if="{{addr.is_default == '1'}}">
+            <image src='{{imgUrl}}/my/Address-check-c.png'></image>
+            <view>
+              默认地址
+            </view>
+          </block>
+          <block wx:else>
+            <image src='{{imgUrl}}/my/Address-check-n.png' bindtap='defaultAddress' data-id="{{addr.address_id}}"></image>
+            <view bindtap='defaultAddress' data-id="{{addr.address_id}}">
+              设为默认
+            </view>
+          </block>
+          <view>
+          </view>
+        </view>
+        <view class='right flex_center'>
+          <!--修改收货地址-->
+          <view class='flex_start' bindtap='editAddr' data-id="{{addr.address_id}}">
+            <image src='{{imgUrl}}/my/address-modification.png'></image>
+            <view>修改</view>
+          </view>
+          <view bindtap='delAddr' data-id="{{addr.address_id}}" class='delete flex_start'>
+            <image src='{{imgUrl}}/my/address-delete.png'></image>
+            <view>删除</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <navigator url='add'>
+    <button class='sure'>
+      新增收货地址
+    </button>
+  </navigator>
+</block>
+<block wx:else>
+  <view class='defaultpage'>
+    <image src='{{imgUrl}}/icondefault-address.png'></image>
+    <view class='text'>您还没有添加收货地址</view>
+   
+  </view>
+
+  <view class='bottom_button'>
+     <navigator url='add'>
+        <button>添加地址</button>
+     </navigator>
+    <button type="warn" bindtap="syncWxAddress"> 同步微信收货地址 </button>
+  </view>
+</block>

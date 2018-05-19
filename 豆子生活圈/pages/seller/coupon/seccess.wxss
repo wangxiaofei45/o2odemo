@@ -1,0 +1,51 @@
+@import "list.wxss";
+
+.title image{
+  width: 135rpx;
+  height: 135rpx;
+  display: block;
+  margin: 0 auto;
+  margin-top: 67rpx;
+  margin-bottom: 30rpx;
+}
+.success_text{
+  margin: 0 auto;
+  width: 400rpx;
+  text-align: center;
+  color: #666666;
+  font-size: 36rpx;
+  letter-spacing:7rpx;
+  margin-bottom: 35rpx;
+}
+.warning{
+  width: 700rpx;
+  margin: 0 auto;
+  font-size: 22rpx;
+  
+}
+.warning .title{
+  color: #333333;
+  height: 40rpx;
+  line-height: 40rpx;
+}
+.warning .text{
+  color: #999999;
+  height: 40rpx;
+  line-height: 40rpx;
+}
+.button{
+  width: 700rpx;
+  position: fixed;
+  left: 25rpx;
+  bottom: 50rpx;
+}
+.button button{
+  width:340rpx;
+  height: 90rpx;
+  background-color: #fff;
+  line-height: 90rpx;
+  font-size: 30rpx;
+  color: #333333;
+  letter-spacing: 5rpx;
+  font-weight: 700
+}

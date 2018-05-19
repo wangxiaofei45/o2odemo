@@ -1,0 +1,40 @@
+<form bindsubmit="formSubmit" bindreset="formReset">
+  <view class='containers'>
+    <view class='title'>
+      金额区间(元)
+    </view>
+    <view class='input_con flex_center'>
+      <view class='input flex_center'>
+          ￥
+        <input name="minPrice" placeholder-class="phcolor" placeholder='最低金额' value="{{minPrice}}" bindchange="changeMinPrice"></input>
+      </view>
+      <view class='center'>
+        至
+      </view>
+      <view class='input flex_center'>
+          ￥
+        <input name="maxPrice" placeholder-class="phcolor" placeholder='最高金额' value="{{maxPrice}}" bindchange="changeMaxPrice"></input>
+      </view>
+    </view>
+    <block wx:if="{{classList.length>0 && role_type=='user'}}">
+      <view class='title'>
+        分类检索
+      </view>
+      <view class='button flex_start_wrap'>
+        <view class='list {{nowClassId=="0"?"list_active":""}}' bindtap='tapClass' data-id='0'> 
+            全部
+            <input name="nowClassId" value="{{nowClassId}}" hidden='true'></input>
+        </view>
+        <view class='list {{nowClassId==class.class_id?"list_active":""}}' wx:for="{{classList}}" wx:for-item="class" wx:key="nowclass" bindtap='tapClass' data-id='{{class.class_id}}'>{{class.class_name}}</view>
+      </view>
+    </block>
+    <view class='bottom flex_center'>
+      <button class='reset' formType="reset">
+          清空条件
+      </button>
+      <button class='sure' formType="submit">
+          确定
+      </button>
+    </view>
+  </view>
+</form>

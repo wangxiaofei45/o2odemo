@@ -1,0 +1,287 @@
+<view class="select_identity flex_center">
+  <view class='left flex_start' bindtap='tapSelectRole'>
+    <image wx:if="{{user_type=='1'}}" src='{{imgUrl}}/bill/nav-me-c.png'></image>
+    <image wx:if="{{user_type=='2'}}" src='{{imgUrl}}/bill/nav-store-c.png'></image>
+    <view class="name">
+      {{showname}}
+    </view>
+    <block wx:if="{{levelData.length>1}}">
+      <image class="{{select_model?'rotate':''}}" src='{{imgUrl}}/bill/upr.png'></image>
+    </block>
+  </view>
+  <!--导航条的右边显示的部分-->
+  <view class='right flex_end'>
+    <navigator url='billseach?role_type={{nowRoleType}}'>
+      <image src='{{imgUrl}}/bill/seach.png'></image>
+    </navigator>
+    <navigator url='billscreen?role_type={{nowRoleType}}&minPrice={{minPrice}}&maxPrice={{maxPrice}}&nowClassId={{nowClassId}}'>
+      <image src='{{imgUrl}}/bill/filter.png'></image>
+    </navigator>
+    <!--指数分析-->
+    <navigator url='analysis?role_type={{user_type}}&chain_id={{id}}'>
+      <image src='{{imgUrl}}/bill/zhishu.png'></image>
+    </navigator>
+  </view>
+
+  <view wx:if="{{select_model && levelData.length>1}}" class="select_pos_abs" catchtouchmove='true' catchtap='close_model'>
+    <view wx:for="{{levelData}}" wx:for-item="i" wx:key="names" class='list' data-id="{{i.id}}" data-name="{{i.name}}" data-type="{{i.type}}" catchtap='tapChangeRole'>
+      {{i.name}}
+    </view>
+  </view>
+</view>
+<view>
+  <view class='detail flex_center'>
+    <view class='detail_left'>
+      <view class='select flex_center'>
+        <view class='flex_center' bindtap='selectYear'>
+          <image hidden="{{bill_time=='month'}}" src='{{imgUrl}}/bill/singleselection-c.png'></image>
+          <image hidden="{{bill_time=='year'}}" src='{{imgUrl}}/bill/singleselection-n.png'></image>
+          年度
+        </view>
+        <view class='flex_center' bindtap='selectMonth'>
+          <image hidden="{{bill_time=='year'}}" src='{{imgUrl}}/bill/singleselection-c.png'></image>
+          <image hidden="{{bill_time=='month'}}" src='{{imgUrl}}/bill/singleselection-n.png'></image>
+          月度
+        </view>
+      </view>
+      <view class='years' bindtap='selectTime'>
+        <image src='{{imgUrl}}/bill/kalendar.png'>
+        </image>
+        <view hidden="{{bill_time=='month'}}" data-year="{{year}}">
+          {{year}}
+        </view>
+        <view hidden="{{bill_time=='year'}}">
+          {{year}}/{{month}}
+        </view>
+      </view>
+    </view>
+    <view class='detail_right flex_center_wrap'>
+      <!--我的余额-->
+      <view class='list flex_center_wrap list1' wx:if="{{user_type=='1'}}">
+        <view class='name'>
+          我的余额
+        </view>
+        <view class='number flex_center'>
+          ￥{{countData.available_rc_balance}}
+        </view>
+      </view>
+      <!--店铺余额-->
+      <view class='list flex_center_wrap list1' wx:if="{{user_type=='2'}}">
+        <view class='name'>
+          店铺余额
+        </view>
+        <view class='number flex_center'>
+          ￥{{store_total}}
+        </view>
+      </view>
+      <!--判断店铺还是个人-->
+      <!--本年收入-->
+      <block wx:if="{{user_type=='2'}}">
+        <view class='list flex_center_wrap list2'>
+          <view class='name'>
+            <block wx:if="{{bill_time=='year'}}">本年</block>
+            <block wx:else>本月</block>
+            <block wx:if="{{nowRoleType=='user'}}">收入</block>
+            <block wx:else>佣金</block>
+          </view>
+          <view class='number flex_center'>
+            ￥{{countData.expend_total}}
+          </view>
+        </view>
+        <!--本年支出-->
+        <view class='list flex_center_wrap list3'>
+          <view class='name'>
+            <block wx:if="{{bill_time=='year'}}">本年</block>
+            <block wx:else>本月</block>
+            <block wx:if="{{nowRoleType=='user'}}">支出</block>
+            <block wx:else>销售</block>
+          </view>
+          <view class='number flex_center'>
+            ￥{{commis_total}}
+          </view>
+        </view>
+      </block>
+      <!--本年支出-->
+      <block wx:if="{{user_type=='1'}}">
+        <view class='list flex_center_wrap list2'>
+          <view class='name'>
+            <block wx:if="{{bill_time=='year'}}">本年</block>
+            <block wx:else>本月</block>
+            <block wx:if="{{user_type=='1'}}">收入</block>
+            <block wx:else>佣金</block>
+          </view>
+          <view class='number flex_center'>
+            ￥{{countData.incomeAmount}}
+          </view>
+        </view>
+        <!--本年支出-->
+        <view class='list flex_center_wrap list3'>
+          <view class='name'>
+            <block wx:if="{{bill_time=='year'}}">本年</block>
+            <block wx:else>本月</block>
+            <block wx:if="{{user_type=='1'}}">支出</block>
+            <block wx:else>销售</block>
+          </view>
+          <view class='number flex_center'>
+            ￥{{countData.payAmount}}
+          </view>
+        </view>
+      </block>
+      <!--交易笔数-->
+      <view class='list flex_center_wrap list4'>
+        <view class='name'>
+          交易笔数
+        </view>
+        <view class='number flex_center'>
+          {{countData.orderCount}}
+        </view>
+      </view>
+    </view>
+  </view>
+  <!--时间选择model-->
+  <view class='model' catchtouchmove='true' hidden="{{showYearMonth}}">
+    <view class='modelcon'>
+      <view>
+        <picker-view indicator-style="height: 50px;" style="width: 100%; height: 300px; text-align:center" value="{{value}}" bindchange="changeYearMonth">
+          <picker-view-column>
+            <view wx:for="{{years}}" wx:key="years" style="line-height: 50px">{{item}}年</view>
+          </picker-view-column>
+          <!--切换到月份的时候将选择框的月份隐藏掉-->
+          <picker-view-column hidden="{{monthsHidden}}">
+            <view wx:for="{{months}}" wx:key="months" style="line-height: 50px">{{item}}月</view>
+          </picker-view-column>
+        </picker-view>
+      </view>
+      <button class='left' bindtap='closeYearMonth'>
+        取消
+      </button>
+      <button class='right' bindtap='confirmYearMonth'>
+        确定
+      </button>
+    </view>
+  </view>
+
+  <!--店铺 显示明细-->
+  <view wx:if="{{user_type=='2'}}" class="info_title">
+    账目明细
+  </view>
+  <!--切换查看-->
+  <view class="canvas_con" wx:if="{{user_type=='1'}}" hidden='{{select_model}}'>
+    <canvas class="canvas" hidden="{{!showYearMonth}}" bindtouchstart="touchHandler" bindtouchmove="moveHandler" bindtouchend="touchEndHandler" canvas-id="ringCanvas">
+    </canvas>
+    <swiper class="swiper canvas_right" indicator-dots="true" indicator-color="#d6d6d6" indicator-active-color="#ff4965" interval="2000" duration="1000" circular="true">
+      <block>
+        <swiper-item class="swippers">
+          <view class='container1'>
+            <view class='list flex_start' wx:for="{{series}}" wx:key="colors" wx:for-item="j" wx:if="{{j.id <= 4}}">
+              <view class='color' style='background-color:{{j.color}}'>
+              </view>
+              <view class='name'>
+                {{j.name}} {{j.data}} 元
+              </view>
+            </view>
+          </view>
+        </swiper-item>
+        <swiper-item class="swippers">
+          <view class='container1'>
+            <view class='list flex_start' wx:for="{{series}}" wx:key="colors" wx:for-item="j" wx:if="{{j.id >= 5}}">
+              <view class='color' style='background-color:{{j.color}}'>
+              </view>
+              <view class='name'>
+                {{j.name}} {{j.data}} 元
+              </view>
+            </view>
+          </view>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+  <!--店铺的账单渲染列表-->
+  <block wx:if="{{orderData.length>0}}">
+    <view class='info'>
+      <view class="info_list flex_center" hover-class="active" wx:for="{{orderData}}" wx:key="bill_list" wx:for-item="j" bindtap='gotoOrderDetails' data-order_id="{{j.order_id}}" data-order_sn='{{j.order_sn}}'>
+        <view class='user_avatar'>
+          <block wx:if="{{user_type == '1'}}">
+            <image src='{{j.chain_logo}}'></image>
+          </block>
+          <block wx:if="{{user_type == '2'}}">
+            <image src='{{j.chain_logo}}'></image>
+          </block>
+        </view>
+        <view class='name'>
+          <view class='names'>
+            {{j.order_desc}}
+          </view>
+          <view class='times'>
+            {{j.add_time}}
+          </view>
+          <block wx:if="{{j.refund_state>0}}">
+            <!--退款中-->
+            <view wx:if="{{j.refund_state == 1 || j.refund_state == 2}}" class='state flex_start'>
+              <image src='{{imgUrl}}/bill/hint_y.png'></image>退款中...
+            </view>
+            <!--退款完成-->
+            <view wx:if="{{j.refund_state == 4}}" class='state flex_start'>
+              <image src='{{imgUrl}}/bill/hint_b.png'></image>退款完成
+            </view>
+          </block>
+          <block wx:else>
+            <block wx:if="{{j.order_state>0}}">
+              <!--已支付-->
+              <view wx:if="{{j.order_state == 20}}" class='state flex_start'>
+                <image src='{{imgUrl}}/bill/hint_y.png'></image>交易完成
+              </view>
+              <!--正在支付-->
+              <view wx:if="{{j.order_state == 10}}" class='state flex_start'>
+                <image src='{{imgUrl}}/bill/hint_y.png'></image>
+                <block wx:if="{{nowRoleType=='user'}}">未支付</block>
+                <block wx:else>正在支付...</block>
+              </view>
+              <!--交易失败-->
+              <view wx:if="{{j.order_state == 30}}" class='state flex_start'>
+                <image src='{{imgUrl}}/bill/hint_r.png'></image>交易失败
+              </view>
+              <!--交易完成-->
+              <view wx:if="{{j.order_state == 40}}" class='state flex_start'>
+                <image src='{{imgUrl}}/bill/hint_b.png'></image>订单完成
+              </view>
+            </block>
+            <block wx:else>
+              <!--交易关闭-->
+              <view class='state flex_start'>
+                <image src='{{imgUrl}}/bill/hint_g.png'></image>交易关闭
+              </view>
+            </block>
+          </block>
+        </view>
+        <view class='number'>
+          <view class='number1'>
+            <block wx:if="{{nowRoleType=='user'}}">-</block>
+            <block wx:else>+</block> ￥{{j.order_amount}}
+          </view>
+          <view class='number2 flex_end' wx:if="{{j.promotion_total>0}}">
+            优惠金额:
+            <block wx:if="{{nowRoleType=='user'}}">-</block>
+            <block wx:else>+</block> {{j.promotion_total}}
+          </view>
+          <view class='number3 flex_end' wx:if="{{j.commision>0}}">
+            奖励积分:
+            <block wx:if="{{nowRoleType=='user'}}">+</block>
+            <block wx:else>-</block>{{j.commision}}
+          </view>
+        </view>
+        <view class='go_next'>
+          <image src='{{imgUrl}}/icon-details.png'>
+          </image>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class='defaultpage'>
+      <image src='{{imgUrl}}/icondefault-bill.png'></image>
+      <view class='text'>还没有账单信息哦</view>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,44 @@
+<view class="codeCon">
+<!--有店铺判断wx:if="{{shop_id}}"-->
+  <block>
+    <image class="shop_img" src='{{currentInfo.role_logo}}'></image>
+    <view class="name flex_center">
+      <view class='flex_center' bindtap='bindselect'>{{currentInfo.role_name}}
+        <image class="{{selectRole?'':'up'}}" src='{{imgUrl}}/up.png'></image>
+      </view>
+    </view>
+    <view class='name_con' wx:if="{{!selectRole}}">
+      <view class='pos_abs'>
+        <picker-view indicator-style="height: 50px;" style="width: 200px; height: 150px;" value="{{value}}" bindchange="bindChange">
+          <picker-view-column>
+            <view wx:for="{{roleList}}"  wx:key="rkey" wx:for-item="i" data-id="{{index}}" data-name="{{i.role_name}}" data-tag="{{i.role_tag}}" style="line-height: 50px;text-align:center">{{i.role_name}}</view>
+          </picker-view-column>
+        </picker-view>
+      </view>
+    </view>
+  </block>
+  
+  <block wx:if="{{selectRole}}">
+    <view class='title'>
+      扫一扫向我付钱吧
+    </view>
+    <view class='qrcode'>
+      <canvas canvas-id="collectCode" />
+    </view>
+    <view class='input_con' hidden='{{inputSetMoneyHidden}}'>
+      <input name="collectMoney" bindblur='blurInputCollectMoney'> </input>
+      <image src='{{imgUrl}}/rmbb.png'></image>
+    </view>
+    <view class='text_con flex_center'>
+      <view wx:if="{{inputSetMoneyHidden}}" class='text_list text_list1' bindtap='setMoney'>
+        设置金额
+      </view>
+      <view wx:if="{{!inputSetMoneyHidden}}" class='text_list text_list1' bindtap='removeMoney'>
+        清除金额
+      </view>
+      <view class='text_list' bindtap='saveImageToPhotosAlbum'>
+        保存图片
+      </view>
+    </view>
+  </block>
+</view>

@@ -1,0 +1,141 @@
+<view class='pos_con'>
+  <view class='pos_a'>
+    <navigator url='recharge'>
+      历史购买
+    </navigator>
+  </view>
+  <view class='zw'>
+  </view>
+  <view class='code_con'>
+    <view class='con_ab'>
+      <!-- 码主默认-->
+      <block wx:if="{{currentInfo.role_tag == 'code'}}">
+        <image src='{{imgUrl}}/my/code_owner.png'></image>
+      </block>
+      <!--店铺默认-->
+      <block wx:if="{{currentInfo.role_tag == 'store'}}">
+        <image src="{{currentInfo.role_logo}}"></image>
+      </block>
+    </view>
+    <view class='s flex_center' bindtap='openChangeRole'>
+      {{currentInfo.role_name}}
+      <image class="right {{oplist?'rotate':''}}" src='{{imgUrl}}/up.png'></image>
+      <view wx:if="{{open_role}}" class='select'>
+        <view class='l' wx:for="{{roleList}}" wx:key="rkey" wx:for-item="i" data-id="{{index}}" data-name="{{i.role_name}}" data-tag="{{i.role_tag}}" bindtap='change_role'>{{i.role_name}}</view>
+      </view>
+    </view>
+    <!--二维码 码主-->
+    <view wx:if='{{currentInfo.role_tag =="code"}}' class='code'>
+      <view wx:if='{{currentInfo.vip_num==0}}' class='code_model'></view>
+      <image src='{{currentInfo.invite_qrcode}}'></image>
+    </view>
+    <!--二维码 商家-->
+    <view wx:if='{{currentInfo.role_tag =="store" && currentInfo.parent_id > 0}}' class='code'>
+      <view wx:if='{{currentInfo.vip_num==0}}' class='code_model'></view>
+      <block wx:if="{{currentInfo.invite_qrcode}}">
+        <image src='{{currentInfo.invite_qrcode}}'></image>
+      </block>
+      <block wx:else>
+        <canvas hidden='{{open_role}}' canvas-id="invite_qrcode" />
+      </block>
+    </view>
+
+    <!--商铺解绑显示出来的部分-->
+    <view class='bundle' wx:if="{{currentInfo.role_tag=='store'&& currentInfo.parent_id == '0'}}">
+      <view class='w'>
+        对不起，您的账号已被上级码主解绑
+      </view>
+      <block wx:if="{{is_codeowner}}">
+        <view class='w'>
+          系统已匹配到您当前身份也是码主，是否直接绑定？
+        </view>
+        <view class='w'>
+          请建立新的绑定关系
+        </view>
+      </block>
+      <view class='flex_around input'>
+        <image src='{{imgUrl}}/my/code_login.png'></image>
+        <view class='flex_center input_con'>
+          <input name="inviteCode" bindblur="inputInviteCode" placeholder="码主的邀请码" value="{{inviteCode}}" />
+          <image src='{{imgUrl}}/my/code_scan.png' bindtap="scanCodeBtn"></image>
+        </view>
+      </view>
+      <button bindtap='bindingCodeOwner'>
+        绑定码主
+      </button>
+    </view>
+    <!--被解绑-->
+    <view wx:if="{{currentInfo.role_tag=='code' || (currentInfo.role_tag=='store'&&currentInfo.parent_id>0)}}">
+      <image class='line_l' src='{{imgUrl}}/my/code-line.png'></image>
+      <image class='line_r' src='{{imgUrl}}/my/code-line.png'></image>
+    </view>
+    <!--被解绑-->
+    <!--过期图片-->
+    <block wx:if="{{currentInfo.vip_num==0 &&currentInfo.parent_id>0}}">
+      <image class='top_r' src='{{imgUrl}}/my/code_pass.png'></image>
+    </block>
+  </view>
+
+  <!--通明的色块商铺解绑后不显示-->
+  <view wx:if="{{currentInfo.role_tag=='code' || (currentInfo.role_tag=='store'&&currentInfo.parent_id>0)}}">
+    <view class='b flex_around'>
+      <!--个人码主-->
+      <block>
+        <view class='list'>
+          <view class='l1'>
+            <block wx:if="{{currentInfo.vip_num>0}}">
+              {{currentInfo.invite_code}}
+              <block wx:if="{{currentInfo.member_mobile}}">
+                <br/>或{{currentInfo.member_mobile}}
+              </block>
+            </block>
+            <block wx:if="{{currentInfo.vip_num==0}}">
+              --
+            </block>
+          </view>
+          <view class='l2'>我的邀请码</view>
+          <button class="{{currentInfo.vip_num==0?'disable':''}}" bindtap='tapCopy' disabled="{{currentInfo.vip_num==0?true:flase}}"  data-invite_code='{{currentInfo.invite_code}}'>复制</button>
+        </view>
+        <view class='list' wx:if="{{currentInfo.role_tag=='code'}}">
+          <view class='l1'>{{currentInfo.shop_num}}</view>
+          <view class='l2'>剩余商户名额</view>
+          <navigator url='index'>
+              <button>购买</button>
+          </navigator>
+        </view>
+        <view class='list'>
+          <view class='l1'>{{currentInfo.vip_num}}</view>
+          <view class='l2'>剩余会员名额</view>
+          <navigator url="buy">
+            <button>购买</button>
+          </navigator>
+        </view>
+      </block>
+      <!--商铺渲染模块-->
+      <block wx:if="{{currentInfo.role_tag == 'shop'}}">
+        <!--有名额-->
+        <block wx:if="{{currentInfo.vip_num>0}}">
+          <view class='list'>
+            <view class='l1'>
+              {{currentInfo.invite_code}}
+            </view>
+            <view class='l2'>我的邀请码</view>
+            <button bindtap='tapCopy' data-invite_code='{{currentInfo.invite_code}}'>复制</button>
+          </view>
+        </block>
+        <!--无名额-->
+        <block wx:if="{{currentInfo.vip_num==0}}">
+          <view>
+            名额不足！请联系码主进行购买。
+          </view>
+        </block>
+      </block>
+    </view>
+  </view>
+  <!--通明的色块商铺解绑后不显示-->
+  <view class='history'>
+    <navigator url='inviteLog'>
+      我的邀请记录>>
+    </navigator>
+  </view>
+</view>

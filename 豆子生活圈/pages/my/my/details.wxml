@@ -1,0 +1,19 @@
+<view class='header flex_center'>
+   <view class='left list'>
+      <view class='name'>代金券总额</view>
+      <view class='number'>365</view>
+   </view>
+   <view class='list'>
+      <view class='name'>代金券余额</view>
+      <view class='number'>120</view>
+   </view>
+</view>
+<view class='list_cons'>
+  <view class='list flex_between'>
+      <view class='left flex_start'>
+        <image src='../../../image/demo.png'></image>
+      </view>
+      <view class='right'>-5</view>
+  </view>
+  
+</view>

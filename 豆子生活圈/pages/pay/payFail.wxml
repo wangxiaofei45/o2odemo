@@ -1,0 +1,18 @@
+<view class="title">
+  <image src='{{imgUrl}}/fail.png'></image>
+  <view class='success_text'>
+    支付失败
+  </view>
+</view>
+<view class='pointout'>
+  {{errMsg}}
+</view>
+
+<button class='paymoney'>
+  去充值
+</button>
+<!--支付失败跳转到新的页面并关闭当前-->
+<navigator class='bottom' url='toPay?order_sn={{order_sn}}&payableAmount={{payableAmount}}' redirect="true">
+  使用其他方式支付
+  <image src='{{imgUrl}}/icon-more.png'></image>
+</navigator>

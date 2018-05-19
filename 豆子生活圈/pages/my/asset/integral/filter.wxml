@@ -1,0 +1,44 @@
+<view class='containers'>
+  <view class='title'>
+    积分区间(元)
+  </view>
+  <view class='input_con flex_center'>
+    <view class='input flex_center'>
+      ￥
+      <input placeholder-class="phcolor" placeholder='最低积分'></input>
+    </view>
+    <view class='center'>
+      至
+    </view>
+    <view class='input flex_center'>
+      ￥
+      <input placeholder-class="phcolor" placeholder='最高积分'></input>
+    </view>
+  </view>
+  <view class='title'>
+    分类检索
+  </view>
+  <view class='button flex_start'>
+    <view class='list list_active'>
+      全部
+    </view>
+    <view wx:if="{{identitys=='user'}}" class='list'>
+      抵现
+    </view>
+    <view class='list'wx:if="{{identitys !='user'}}">
+      提现
+    </view>
+    <view wx:if="{{identitys=='codemaster'}}" class='list'>
+      消费返佣
+    </view>
+  </view>
+  <view class='bottom flex_center'>
+    <button class='reset'>
+      清空条件
+    </button>
+    <button class='sure'>
+      确定
+    </button>
+  </view>
+
+</view>

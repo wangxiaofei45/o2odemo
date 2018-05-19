@@ -1,0 +1,30 @@
+<view class="header">
+<image src='{{imgUrl}}/my/about-logo.png'></image>
+<view class='name'>
+  为你而省V1.0.0
+</view>
+</view>
+<view class='list flex_between'>
+   <view class='left'>
+      客服电话
+   </view>
+   <view class='right' bindtap='makePhoneCall' data-tel='0571—22819898'>
+      0571—22819898
+   </view>
+</view>
+<view class='list flex_between'>
+   <view class='left'>
+      微信公众号
+   </view>
+   <view class='right'>
+      DCL原创设计共享平台
+   </view>
+</view>
+<view class='list flex_between'>
+   <view class='left'>
+      公司官网
+   </view>
+   <view class='right'>
+      http://o2o.hzlwo.com
+   </view>
+</view>

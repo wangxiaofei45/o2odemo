@@ -1,0 +1,31 @@
+<block wx:if='{{mybankcard.length > 0 }}'>
+  <view wx:for="{{mybankcard}}" class="header flex_between" hover-class="active">
+    <view class='left flex_start'>
+      <image src='{{imgUrl}}/bank/{{item.bank_code}}.png'>
+      </image>
+      <view class='name'>
+        <view class='name1'>
+          {{item.bank_name}}
+        </view>
+        <view class='number'>
+          {{item.bank_account_number}}
+        </view>
+      </view>
+    </view>
+  </view>
+  <navigator url='addbank'>
+    <view class="header flex_center">
+      <image class='add' src='{{imgUrl}}/my/add.png'></image>
+      添加银行卡
+    </view>
+  </navigator>
+</block>
+<block wx:else>
+  <view class='defaultpage'>
+    <image src='{{imgUrl}}/icondefault-bankcard.png'></image>
+    <view class='text'>您还没有银行卡</view>
+    <!-- <navigator url='addbank'> -->
+      <button hover-class='active' bindtap='gotoaddbank'>添加银行卡</button>
+    <!-- </navigator> -->
+  </view>
+</block>

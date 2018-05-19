@@ -1,0 +1,53 @@
+<view class='header'>
+  <view class='input flex_start'>
+    <view class='i1' bindtap='select_t' data-time="start">
+      {{startyear}}/{{startmonth}}/{{startday}}
+    </view>
+    <view class='t'>至</view>
+    <view class='i2' bindtap='select_t' data-time="end">
+      {{endyear}}/{{endmonth}}/{{endday}}
+    </view>
+    <image src='{{imgUrl}}/search.png'></image>
+  </view>
+  <view class='w'>您已经成功邀请了
+    <i class="red">{{collect.vip_total}}</i>人</view>
+  <view class='w'>累计获得收益
+    <i class="red">{{collect.dues_total}}</i>元</view>
+</view>
+<view class='list' wx:for="{{binding_list}}" wx:for-item="i" wx:key="list">
+  <view class='l'>
+    <image src='{{i.role_logo}}'></image>
+  </view>
+  <view class='r'>
+    <view class='r_con'>
+      <view class='n'>{{i.role_name}}</view>
+      <view class='t'>{{i.add_time}}</view>
+      <block wx:if="{{i.role_type == 'store'}}">
+         <image src='{{imgUrl}}/my/shop.png'></image> 
+      </block>
+      <block wx:else>
+       <image src='{{imgUrl}}/my/people.png'></image> 
+      </block>
+      <view class='pull' wx:if="{{i.role_type == 'store'}}">
+      邀请了<i class="number">{{i.pull_num}}</i>人</view>
+    </view>
+  </view>
+</view>
+<!--时间选择-->
+<block wx:if="{{model_hidden}}">
+<view class='model' catchtouchmove='true'>
+  <view class='model_con' bindtap='close'>
+  </view>
+  <picker-view class='picker' indicator-style="height: 50px;" value="{{value}}" bindchange="bindChange">
+    <picker-view-column>
+      <view wx:for="{{years}}" wx:key="years" style="line-height: 50px">{{item}}年</view>
+    </picker-view-column>
+    <picker-view-column>
+      <view wx:for="{{months}}" wx:key="mouths" style="line-height: 50px">{{item}}月</view>
+    </picker-view-column>
+    <picker-view-column>
+      <view wx:for="{{days}}" wx:key="days" style="line-height: 50px">{{item}}日</view>
+    </picker-view-column>
+  </picker-view>
+</view>
+</block>

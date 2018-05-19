@@ -1,0 +1,43 @@
+<view class="title">
+     <image src='{{imgUrl}}/success.png'></image>
+     <view class='success_text'>
+        付款成功
+     </view>
+     <view class='money_text clearfix'>
+        <view class='text'>
+          ￥{{order_info.order_amount}}
+       </view> 
+     </view>
+</view>
+<view class='payList payList1'>
+    <view class='left'>收款方：</view>
+    <view class='right'>
+       <view class='right_con clearfix'>
+          <view class='name'>
+             {{order_info.store_name}}
+          </view>
+       </view>
+    </view>
+</view>
+<view class='payList payList2'>
+    <view class='left'>支付方式</view>
+</view>
+<view class='payList payList3' wx:if="{{order_info.rcb_amount > 0 }}">
+    <view class='left'>卡额支付：</view>
+    <view class='right'>{{order_info.rcb_amount}}</view>
+</view>
+<view class='payList payList4' wx:if="{{order_info.pd_amount > 0}}">
+    <view class='left'>积分抵现：</view>
+    <view class='right'>-{{order_info.pd_amount}}</view>
+</view>
+<view class='payList payList5' wx:if="{{order_info.promotion_total > 0}}">
+    <view class='left'>优惠立减：</view>
+    <view class='right'>-{{order_info.promotion_total}}</view>
+</view>
+<view class='payList payList6' wx:if="{{order_info.commis_rate > 0}}">
+    <view class='left'>奖励积分：</view>
+    <view class='right'>+{{order_info.commis_rate}}</view>
+</view>
+<button class='sure' bindtap='successPay'>
+    完成
+</button>

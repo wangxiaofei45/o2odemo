@@ -1,0 +1,16 @@
+<view class="header flex_between">
+  <view class='left flex_start'>
+    <image src='{{imgUrl}}/my/code_shop_03.png'>
+    </image>
+    <view class='name'>
+      <view class='name1'>
+        江南美食(下沙店)
+      </view>
+      <view class='number'>
+        可提现额度36800.00元
+      </view>
+    </view>
+  </view>
+  <!--选中-->
+   <image class='right' src='{{imgUrl}}/my/checkoff.png'></image>
+</view>

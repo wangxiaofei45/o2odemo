@@ -1,0 +1,80 @@
+page{
+  background-color: #ffffff;
+}
+.title{
+  width: 100%;
+  margin-bottom: 70rpx;
+}
+.title image{
+  width: 86rpx;
+  height: 86rpx;
+  border-radius: 10rpx;
+  display: block;
+  margin: 0 auto;
+  margin-top: 90rpx; 
+  }
+  .title .name{
+    width: 100%;
+    color: #393a3f;
+    font-size: 30rpx;
+    font-weight: 700;
+    margin: 0 auto;
+    margin-top: 40rpx;
+    text-align: center;
+  }
+.up{
+  width: 564rpx;
+  margin: 0 auto;
+}
+.up .title{
+  width: 100%;
+  
+  font-size: 28rpx;
+  color: #999999;
+  font-weight: 700;
+  margin-bottom: 50rpx;
+  text-align: center;
+  letter-spacing: 6rpx;
+}
+.up .hidden .titles{
+  height: 120rpx;
+}
+.up .hidden .titles .left{
+  color: #393a3f;
+  font-size: 28rpx;
+}
+.up .hidden .titles .right{
+  color: #ff4965;
+  font-size: 24rpx;
+}
+.up .money{
+  width: 100%;
+  height: 130rpx;  
+  font-size: 80rpx;
+  /*暂时使用base64之后换网上图片*/
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAjMAAAAKCAIAAADO2kjZAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA4ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo4YmQ3ODBiZS1iNTBjLTQxNjktYTdiMi1kY2FiNGFiODM2NzgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OTdBQ0ZDMkZBRkVBMTFFNzgwOTQ4MTVCMDk4NTUzREQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OTdBQ0ZDMkVBRkVBMTFFNzgwOTQ4MTVCMDk4NTUzREQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTcgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo5NWJlOGY0Mi1hMWZkLTQzNDctOThjNS0xMjc1Nzk3MjI5MTQiIHN0UmVmOmRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDo2MDk4YjQ0My1jODM2LTExN2EtYTA0Yy1hOThiMTQzZWRjZGMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz5RL5d2AAAAQklEQVR42uzVMREAMAwDsab8QZqJy6KXQYLwy0+SAwBrTFsVANjjSgCAMwGAMwHgTADgTAA4EwA4EwDOBACfPAEGAHp5BbCa9v+nAAAAAElFTkSuQmCC);
+  
+}
+.up .money image{
+  width: 80rpx;
+  height: 80rpx;
+}
+.up button{
+  background-color: #ff4965;
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 5rpx;
+  margin-top: 43rpx;
+}
+.collec_code_list{
+  width: 565rpx;
+  height: 120rpx;
+  margin: 0 auto;
+  border-bottom: 3rpx solid #e0e0e0;
+  position: relative;
+  color: #999999;
+  font-size: 30rpx;
+}
+.up button:active{
+  background-color: #393a3f;
+}

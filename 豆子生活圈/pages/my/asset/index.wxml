@@ -1,0 +1,90 @@
+<view class="header_bar flex_center">
+  <navigator url='balance'>
+    <view class='bar_list'>
+      <image src='{{imgUrl}}/my/property-asset.png'></image>
+      <view class='number'>{{memberInfo.available_rc_balance}}</view>
+    </view>
+  </navigator>
+  <navigator url='integral'>
+    <view class='bar_list'>
+      <image src='{{imgUrl}}/my/property-integration.png'></image>
+      <view class='number'>{{memberInfo.available_predeposit}}</view>
+    </view>
+  </navigator>
+  <navigator url='../my/coupon'>
+    <view class='bar_list'>
+      <image src='{{imgUrl}}/my/property-coupon.png'></image>
+      <view class='number'>{{memberInfo.couponCount}}</view>
+    </view>
+  </navigator>
+  <view class='bar_list' bindtap='Richscan'>
+    <image src='{{imgUrl}}/my/property-scan.png'></image>
+    <view class='number'>扫一扫</view>
+  </view>
+</view>
+<view class='list_con flex_center'>
+  <navigator url='recharge' open-type='redirect' class="list list1">
+    <view class='title'>
+      充值
+    </view>
+    <view class='text'>
+      充值卡额充值
+    </view>
+  </navigator>
+  <navigator class="list" url='bank'>
+    <view class='title'>
+      银行卡
+    </view>
+    <view class='text'>
+      查看/添加银行卡
+    </view>
+  </navigator>
+</view>
+<view class='list_con flex_center'>
+  <navigator class="list list1" url='../../pay/payCode/payCode'>
+    <view class='title'>
+      付款码
+    </view>
+    <view class='text'>
+      扫一扫急速付款
+    </view>
+  </navigator>
+  <navigator class="list" url='../../pay/collect/collectMoney'>
+    <view class='title'>
+      收款码
+    </view>
+    <view class='text'>
+      扫一扫向我付款
+    </view>
+  </navigator>
+</view>
+<!--
+<view class='list_con flex_center'>
+  <view class="list list1">
+    <view class='title'>
+      收益提现
+    </view>
+    <view class='text'>
+      店铺收益提现
+    </view>
+  </view>
+  <view class="list">
+    <view class='title'>
+      积分提现
+    </view>
+    <view class='text'>
+      积分折现提取
+    </view>
+  </view>
+</view>
+   -->
+<view class='list_con '>
+  <navigator class="list list1" url='payforother'>
+    <view class='title'>
+      帮他代付
+    </view>
+    <view class='text'>
+      代付省心省力
+    </view>
+  </navigator>
+</view>

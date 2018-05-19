@@ -1,0 +1,97 @@
+page{
+  background-color: #ffffff;
+}
+.title image{
+  width: 135rpx;
+  height: 135rpx;
+  display: block;
+  margin: 0 auto;
+  margin-top: 67rpx;
+  margin-bottom: 30rpx;
+}
+.success_text{
+  margin: 0 auto;
+  width: 200rpx;
+  text-align: center;
+  color: #666666;
+  font-size: 36rpx;
+  letter-spacing:7rpx;
+  margin-bottom: 65rpx;
+}
+.other_success{
+  width: 100%;
+  font-size: 36rpx;
+  color: #999999;
+  text-align: center;
+  margin-top: 100rpx;
+  margin-bottom: 230rpx;
+}
+.money_text{
+   width: 180rpx; 
+   height: 46rpx; 
+   line-height: 46rpx; 
+   font-size: 46rpx; 
+   color: #393a3f; 
+   margin: 0 auto; 
+}
+.money_text image{
+  float: left;
+  width: 46rpx;
+  height: 46rpx;
+  margin: 0rpx;
+}
+.money_text .text{
+  float: right;
+  font-size: 46rpx;
+  line-height: 46rpx;
+  height: 46rpx;
+  color: #393a3f;
+}
+.payList{
+  position: relative;
+  width: 564rpx;
+  height: 109rpx;
+  line-height: 109rpx;
+  margin: 0 auto;  
+  border-bottom: 3rpx solid #e0e0e0;
+  color: #999999;
+}
+.payList1{
+  color: #333333;
+}
+.payList1 .right .right_con .name{
+  float: left;
+}
+.payList1 .right .right_con image{
+  float: right;
+  width: 86rpx;
+  height: 86rpx;
+  margin-top: 12rpx;
+  margin-left: 10rpx;
+}
+
+.payList2{
+  border: 0rpx;
+  color: #333333;
+}
+.payList6{
+  border: none;
+}
+.payList .left{
+  text-align: left;
+  float: left;
+  position: absolute;
+  left: 0rpx;
+}
+.payList .right{
+  position: absolute;
+  right: 0rpx;
+}
+.sure{
+  background-color: #ffffff;
+  color: #666666;
+  font-size: 36rpx;
+  width: 560rpx;
+  margin: 0 auto;
+  border: 3rpx solid #e0e0e0;
+}

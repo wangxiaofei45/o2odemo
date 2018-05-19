@@ -1,0 +1,128 @@
+<view class="select_identity flex_center">
+  <view class='left flex_start'>
+    <view class="name">
+       店铺基本信息
+    </view>
+  </view>
+  <view class='right flex_end'>
+    <navigator url='apply/step_ament?apply_id={{store_info.apply_id}}&store_id={{store_id}}'>
+      修改
+    </navigator>
+  </view>
+</view>
+<view class="posabs">
+  <view class='li flex_start'>
+    <view class='left'>
+      店铺名称
+    </view>
+    <view class='right'>
+      {{store_info.store_name}}
+    </view>
+  </view>
+  <view class='li flex_start'>
+    <view class='left'>
+      店铺分类
+    </view>
+    <view class='right'>
+      {{store_info.store_class_names}}
+    </view>
+  </view>
+  <view class='li flex_start'>
+    <view class='left'>
+      详细地址
+    </view>
+    <view class='right text2 flex_start_wrap'>
+      {{store_info.company_address}} {{store_info.company_address_detail}} 
+    </view>
+  </view>
+  <view class='li flex_start'>
+    <view class='left'>
+      联系人
+    </view>
+    <view class='right'>
+      {{store_info.contacts_name}}
+    </view>
+  </view>
+  <view class='li flex_start'>
+    <view class='left'>
+      联系电话
+    </view>
+    <view class='right'>
+      {{store_info.contacts_phone}}
+      <block wx:if="{{store_info.company_phone}}"> / {{store_info.company_phone}}</block>
+    </view>
+  </view>
+  <view class='li flex_start'>
+    <view class='left'>
+      电子邮箱
+    </view>
+    <view class='right'>
+      {{store_info.contacts_email}}
+    </view>
+  </view>
+  <view class='li flex_start'>
+    <view class='left'>
+      经营特色
+    </view>
+  </view>
+  <view class='li flex_start'>
+    <view class='right'>
+      {{store_info.business_sphere}}
+    </view>
+  </view>
+  <view class='li flex_start'>
+    <view class='left'>
+      店铺介绍：
+    </view>
+  </view>
+  <view class='text'>
+    {{store_info.store_intro}}
+  </view>
+  <view class='li flex_start'>
+    <view class='left'>
+      营业执照：
+    </view>
+  </view>
+  <view class='image'>
+    <image src='{{store_info.uploadImg.licence}}'></image>
+  </view>
+  <view class='li flex_start'>
+    <view class='left'>
+      门店照片
+    </view>
+  </view>
+  <view class='image'>
+     <image src='{{store_info.uploadImg.facade}}'></image>
+  </view>
+  <view class='li flex_start'>
+    <view class='left'>
+      店铺主图：
+    </view>
+  </view>
+  <view class='image flex_between'>
+    <block wx:for="{{store_info.uploadImg.instore}}" wx:key="img">
+      <image src='{{item.pic_name}}'></image>
+    </block>
+  </view>
+</view>
+
+<view class='model_container' catchtouchmove='true' hidden='{{applyHideMgs}}'>
+  <view class='model' bindtap='closeHint'></view>
+  <view class='model_con'>
+    <view class='posabs'>
+      <image src='{{imgUrl}}/my/wraning.png'></image>
+    </view>
+    <view class='bottom'>
+      <view class='text'>
+        小编正加班为您审核ing
+      </view>
+      <view class='text'>
+        请耐心等待
+      </view>
+      <button bindtap='closeHint'>我知道了</button>
+    </view>
+  </view>
+</view>
+<view wx:if="{{store_info.is_audit}}" class='wraning'>
+    {{store_info.joinin_state}}
+</view>

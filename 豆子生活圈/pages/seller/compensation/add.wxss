@@ -1,0 +1,111 @@
+.form_container{
+  width: 100%;
+  background-color: #fff;
+  margin-bottom: 22rpx;
+}
+.section{
+  width: 700rpx;
+  margin: 0 auto;
+  height: 90rpx;
+}
+.section .section__title{
+  font-size: 30rpx;
+  color: #666666;
+}
+.section input{
+  text-align: right;
+  color: #333333;
+  font-size: 30rpx;
+}
+.section image{
+  width: 20rpx;
+  height: 20rpx;
+}
+.section .section__title .image_r{
+  width: 40rpx;
+  height: 40rpx;
+}
+.sure{
+  position: fixed;
+  left: 25rpx;
+  bottom: 50rpx;
+  width: 700rpx;
+  background-color: #ff4965;
+  color: #ffffff;
+}
+.select_obj{
+  width: 650rpx;
+  height: 400rpx;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -325rpx;
+  margin-top: -200rpx;
+  background-color: #fff;
+  border-radius: 10rpx;
+}
+.select_obj .title{
+  height: 100rpx;
+  line-height: 100rpx;
+  text-align: center;
+  font-size: 36rpx;
+  color: #333333;
+  font-weight: 700;
+  border-bottom: 1rpx solid #d6d6d6;
+}
+.select_obj .list{
+  height: 100rpx;
+  font-size: 36rpx;
+  padding: 0rpx 25rpx;
+  box-sizing: border-box;
+  border-bottom: 1rpx solid #d6d6d6;
+}
+.select_obj .list image{
+  width: 40rpx;
+  height: 40rpx;
+}
+.img_hidden{
+  display: none;
+}
+/*分开*/
+.header{
+  background-color: #ffffff;
+  padding-bottom: 40rpx;
+}
+.header .input{
+  width: 700rpx;
+  height: 90rpx;
+  border: 1rpx solid #d6d6d6;
+  border-radius: 10rpx;
+  margin: 0 auto;
+  color: #666666;
+}
+.header .input input{
+  width: 550rpx;
+  height: 90rpx;
+  font-size: 30rpx;
+  color: #333333;
+}
+.header .input .right{
+  width: 100rpx;
+  text-align: right;
+}
+.header .title{
+  width: 100%;
+  height: 120rpx;
+  line-height: 120rpx;
+  font-size: 30rpx;
+  color: #666666;
+  padding-left: 30rpx;
+  letter-spacing: 5rpx;
+}
+.money{
+  color: #ff4965;
+  text-align: center;
+  width: 700rpx;
+  height: 120rpx;
+  line-height: 100rpx;
+  margin: 0 auto;  
+  font-size: 80rpx;
+  background-image: url(http://o2o.hzlwo.com/wxapp/image/my/line.png);
+}

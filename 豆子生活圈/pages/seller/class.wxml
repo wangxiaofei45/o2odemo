@@ -1,0 +1,15 @@
+<view class="containers" wx:for="{{class_root}}" wx:for-item="class"  wx:for-index="i">
+  <view class='title flex_between'>
+     <image src='{{class.class_image}}'></image>{{class.class_name}}
+     <block wx:for="{{class_color}}" wx:for-item="color" wx:for-index="c">
+     <view wx:if="{{c == i}}" class='line' style='background-color:{{color}}'></view>
+     </block>
+  </view>
+  <block wx:for="{{class_menu}}" wx:for-item="p" wx:key="p">
+    <view class='listcon' wx:if="{{index == class.class_id}}">
+      <view class='list' wx:for="{{p}}" wx:for-item="j" wx:key="j" bindtap='selecedClass' data-id='{{j.class_id}}' data-name='{{j.class_name}}'>
+        {{j.class_name}}
+      </view>
+    </view>
+  </block>
+</view>

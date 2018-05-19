@@ -1,0 +1,117 @@
+<import src="../../../wxParse/wxParse.wxml"/>
+<view class="top_image">
+   <image src='{{store_pic}}' binderror="errorFunction"></image> 
+</view>
+<view class='Shopdetails'>
+  <button bindtap='pay'>买单</button>
+  <view class='list title'>{{store_name}}
+    <block wx:if="{{store_side}}">（{{store_side}}）</block>
+  </view>
+  <view class='list'>营业时间 {{business_hour}}</view>
+  <view class='list clearfix' bindtap='open_calltel' data-tel='{{telephone}}'>
+    <view class='left'>
+      联系电话 {{telephone}}
+    </view>
+    <image src='{{imgUrl}}/icon-phone.png'></image>
+  </view>
+  <view class='list clearfix' bindtap='tapOpenLocation' data-address='{{address}}'>
+    <view class='left'>
+      详细地址 {{address}}
+    </view>
+    <image src='{{imgUrl}}/icon-address.png'></image>
+  </view>
+</view>
+<view class='activityArea'>
+  <view class='list title'>
+    活动专区
+  </view>
+  <!--跳到积分抵现页面-->
+  <navigator url='integral'>
+    <view class='list clearfix'>
+      <image class='left' src='{{imgUrl}}/ji.png'></image>
+      <view class='center'>
+        积分抵现，买单增积分
+      </view>
+      <image class='right' src='{{imgUrl}}/icon-details.png'></image>
+    </view>
+  </navigator>
+  <view class='list clearfix' bindtap='open_coupon'>
+    <image class='left' src='{{imgUrl}}/quan.png'></image>
+    <view class='center'>
+      领取优惠券
+    </view>
+    <image class='right' src='{{imgUrl}}/icon-details.png'></image>
+  </view>
+</view>
+<!--商品的展示-->
+<view class='onlinechoose'>
+  <view class='title flex_around'>
+    <view class="change {{present == 1?'.actives':''}}" data-present="1" bindtap='change'>
+      店铺商品
+    </view>
+    <view class="change {{present == 2?'.actives':''}}" data-present="2" bindtap='change'>
+      店铺介绍
+    </view>
+  </view>
+  <block wx:if="{{present == 1}}">
+    <view class='hotel_list flex_center' wx:for="{{goodsData}}" wx:for-item="i" wx:key="room" data-good_id="{{i.goods_commonid}}" catchtap='get_goodinfo'>
+      <view class='list_cons flex_center'>
+        <image src='{{i.goods_image}}'></image>
+        <view class='right'>
+          <view class='name'>
+            {{i.goods_name}}
+          </view>
+          <view class='list1'>
+            {{i.mobile_body}}
+          </view>
+          <view class='lists2 flex_between'>
+             <view class='left'>参考价:<i class="yellow">￥<i class="big">{{i.goods_price}}</i></i></view>
+             <view class='rights'>预计返回{{i.returun_point}}积分</view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+  <block wx:if="{{present == 2}}">
+    <view class='about_shop'>
+       <view class='about_shop_text'>关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺</view>
+       <image src='../../../image/demo.png'></image>
+    </view>
+  </block>
+</view>
+<!-- 这里是优惠券的领取的地方 -->
+<view class='model' catchtouchmove='true' hidden='{{open_coupon}}'>
+  <view class='model_con'>
+    <view class='title'>
+      店铺优惠券
+    </view>
+    <!--已经领取的优惠券-->
+    <view wx:for="{{couponList}}" wx:key="couponList">
+      <view  class="ticket {{item.is_receive == 1 ?'ticket1':'ticket2'}}">
+       <view class='money'>
+          <view class='left'>
+              <view class='list1 list'>
+                 <image src='{{imgUrl}}/money.png'></image>{{item.discount_price}}
+              </view>
+              <view class='list2 list'>
+                 {{item.coupon_des}}
+              </view>
+               <view class='list3 list'>
+                 有效期：{{item.coupon_start_time}}-{{item.coupon_end_time}}
+              </view>
+          </view>
+          <view class='right'>  
+             <view bindtap='receive_coupon' data-id='{{item.coupon_id}}' wx:if="{{item.is_receive == 0}}"> 立即领取 </view>
+             <view wx:if="{{item.is_receive == 1}}"> 已经领取 </view>
+          </view>
+       </view>
+    </view>
+    </view>
+    <button bindtap='close_coupon'>关闭</button>
+  </view>
+</view>
+<!--电话model-->
+<view class='telmodel' catchtouchmove='true' hidden='{{open_calltel}}'>
+   <button bindtap='makecall'>{{telephone}}</button>
+   <button bindtap='close_calltel'>关闭</button>
+</view>

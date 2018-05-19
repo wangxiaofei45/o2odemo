@@ -1,0 +1,65 @@
+<view class="seach_title flex_between">
+  <view class='input'>
+    <input bindinput='bindInputKeywords' placeholder='请输入优惠券关键字'></input>
+    <image src='{{imgUrl}}/search.png'></image>
+  </view>
+  <navigator url='add' class='code flex_center'>
+    <image src='{{imgUrl}}/my/add.png'></image>
+    新增
+  </navigator>
+</view>
+<block wx:if="{{couponList.length>0}}">
+<view class='content'>
+  <view class='ticket_con'>
+    <view class="ticket" wx:for="{{couponList}}" wx:key="ticket" data-cid="{{item.coupon_id}}">
+      <!--跳转到优惠券详情页面-->
+    <navigator url='giftdetails?coupon_id={{item.coupon_id}}'>
+      <view class="money clearfix  {{item.audit_state < '1'?'nostart':item.audit_state == '2'?'past':''}}">
+        <view class='left'>
+          <view class='list1'>优惠券</view>
+          <view class='list2'>
+            <image wx:if='{{item.audit_state==2}}' src='{{imgUrl}}/rmbb.png'></image>
+            <image wx:else src='{{imgUrl}}/money.png'></image>
+            {{item.discount_price}}
+          </view>
+          <view class='list3'>
+            {{item.coupon_state}}
+          </view>
+        </view>
+        <image wx:if="{{item.audit_state==2}}" class="borderimg" src='{{imgUrl}}/my/bgg.png'></image>
+        <image wx:elif="{{item.audit_state<1}}" class="borderimg" src='{{imgUrl}}/my/bgb.png'></image>
+        <image wx:else class="borderimg" src='{{imgUrl}}/my/bgy.png'></image>
+        <view class='right'>
+          <view class='list1 list'>
+            {{item.coupon_name}}
+          </view>
+          <view class='list2 list'>
+            {{item.coupon_des}}
+          </view>
+          <view class='list3 list'>
+            有效期：{{item.coupon_start_time}}-{{item.coupon_end_time}}
+          </view>
+        </view>
+      </view>
+    </navigator>
+      <view class='ticket_pos'>
+        <block wx:if="{{item.audit_reason}}">
+        {{item.audit_reason}}
+        </block>
+        <block wx:else>
+          已下载：{{item.download_count}}张
+        </block>
+      </view>
+      <!-- 已使用
+      <image wx:if="{{item.audit_state == '1'}}" class='image_pos' src='{{imgUrl}}/my/icon-Hasthe.png'></image> -->
+      <image wx:if="{{item.audit_state == '2'}}" class='image_pos' src='{{imgUrl}}/my/icon-Expired.png'></image>
+    </view>
+  </view>
+  </view>
+</block>
+<block wx:else>
+  <view class='defaultpage'>
+    <image src='{{imgUrl}}/icondefault-coupon.png'></image>
+    <view class='text'>无可用优惠券</view>
+  </view>
+</block>

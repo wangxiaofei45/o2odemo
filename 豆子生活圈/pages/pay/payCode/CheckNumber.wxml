@@ -1,0 +1,10 @@
+<view class="containers">
+   <view class='image_con'>
+      <canvas canvas-id="barcode" />
+   </view>
+   <view class='code_number flex_around'>
+      <view class='list'>
+          {{order_sn}}
+      </view>
+   </view>
+</view>

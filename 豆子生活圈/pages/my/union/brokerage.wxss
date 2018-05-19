@@ -1,0 +1,59 @@
+/* pages/my/my/happy.wxss */
+.header{
+  width: 100%;
+  background-color: #fff;
+  margin-bottom: 22rpx;
+}
+.header .title{
+  width: 700rpx;
+  margin: 0 auto;
+  height: 80;
+  line-height: 80rpx;
+  font-size: 30rpx;
+  color: #323232;
+  font-weight: 700;
+}
+.canvas_con{
+  width: 100%;
+  border-bottom: 3rpx solid #d6d6d6;
+}
+.canvas{
+  width: 350px;
+  height: 220px;
+  margin: 0 auto;
+}
+/* canvas{
+  border: 1px dashed black;
+} */
+
+.header .more{
+  height: 75rpx;
+  width: 700rpx;
+  margin: 0 auto;
+  line-height: 75rpx;
+  font-size: 23rpx;
+  color: #ff4965;
+  text-align: right;
+}
+.list:nth-child(2n){
+  background-color: #ffffff;
+}
+.list{
+  width: 750rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  font-size: 24rpx;
+  color: #666666;
+  text-align: center;
+}
+.th{
+  font-size: 30rpx;
+  color: #333333;
+  font-weight: 700;
+}
+.list .list1,.list4{
+  width: 200rpx;
+}
+.list .list2,.list3{
+  width: 175rpx;
+}

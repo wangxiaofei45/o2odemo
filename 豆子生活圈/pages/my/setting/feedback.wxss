@@ -1,0 +1,33 @@
+.containers{
+  width: 700rpx;
+  margin: 0 auto;
+}
+.containers .title{
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+  color: #5c5c5c;
+  font-size: 28rpx;
+  letter-spacing: 4rpx;
+}
+.containers .textarea{
+  width: 650rpx;
+  height: 266rpx;
+  background-color: #fff;
+  border-radius: 10rpx;
+  padding-left: 25rpx;
+  padding-right: 25rpx;
+  padding-top: 15rpx;
+  font-size: 24rpx;
+  border:3rpx solid #d6d6d6;
+}
+.sure{
+  margin-top: 80rpx;
+  width: 100%;
+  height: 90rpx;
+  background-color: #ff4965;
+  color: #fff;
+}
+.button-hover{
+  background-color: rgba(0, 0, 0, 0.1)
+}

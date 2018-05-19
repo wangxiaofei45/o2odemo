@@ -1,0 +1,284 @@
+@import "../../../bill/billscreen.wxss";
+
+.button .list {
+  width: 100rpx;
+  margin-right: 20rpx;
+  margin-bottom: 25rpx;
+}
+
+.button .list:nth-child(6) {
+  margin-right: 0rpx;
+}
+
+.detail {
+  width: 100%;
+  height: 90rpx;
+  background-color: #fff;
+}
+
+.detail .select {
+  width: 50%;
+  font-size: 28rpx;
+  color: #000;
+  padding-left: 25rpx;
+}
+
+.detail .select image {
+  width: 44rpx;
+  height: 44rpx;
+}
+
+.detail .years {
+  width: 50%;
+  font-size: 27rpx;
+  color: #ff4965;
+  padding-right: 25rpx;
+}
+
+.detail .years image {
+  width: 37rpx;
+  height: 37rpx;
+  padding-left: 25rpx;
+}
+
+/*新添*/
+
+.table {
+  width: 100%;
+  background-color: #fff;
+  padding-bottom: 30rpx;
+}
+
+.table .lists {
+  width: 700rpx;
+  height: 110rpx;
+  margin: 0 auto;
+}
+
+.table .lists image {
+  width: 60rpx;
+  height: 60rpx;
+}
+
+.lists .r .n1 {
+  font-size: 28rpx;
+  color: #333;
+  padding-right: 45rpx;
+}
+
+.lists .r .n2 {
+  font-size: 22rpx;
+  color: #666;
+  padding-right: 30rpx;
+}
+
+.lists .r .rb {
+  width: 640rpx;
+  height: 30rpx;
+  background-color: #ebebeb;
+  margin-top: 25rpx;
+}
+
+.lists .r .rb .rb_con {
+  height: 30rpx;
+  background-color: #ff4965;
+}
+
+/*列表*/
+
+.info_title {
+  width: 100%;
+  height: 70rpx;
+  line-height: 70rpx;
+  font-size: 30rpx;
+  color: #333;
+  letter-spacing: 8rpx;
+  text-align: center;
+}
+
+.info {
+  width: 100%;
+}
+
+.info .info_time {
+  width: 100%;
+  height: 70rpx;
+  line-height: 70rpx;
+  border-bottom: 3rpx solid #e0e0e0;
+  font-size: 26rpx;
+}
+
+.info .info_time .left {
+  padding-left: 25rpx;
+}
+
+.info .info_time .right {
+  padding-right: 25rpx;
+}
+
+.info .info_list {
+  width: 100%;
+  height: 140rpx;
+  background-color: #fff;
+  border-bottom: 3rpx solid #e0e0e0;
+}
+
+/*列表点击的时候改变颜色*/
+
+.info .active {
+  width: 100%;
+  height: 140rpx;
+  background-color: #ff4965;
+  border-bottom: 3rpx solid #e0e0e0;
+}
+
+.info .info_list .user_avatar {
+  width: 130rpx;
+  padding-left: 25rpx;
+}
+
+.info .info_list .user_avatar image {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 40rpx;
+}
+
+.info .info_list .name {
+  width: 570rpx;
+}
+.info .info_list .name .names {
+  color: #333;
+  font-size: 29rpx;
+  height: 70rpx;
+  line-height: 35rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.info .info_list .name .times {
+  color: #666;
+  font-size: 21rpx;
+  margin-top: 10rpx;
+}
+
+.info .info_list .number {
+  width: 130rpx;
+  text-align: right;
+}
+
+.info .info_list .number .number1 {
+  color: #333;
+  font-size: 24rpx;
+}
+
+.info .info_list .number .number2 {
+  color: #e2b742;
+  font-size: 28rpx;
+  margin-top: 30rpx;
+}
+
+.info .info_list .go_next {
+  width: 70rpx;
+}
+
+.info .info_list .go_next image {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.model {
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  left: 0rpx;
+  bottom: 0rpx;
+}
+
+.model .modelcon {
+  width: 648rpx;
+  height: 544rpx;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -272rpx;
+  margin-left: -324rpx;
+  background-color: #fff;
+  border-radius: 10rpx;
+}
+
+.model .modelcon .button:active {
+  background-color: balck;
+}
+
+.model .modelcon .left {
+  width: 50%;
+  height: 100rpx;
+  line-height: 100rpx;
+  position: absolute;
+  text-align: center;
+  left: 0rpx;
+  bottom: 0rpx;
+  border-top: 3rpx solid #d6d6d6;
+  border-right: 3rpx solid #d6d6d6;
+}
+
+.model .modelcon .right {
+  width: 50%;
+  height: 100rpx;
+  line-height: 100rpx;
+  position: absolute;
+  right: 0rpx;
+  text-align: center;
+  bottom: 0rpx;
+  border-top: 3rpx solid #d6d6d6;
+  z-index: 20;
+}
+
+.container1 {
+  width: 100%;
+  height: 80%;
+  margin-top: 5%;
+  display: flex;
+  display: -webkit-flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.container1 .list {
+  width: 100%;
+}
+
+.container1 .list .name {
+  color: #999;
+  font-size: 24rpx;
+  padding-left: 10rpx;
+}
+
+.filter_model {
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0rpx;
+  top: 0rpx;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.filter_model .model_u {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0rpx;
+  bottom: 0rpx;
+}
+
+.filter_model .model_t {
+  position: absolute;
+  width: 750rpx;
+  background-color: #fff;
+  padding-bottom: 60rpx;
+}

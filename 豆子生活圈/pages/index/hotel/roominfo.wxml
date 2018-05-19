@@ -1,0 +1,58 @@
+<view class='roominfocontainer'>
+  <view class="top_image" >
+    <image wx:for="{{goodsInfo.indexData}}" wx:key="topimg" src='{{item.imgurl}}'></image>
+  </view>
+  <view class='Shopdetails'>
+    <view class='list title'>{{goodsInfo.goodsname}}
+    </view>
+    <view class='list border_bottom flex_between'>
+      <view>
+        {{goodsInfo.goodsize}}{{goodsInfo.bedcount}}
+        <block wx:if="{{goodsInfo.breakfast == 1}}">含早</block>
+      </view>
+      <view class='money'>
+        ￥
+        <i class="big">{{goodsInfo.price}}</i>起
+      </view>
+    </view>
+    <view class='list title'>取消规则
+    </view>
+    <view class='list flex_start'>
+      <view class='before'></view>
+      <view class='black'>
+        <block wx:if="{{goodsInfo.freecancel == 0}}">不可取消</block>
+        <block wx:if="{{goodsInfo.freecancel == 1}}">免费取消</block>
+      </view>
+      {{goodsInfo.canceldesc}}
+    </view>
+    <view class='list title'>入住说明
+    </view>
+    <view class='list flex_start'>
+      <view class='before'></view>
+      <view class='wraning'>
+        {{goodsInfo.explain}}
+      </view>
+    </view>
+  </view>
+  <view class='show_img'>
+    <view class='text'>
+      <!-- 豪华舒适大床放，温馨如家,24h热水，周到服务，让您时刻享受...... -->
+      商品详情图片
+    </view>
+    <view class='image' wx:for="{{goodsInfo.picData}}" wx:key="img">
+      <image src='{{item.imgurl}}'></image>
+    </view>
+  </view>
+</view>
+<view class='bottom flex_center'>
+  <view class='left'>
+    在线预订
+  </view>
+  <view class='right' hover-class='active' bindtap='open_calltel'>
+    电话预订
+  </view>
+</view>
+<view class='telmodel' catchtouchmove='true' hidden='{{open_calltel}}'>
+  <button bindtap='makecall'>{{goodsInfo.telphone}}</button>
+  <button bindtap='close_calltel'>关闭</button>
+</view>

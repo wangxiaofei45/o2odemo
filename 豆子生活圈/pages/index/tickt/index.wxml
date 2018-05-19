@@ -1,0 +1,24 @@
+<image class="header_image" src='{{imgUrl}}/index/home_ticke_1.png'></image>
+<view class='tickt_list'>
+    <image src='{{imgUrl}}/my/tickt_01.png'></image>
+    <view class='pos_02'>
+      ￥{{couponAmount}}元
+    </view>
+</view>
+<view class='button' bindtap='tapReceive'>立即领取</view>
+<view class='wraning'>想要更多优惠？</view>
+<view class='more'>
+  <block wx:if="{{storeList.length>0}}">
+   <view class='title'>以下店铺为您提供了更多的新人专属礼券</view>
+   <view class="content flex_between_wrap">
+      <view class='list' wx:for="{{storeList}}" wx:key="store">
+         <image src='{{item.store_logo}}'></image>
+      </view>
+   </view>
+   </block>
+   <block wx:else>
+    <view class='wraning'>暂无可领取的优惠券</view>
+   </block>
+</view>
+<view class='button' bindtap='tapReceive'>一键领取</view>
+<image class='bottom' src='{{imgUrl}}/index/home_tickt_2.png'></image>

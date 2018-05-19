@@ -1,0 +1,25 @@
+.listcon{
+  width: 100%;
+  background-color: #fff;
+  border-top: 3rpx solid #d6d6d6;
+  border-bottom: 3rpx solid #d6d6d6;
+  margin-top: 40rpx;
+}
+.list{
+  width: 700rpx;
+  margin: 0 auto;
+  height: 100rpx;
+  border-bottom: 3rpx solid #d6d6d6;
+  font-size: 30rpx;
+  color: #666666;
+}
+.listnone{
+  border: none;
+}
+.list .left image{
+  margin-right: 25rpx;
+}
+.list image{
+  width: 44rpx;
+  height: 44rpx;
+}

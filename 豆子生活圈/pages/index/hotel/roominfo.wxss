@@ -1,0 +1,64 @@
+@import "index";
+.roominfocontainer{
+  margin-bottom: 90rpx;
+}
+.list .money{
+  color: #ff4965;
+}
+.list .money .big{
+  font-size: 64rpx;
+}
+.list .before{
+  width: 10rpx;
+  height: 10rpx;
+  background-color: #b8bab8;
+  border-radius: 50%;
+  margin-right: 15rpx;
+}
+.list .black{
+  color: #333333;
+  margin-right: 15rpx;
+  font-size: 28rpx;
+}
+.list .wraning{
+  width: 675rpx;
+  color: #333333
+}
+.show_img{
+  width: 750rpx;
+  background-color: #ffffff;
+}
+.show_img .text{
+  width: 700rpx;
+  margin: 0 auto;
+  color: #333333;
+  font-size: 26rpx;
+  line-height: 40rpx;
+  padding: 20rpx 0rpx;
+}
+.show_img image{
+   width: 750rpx;
+  height: 362rpx;
+}
+.bottom{
+  width: 750rpx;
+  height: 90rpx;
+  position: fixed;
+  left: 0rpx;
+  bottom: 0rpx;
+  color: #ffffff;
+  font-size: 32rpx;
+  line-height: 90rpx;
+  text-align: center;
+}
+.bottom .left{
+  width: 50%;
+  background-color: #ff9baa;
+}
+.bottom .right{
+  width: 50%;
+  background-color: #ff4965;
+}
+.bottom .active{
+  background-color: #d6d6d6;
+}

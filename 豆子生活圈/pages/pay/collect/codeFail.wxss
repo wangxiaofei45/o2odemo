@@ -1,0 +1,7 @@
+ @import "../payFail.wxss"; 
+.pointout{
+  width: 520rpx;
+  margin: 0 auto;
+  letter-spacing: 3rpx;
+  margin-bottom: 55rpx;
+}

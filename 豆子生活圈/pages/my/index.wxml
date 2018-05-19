@@ -1,0 +1,106 @@
+<view class="header">
+  <navigator url='my/information'>
+    <image class='pos1' src='{{imgUrl}}/my/my-set.png'>
+    </image>
+  </navigator>
+  <image class='pos2' src='{{imgUrl}}/my/Notificationmassage.png'></image>
+  <view class='user_header flex_start'>
+    <image src='{{memberInfo.member_avatar}}'>
+    </image>
+    <view class='right'>
+      <view class='name'>
+        {{memberInfo.member_name}}
+      </view>
+      <view class='name'>
+        {{memberInfo.member_mobile}}
+      </view>
+    </view>
+  </view>
+  <view class='header_bottom flex_around'>
+    <navigator url='asset/balance'>
+      <view class='hb_list'>
+        <view class='red'>
+          {{memberInfo.available_rc_balance}}
+        </view>
+        <view>
+          资产
+        </view>
+      </view>
+    </navigator>
+    <navigator url='asset/integral'>
+      <view class='hb_list'>
+        <view class='red'>
+          {{memberInfo.available_predeposit}}
+        </view>
+        <view>
+          积分
+        </view>
+      </view>
+    </navigator>
+    <navigator url='my/coupon'>
+      <view class='hb_list'>
+        <view class='red'>
+          {{mycoupon}}
+        </view>
+        <view>
+          卡券包
+        </view>
+      </view>
+    </navigator>
+  </view>
+</view>
+<!--服务结束-->
+<!-- 码主和商家 专享-->
+<view class='sever' wx:if="{{store_id>0 || is_codeowner}}">
+  <view class='title flex_start'>
+    <image src='{{imgUrl}}/my/main-Enjoyservice.png'>
+    </image>尊享服务
+  </view>
+  <view class='bar flex_around'>
+    <navigator url='union/list' class='bar_list'>
+      <image src='{{imgUrl}}/my/vip-team.png'></image>
+      <view>
+        我的联盟商
+      </view>
+    </navigator>
+    <navigator url='union/brokerage' class='bar_list'>
+      <image src='{{imgUrl}}/my/vip-index.png'></image>
+      <view>
+        幸福指数
+      </view>
+    </navigator>
+    <navigator url='codeowner/qrcode' class='bar_list'>
+      <image src='{{imgUrl}}/my/vip-number.png'></image>
+      <view>
+        专属二维码
+      </view>
+    </navigator>
+  </view>
+</view>
+<!--我的财产 幸福指数 专属二维码-->
+<navigator url='asset/index'>
+  <view class='list flex_start' hover-class='active'>
+    <image src='{{imgUrl}}/my/main-myproperty.png'></image>我的财产
+  </view>
+</navigator>
+<navigator url='../seller/apply' wx:if="{{!store_id}}">
+  <view class='list flex_start' hover-class='active'>
+    <image src='{{imgUrl}}/my/main-store.png'></image>成为商家
+  </view>
+</navigator>
+<!-- 商家信息 -->
+<navigator url='../seller/index' wx:if="{{store_id>0}}">
+  <view class='list flex_start' hover-class='active'>
+    <image src='{{imgUrl}}/my/main-store.png'></image>店铺管理
+  </view>
+</navigator>
+<navigator url='be_vip/index'>
+  <view class='list flex_start' hover-class='active'>
+    <image src='{{imgUrl}}/my/level_up.png'></image>升级VIP
+  </view>
+</navigator>
+<navigator url='setting/index'>
+  <view class='list flex_start' hover-class='active'>
+    <image src='{{imgUrl}}/my/main-usersetting.png'></image>用户设置
+  </view>
+</navigator>

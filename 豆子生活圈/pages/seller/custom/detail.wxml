@@ -1,0 +1,80 @@
+<view class='tickt_lists'>
+   <view class='pos_top_r'>
+     <block wx:if="{{tickt.status == 1}}">已开启</block>
+     <block wx:if="{{tickt.status == 2}}">未开启</block>
+     <block wx:if="{{tickt.status == 3}}">已关闭</block>
+   </view>
+   <view class='no_1 flex_start'>
+      <image src='../../../image/demo.png'></image>
+       <view>
+       <view class='name'>{{tickt.title}}</view>
+       <view class='text'>{{tickt.text}}</view>
+   </view>
+   </view>
+    <image class='center_line' src='../../../image/my/tickt_line_02.png'></image> 
+   <view class='no_2'>
+       <view class='name'>有效日期：{{tickt.time}}</view>
+   </view>
+   <image wx:if="{{tickt.status == 4}}" class='pos_right' src='{{imgUrl}}/my/icon-Expired.png'></image>
+</view>
+<!--使用详情-->
+<navigator class='detail flex_between' url='usingdetail'>
+    <view class='left flex_start'>
+      <view class='list_1'>
+        使用详情
+      </view>
+      <view class='list_2'>
+        已下载：200
+      </view>
+      <view class='list_2'>
+        已使用：80
+      </view>
+    </view>
+    <image src='{{imgUrl}}/icon-details.png'></image>
+</navigator>
+<view class='detail_2'>
+  <view class='header'>
+    优惠券详情
+  </view>
+  <view class='list flex_start'>
+    <view class='left'>活动名称：</view>
+    <view class='right'>春节活动大促销</view>
+  </view>
+  <view class='list flex_start'>
+    <view class='left'>优惠面额：</view>
+    <view class='right'>5</view>
+  </view>
+  <view class='list flex_start'>
+    <view class='left'>使用条件：</view>
+    <view class='right'>满100减5元使用</view>
+  </view>
+  <view class='list flex_start'>
+    <view class='left'>是否限领：</view>
+    <view class='right'>是</view>
+  </view>
+  <view class='list flex_start'>
+    <view class='left'>限领次数：</view>
+    <view class='right'>1</view>
+  </view>
+  <view class='list flex_start'>
+    <view class='left'>发放总数：</view>
+    <view class='right'>300</view>
+  </view>
+  <view class='list flex_start'>
+    <view class='left'>发放对象：</view>
+    <view class='right'>全部用户</view>
+  </view>
+  <view class='list flex_start'>
+    <view class='left'>发放方式：</view>
+    <view class='right'>店铺主页领取</view>
+  </view>
+</view>
+
+<view class='bottom flex_between'>
+  <button bindtap='goback'>返回</button>
+  <button wx:if="{{tickt.status == 1}}">立即关闭</button>
+  <!-- <button wx:if="{{tickt.status == 2||3}}">立即启用</button> -->
+  <button wx:if="{{tickt.status == 2}}">立即启用</button>
+  <button wx:if="{{tickt.status == 3}}">立即启用</button>
+  <button wx:if="{{tickt.status == 4}}">删除</button>
+</view>

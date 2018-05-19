@@ -1,0 +1,36 @@
+<block wx:if='{{commis_list}}'>
+  <view class='header'>
+    <view class='title'>
+      近一周积分收益趋势
+    </view>
+    <view class='canvas_con'>
+      <view class='canvas'>
+        <canvas canvas-id='canvas' style='width:350px;height:220px'>
+        </canvas>
+      </view>
+    </view>
+    <view class='more'>
+      想要获取更多积分?
+    </view>
+  </view>
+  <view class='list th flex_center'>
+    <view class='list1'>时间</view>
+    <view class='list2'>联盟商</view>
+    <view class='list3'>收益积分</view>
+    <view class='list4'>状态</view>
+  </view>
+  <view class='list flex_center' wx:for="{{commis_list}}" wx:for-item="i" wx:key="list">
+    <view class='list1'>{{i.add_time}}</view>
+    <view class='list2'>{{i.extension_name}}</view>
+    <view class='list3'>￥{{i.mb_commis_totals}}</view>
+    <view class='list4'>{{i.give_status}}</view>
+  </view>
+</block>
+<!--缺少提示页面-->
+<block wx:else>
+  <view class='defaultpage' >
+    <image src='{{imgUrl}}/icondefault-index.png'></image>
+    <view class='text'>您还没有联盟商创造价值</view>
+    <view class='text'>快去邀请吧！</view>
+  </view>
+</block>

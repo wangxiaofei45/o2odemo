@@ -1,0 +1,120 @@
+<view class="seach_title clearfix">
+  <view class="position1 clearfix">
+    <image src='{{imgUrl}}/position.png'></image>
+    <view class='text'>{{location}}</view>
+  </view>
+  <view class='input'>
+    <input bindfocus='bindfocus' placeholder='请输入店铺的名称或类目关键字'></input>
+    <image src='{{imgUrl}}/search.png'></image>
+  </view>
+  <view class='code' bindtap="tapScanCode">
+    <image  src='{{imgUrl}}/ScanQRCode.png'></image>
+    <view hidden='{{hiddenScanCode}}' class='pull_down'>
+      <view class="list">
+        <view bindtap='Richscan' class='list_cons flex_start'>
+          <image src='{{imgUrl}}/RichScan.png'></image>
+          <view>
+            扫一扫
+          </view>
+        </view>
+      </view>
+      <view class="list">
+        <navigator url='../pay/payCode/payCode'>
+          <view class='list_cons flex_start'>
+            <image src='{{imgUrl}}/code.png'></image>
+            <view>
+              付款码
+            </view>
+          </view>
+        </navigator>
+      </view>
+      <view class="list">
+        <navigator url='../pay/collect/collectMoney'>
+          <view class='list_cons flex_start'>
+            <image src='{{imgUrl}}/code.png'></image>
+            <view>收款码</view>
+          </view>
+        </navigator>
+      </view>
+      <view class="list" wx:if="{{is_codeowner}}">
+        <navigator url='../my/codeowner/qrcode'>
+          <view class='list_cons flex_start'>
+            <image src='{{imgUrl}}/code.png'></image>
+            <view>邀请码</view>
+          </view>
+        </navigator>
+      </view>
+    </view>
+  </view>
+</view>
+<!-- 轮播图 -->
+<swiper class="swiper" indicator-dots="{{indicatorDots}}" indicator-color="{{indicatorColor}}" indicator-active-color="{{indicatorActiveColor}}" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}" circular="{{circular}}">
+  <block wx:for="{{bannerlist}}" wx:key="banner">
+    <swiper-item class="swippers">
+      <navigator url="{{item.link}}">
+      <image src="{{item.imgurl}}" class="slide-image" />
+      </navigator>
+    </swiper-item>
+  </block>
+</swiper>
+<!--submenu-->
+<view class="bars">
+  <view class='bar_con'>
+    <view bindtap='tapSubmenu' class='con_list' hover-class='con_list_active' wx:for="{{submenu}}" wx:key="tabbar" data-id="{{item.class_id}}" data-name="{{item.class_name}}">
+      <image src='{{item.class_image}}'></image>
+      <view>
+        {{item.class_name}}
+      </view>
+    </view>
+  </view>
+</view>
+<!-- <navigator url='tickt/index' class='redemption'>
+    <image src='{{imgUrl}}/index/home_tickt.png'></image>
+</navigator> -->
+<!--新人领券结束- ->
+<!--show_list-->
+<scroll-view class="show_con" scroll-into-view="{{toView}}" scroll-y="true" scroll-with-animation="true">
+  <view class='show_list' wx:for="{{storelist}}" wx:key="*this">
+    <view class='list_con clearfix'>
+      <image catchtap='open_store' data-class_id="{{item.class_id}}" data-pc_id="{{item.parent_class_id}}" data-chain_id="{{item.chain_id}}" src='{{item.store_logo}}'></image>
+      <view class='right'>
+        <view class='title_con clearfix'>
+            <view class='title' catchtap='open_store' data-class_id="{{item.class_id}}" data-pc_id="{{item.parent_class_id}}" data-chain_id="{{item.chain_id}}">
+              {{item.chain_name}}
+            </view>
+          <view class='nav' bindtap='tapOpenLocation' data-lng="{{item.lng}}" data-lat="{{item.lat}}" data-name="{{item.store_name}}" data-tel="{{item.address}}">
+            <image src='{{imgUrl}}/navigation.png'></image>
+            {{item.distance}}
+          </view>
+        </view>
+        <view class='text1' catchtap='open_store' data-class_id="{{item.class_id}}" data-pc_id="{{item.parent_class_id}}" data-chain_id="{{item.chain_id}}" >
+            {{item.class_name}}
+            <block wx:if="{{item.store_side != ''}}">
+            [{{item.store_side}}]
+            </block>
+        </view>
+        <view class='text2'>地址：{{item.address}}</view>
+        <view class='button clearfix' wx:if="{{item.is_discount != ''}}" wx:for="{{item.is_discount}}"  wx:key="*this" wx:for-item="discount">          
+            <button>{{discount}} </button>
+        </view>
+        <view class='text3' wx:if="{{item.activity != ''}}">
+          {{item.activity}}
+        </view>
+        <view class='button' wx:if="{{item.rate_customer&&item.rate_customer!=0?true:false}}">
+           <button>{{item.rate_customer}}%积分</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</scroll-view>
+<!--新人领券大礼包-->
+
+<view class='home_tickt_model' catchtouchmove='true'  hidden='true'>
+  <view class='home_pos' catchtap='close_home_tickt'>
+  </view>
+  <view class='model_con'>
+      <image src='{{imgUrl}}/index/packs.png'></image>
+      <view class='money'>￥{{couponAmount}}</view>
+      <navigator url='tickt/index' class='bottom'>前往领取</navigator>
+  </view>
+</view>

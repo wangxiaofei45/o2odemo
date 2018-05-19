@@ -1,0 +1,57 @@
+<view>
+  <!-- 搜索结果 -->
+  <view class="seach_con">
+    <view class='seach_title claerfix'>
+      <view class='input'>
+        <input name="keyword" value='{{keyword}}' placeholder='请输入店铺的名称或类目关键字' bindchange="changeKeywords"></input>
+        <image src='{{imgUrl}}/search.png'></image>
+      </view>
+      <view bindtap='tapSeach' class='seach_right'>
+        搜索
+      </view>
+    </view>
+  </view>
+  <view class='show_con' wx:if="{{show}}">
+
+    <view class='show_list' wx:if="{{storeList.length>0}}" wx:for="{{storeList}}" wx:key="storeList" data-id="{{item.store_id}}">
+      <navigator url="info?store_id={{item.store_id}}">
+        <view class='list_con clearfix'>
+          <image src='{{item.store_logo}}'></image>
+          <view class='right'>
+            <view class='title_con clearfix'>
+              <view class='title'>
+                {{item.store_name}}
+              </view>
+              <view class='nav' bindtap='tapOpenLocation' data-name="{{item.store_name}}" data-tel="{{item.address}}">
+                <image src='{{imgUrl}}/navigation.png'></image>
+                {{item.distance}}
+              </view>
+            </view>
+            <view class='text1'>
+              {{item.class_name}}
+              <label wx:if="{{item.store_side != ''}}">
+                [{{item.store_side}}]
+              </label>
+              <label wx:if="{{item.telephone != ''}}" data-tel="{{item.telephone}}" bindtap='makePhoneCall'>
+                {{item.telephone}}
+              </label>
+
+            </view>
+            <view class='text2'>地址：{{item.address}}</view>
+            <view class='button clearfix' wx:if="{{item.is_discount != ''}}" wx:for="{{item.is_discount}}" wx:for-item="discount">
+              <button>{{discount}}</button>
+            </view>
+            <view class='text3' wx:if="{{item.activity != ''}}">
+              {{item.activity}}
+            </view>
+          </view>
+        </view>
+      </navigator>
+    </view>
+    <!--没有店铺列表时-->
+    <view wx:if="{{storeList === undefined || storeList.length == 0}}" class='defaultpage'>
+      <image src='{{imgUrl}}/icondefault-store.png'></image>
+      <view class='text'>抱歉，没有找到您要搜索的门店</view>
+    </view>
+  </view>
+</view>

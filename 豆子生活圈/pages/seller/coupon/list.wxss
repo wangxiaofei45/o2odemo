@@ -1,0 +1,148 @@
+.seach_title {
+  width: 100%;
+  background-color: #fff;
+  height: 90rpx;
+  position: fixed;
+  left: 0rpx;
+  top: 0rpx;
+  z-index: 2;
+}
+.seach_title .input {
+  width: 580rpx;
+  height: 60rpx;
+  position: relative;
+  box-sizing: border-box;
+  margin-left: 25rpx;
+}
+.seach_title input {
+  border: 4rpx solid #d6d6d6;
+  width: 580rpx;
+  height: 60rpx;
+  border-radius: 30rpx;
+  box-sizing: border-box;
+  padding-left: 60rpx;
+  font-size: 25rpx;
+}
+.seach_title .input image {
+  width: 60rpx;
+  height: 60rpx;
+  position: absolute;
+  top: 50%;
+  margin-top: -30rpx;
+  left: 0rpx;
+}
+.seach_title .code {
+  margin-right: 25rpx;
+  font-size: 32rpx;
+  color: #ff4965;
+}
+.seach_title .code image{
+  width: 44rpx;
+  height: 44rpx;
+}
+.content{
+  margin-top: 102rpx;
+  z-index: -1;
+}
+/*优惠券*/
+.ticket_con{
+  width: 700rpx;
+  margin: 0 auto;
+  margin-top: 12rpx;
+}
+.ticket_con .ticket{
+  width: 700rpx;
+  height: 206rpx;
+  background-color: #fff;
+  margin-bottom: 22rpx;
+  position: relative;
+}
+.ticket_con .ticket .ticket_pos{
+  position: absolute;
+  right: 25rpx;
+  top: 38rpx;
+  color: #ff4965;
+  font-size: 28rpx;
+}
+.ticket_con .ticket .image_pos{
+  width: 154rpx;
+  height: 156rpx;
+  position: absolute;
+  right: 55rpx;
+  top: 25rpx;
+}
+.ticket_con .ticket .borderimg{
+  width: 7rpx;
+  height: 206rpx;
+}
+.ticket_con .ticket .right{
+  width: 483rpx;
+  height: 206rpx;
+  float: right;
+  padding-left: 45rpx;
+  box-sizing: border-box;
+}
+.ticket_con .ticket .right .list1{
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #333333;
+  padding-top: 30rpx;
+}
+.ticket_con .ticket .right .list2{
+  font-size: 28rpx;
+  color: #333333;
+  padding-top: 20rpx;
+}
+.ticket_con .ticket .right .list3{
+  color: #666666;
+  font-size: 24rpx;
+  padding-top: 20rpx;
+}
+.ticket_con .ticket .left{
+  width: 210rpx;
+  float: left;
+  height: 206rpx;
+  background-color: #f1ae2d;
+  text-align: center;
+}
+.ticket_con .ticket .left .list1{
+   color: #fdefd5;
+   font-size: 30rpx;
+   padding-top: 20rpx;
+}
+.ticket_con .ticket .left .list2{
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 70rpx;
+  color: #fff;
+}
+.ticket_con .ticket .left .list3{
+  margin: 0 auto;
+  font-size: 22rpx;
+  width: 160rpx;
+  height: 45rpx;
+  line-height: 45rpx;
+  color: #fff;
+  border-top: 3rpx solid #fdefd5;
+}
+.ticket_con .ticket .left image{
+  width: 25rpx;
+  height: 30rpx;
+}
+/*过期*/
+.ticket_con .ticket .past .left{
+  background-color: #d6d6d6;
+}
+.ticket_con .ticket .past .left .list1{
+   color: #959595;
+}
+.ticket_con .ticket .past .left .list2{
+  color: #666666;
+}
+.ticket_con .ticket .past .left .list3{
+  color: #959595;
+  border-top: 3rpx solid #c7c7c7;
+}
+.ticket_con .ticket .nostart .left{
+  background-color: #5ea8e7;
+}

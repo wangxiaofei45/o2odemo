@@ -1,0 +1,68 @@
+.list{
+  width:100%;
+  background-color: #ffffff;
+  margin-bottom: 22rpx;
+  border-bottom: 4rpx solid #e9e9e9;
+  border-top: 4rpx solid #e9e9e9;
+}
+.lists_con{
+  width: 700rpx;
+  margin: 0 auto;
+}
+.lists_con .title{
+  padding-top: 15rpx;
+  font-size: 30rpx;
+  color: #333333;
+  height: 55rpx;
+}
+.lists_con .title .name{
+  padding-right: 35rpx;
+}
+.address{
+  font-size: 30rpx;
+   height: 110rpx; 
+  line-height: 55rpx;
+  color: #666666;
+}
+.operation{
+  width: 100%;
+  height: 90rpx;
+  border-top: 3rpx solid #d6d6d6;
+  font-size: 24rpx;
+}
+.operation image{
+  width: 44rpx;
+  height: 44rpx;
+  margin-right: 15rpx;
+}
+.left{
+  color: #ff4965;
+}
+.right{
+  color:  #666666;
+}
+.delete{
+  margin-left: 30rpx;
+}
+.sure{
+  width: 100%;
+  position: fixed;
+  border-radius: 0rpx;
+  left: 0rpx;
+  bottom: 0rpx;
+  background-color: #ff4965;
+  color: #ffffff;
+  font-size: 32rpx;
+  letter-spacing: 5rpx;
+}
+.button-hover{
+  background-color: rgba(0, 0, 0, 0.1)
+}
+.bottom_button{
+  width: 100%;
+  position: absolute;
+  bottom: 25rpx;
+}
+.bottom_button button{
+  margin-top: 25rpx;
+}

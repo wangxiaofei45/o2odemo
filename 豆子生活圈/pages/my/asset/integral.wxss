@@ -1,0 +1,84 @@
+page{
+  background-color: #f5f5f5;
+}
+.header{
+  width: 100%;
+  height: 300rpx;
+  color: #ffffff;
+  position: relative;
+  background-color: #fc7e92;
+}
+.header .header_list{
+  font-size: 45rpx;
+  font-weight: 700;
+  padding-top: 70rpx;
+}
+.header .header_list .left{
+  font-size: 34rpx;
+  font-weight: 700;
+  padding-left: 110rpx;
+  padding-right: 45rpx;
+
+}
+.header .right_img{
+  position: absolute;
+  right: 0rpx;
+  top: 43rpx;
+  width: 200rpx;
+  height: 214rpx;
+}
+.integral{
+  width: 100%;
+  height: 200rpx;
+  background-color: #ffffff;
+}
+.integral .list{
+  width: 350rpx;
+  height: 100rpx;
+  text-align: center;
+}
+.integral .list .name{
+  font-size: 24rpx; color: #666666;
+  font-weight: 700;
+  padding-bottom: 35rpx;
+}
+.integral .list .number{
+  font-size: 29rpx;
+  color: #fc7e92;
+  font-weight: 700;
+}
+.integral .listhas{
+  /* border-right: 3rpx dashed #d6d6d6; */
+}
+.bar_con{
+  width: 100%;
+  background-color: #ffffff;
+  margin-top: 22rpx;
+}
+.bar_con .list{
+  width: 50%;
+  height: 200rpx;
+  text-align: center;
+  box-sizing: border-box;
+}
+.bar_con .list1{
+  border-bottom: 3rpx solid #d6d6d6;
+  border-right: 3rpx solid #d6d6d6;
+}
+.bar_con .list2{
+  border-bottom: 3rpx solid #d6d6d6;
+}
+.bar_con .list3{
+  border-right: 3rpx solid #d6d6d6;
+}
+.bar_con .list .name{
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333333;
+}
+.bar_con .list image{
+  width: 44rpx;
+  height: 44rpx;
+  margin-top: 45rpx;
+  margin-bottom: 30rpx;
+}

@@ -1,0 +1,18 @@
+<view class='list1 flex_between'>
+  <view class='left'>应付金额</view>
+  <view class='right'>{{show.money}}</view>
+</view>
+<view class='content'>
+  <view class='left'>支付方式</view>
+</view>
+<view class='content2'>
+    <view class='list list2 flex_between'>
+    <view class='left'>卡额   <i class="little">可用余额 {{show.old_available}}</i></view>
+    <view class='right'>-{{show.available}}</view>
+  </view>
+    <view class='list flex_between'>
+    <view class='left'>积分   <i class="little"> 可用积分{{show.old_points}}</i></view>
+    <view class='right'>-{{show.points}}</view>
+  </view>
+</view>
+<button bindtap='sure' disabled='{{disabled}}' class='sure'>确定支付</button>

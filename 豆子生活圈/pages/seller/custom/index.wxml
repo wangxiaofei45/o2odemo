@@ -1,0 +1,31 @@
+<view class="seach_title flex_between">
+  <view class='input'>
+    <input bindinput='bindInputKeywords' placeholder='请输入优惠券关键字'></input>
+    <image src='{{imgUrl}}/search.png'></image>
+  </view>
+  <navigator url='add' class='code flex_center'>
+    <image src='{{imgUrl}}/my/add.png'></image>
+    新增
+  </navigator>
+</view>
+<view class='content'>
+  <navigator url='detail' class='tickt_lists' wx:for="{{tickt_list}}" wx:key="tickt_list" wx:for-item="i">
+    <view class='pos_top_r'>
+      <block wx:if="{{i.status == 1}}">已开启</block>
+      <block wx:if="{{i.status == 2}}">未开启</block>
+      <block wx:if="{{i.status == 3}}">已关闭</block>
+    </view>
+    <view class='no_1 flex_start'>
+      <image src='../../../image/demo.png'></image>
+      <view>
+        <view class='name'>{{i.title}}</view>
+        <view class='text'>{{i.text}}</view>
+      </view>
+    </view>
+    <image class='center_line' src='../../../image/my/tickt_line_02.png'></image>
+    <view class='no_2'>
+      <view class='name'>有效日期：{{i.time}}</view>
+    </view>
+    <image wx:if="{{i.status == 4}}" class='pos_right' src='{{imgUrl}}/my/icon-Expired.png'></image>
+  </navigator>
+</view>

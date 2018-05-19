@@ -1,0 +1,103 @@
+page{
+  background-color: #ff4965;
+}
+.content{
+  width: 700rpx;
+  background-color: #fff;
+  margin: 0 auto;
+  border-radius: 18rpx;
+  box-sizing: border-box;
+  position: relative;
+  padding-bottom: 45rpx;
+}
+.type{
+  color: #ff4965;
+  font-size: 24rpx;
+  font-weight: 700;
+  position: absolute;
+  top: 40rpx;
+  right: 40rpx;
+}
+.no_1{
+  text-align: center;
+}
+.content .logo{
+  width: 86rpx;
+  height: 86rpx;
+  border-radius: 10rpx;
+  padding-top: 40rpx;
+}
+.name{
+  font-size: 30rpx;
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 15rpx;
+}
+.money{
+  font-size: 56rpx;
+  color: #ff4965;
+  font-weight: 700;
+  margin-bottom: 22rpx;
+}
+.time{
+  color: #666666;
+  font-size: 24rpx;
+  margin-bottom: 15rpx;
+}
+.center{
+  width: 100%;
+  height: 40rpx;
+}
+.lists_con{
+  width: 620rpx;
+  margin: 0 auto;
+  color: #333333;
+  font-size: 28rpx;
+}
+.lists_con .list{
+  margin-top: 10rpx;
+  letter-spacing: 2rpx;
+}
+.lists_con image{
+  width: 10rpx;
+  height: 10rpx;
+  margin-right: 15rpx;
+}
+.bottom_line{
+  width: 650rpx;
+  height: 17rpx;
+  display: block;
+  margin: 0 auto;
+  margin-top: 25rpx;
+  margin-bottom: 30rpx;
+}
+.goto_detail{
+  width: 620rpx;
+  margin: 0 auto;
+  font-size: 32rpx;
+  color: #333333;
+  font-weight: 700;
+  padding: 15rpx 0rpx;
+}
+.goto_detail .red{
+  color: #ff4965;
+}
+.goto_detail image{
+  width: 40rpx;
+  height: 40rpx;
+}
+.button{
+  width: 700rpx;
+  position: fixed;
+  left: 25rpx;
+  bottom: 50rpx;
+}
+.button button{
+  width:340rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  font-size: 30rpx;
+  color: #333333;
+  letter-spacing: 5rpx;
+  font-weight: 700
+}

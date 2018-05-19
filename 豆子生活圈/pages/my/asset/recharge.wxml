@@ -1,0 +1,63 @@
+<view class="body">
+  <view class='header_con'>
+    <view class='t flex_between'>
+      <view class='t1'>
+        请选择充值金额
+      </view>
+      <block wx:if="{{!diy}}">
+        <view class='t2 flex_center' bindtap='u_defined'>
+          <image src='{{imgUrl}}/my/pencil.png'></image>
+          自定义
+        </view>
+      </block>
+      <block wx:if="{{diy}}">
+        <view class='t2 flex_center' bindtap='u_defined'>
+          <image src='{{imgUrl}}/my/rocket.png'></image>
+          快速通道
+        </view>
+      </block>
+    </view>
+    <block wx:if="{{!diy}}">
+      <view class="header">
+        <view class='money'>
+          ￥{{payableAmount}}
+        </view>
+        <view class='button flex_start_wrap'>
+          <button wx:for="{{rechargecard_list}}" wx:key="rechargecard" class="{{item.rc_id == selectedId ? 'active':''}}" data-id="{{item.rc_id}}" data-amount="{{item.recharge_amount}}" bindtap='changeRechargeAmount'>
+            {{item.recharge_amount}}元
+          </button>
+        </view>
+      </view>
+    </block>
+    <block wx:if="{{diy}}">
+      <view class='input flex_center'>
+        <input bindinput='bindinput' type='number' placeholder='输入数字'></input>
+        <view class='pos_a'>
+          元
+        </view>
+      </view>
+    </block>
+  </view>
+  <view class='header'>
+    <view class='title'>
+      请选择支付方式：
+    </view>
+    <radio-group class="radio-group " bindchange="radioPayment">
+      <label class="lists flex_between" wx:for="{{payment_list}}" wx:key="ss">
+        <view class='left flex_start'>
+          <image src='{{imgUrl}}/payment/{{item.payment_code}}.png'></image>
+          <view>
+            {{item.payment_name}}
+          </view>
+        </view>
+        <checkbox class='right' value="{{item.payment_code}}" checked="{{item.checked}}" color='#ff4965'>
+        </checkbox>
+      </label>
+    </radio-group>
+  </view>
+  <view class='sure_con'>
+    <button bindtap='confirmPay' class='sure'>
+      确认支付
+    </button>
+  </view>
+</view>

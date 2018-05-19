@@ -1,0 +1,59 @@
+<view class='detail flex_center'>
+    <view class='select flex_start'>
+      <view class='flex_center' bindtap='selectYear'>
+        <image hidden='{{year_click}}' src='{{imgUrl}}/bill/singleselection-c.png'></image>
+        <image hidden='{{!year_click}}' src='{{imgUrl}}/bill/singleselection-n.png'></image>
+        年度
+      </view>
+      <view class='flex_center' bindtap='selectMonth'>
+        <image hidden='{{!year_click}}' src='{{imgUrl}}/bill/singleselection-c.png'></image>
+        <image hidden='{{year_click}}' src='{{imgUrl}}/bill/singleselection-n.png'></image>
+        月度
+      </view>
+    </view>
+    <view class='years flex_end' bindtap='selectTime'>
+      <view hidden='{{year_click}}' data-year="{{year}}">
+        {{year}}
+      </view>
+      <view hidden='{{!year_click}}' data-yrarMontn="{{year}}{{month}}">
+        {{year}}/{{month}}
+      </view>
+      <image src='{{imgUrl}}/my/kalendar.png'>
+      </image>
+    </view>
+</view>
+<!--时间选择model-->
+<view class='model' hidden='{{model}}'>
+  <view class='modelcon'>
+    <view>
+      <picker-view indicator-style="height: 50px;" style="width: 100%; height: 300px; text-align:center" value="{{value}}" bindchange="bindChange">
+        <picker-view-column>
+          <view wx:for="{{years}}" wx:key="years" style="line-height: 50px">{{item}}年</view>
+        </picker-view-column>
+        <picker-view-column hidden="{{monthsHidden}}">
+          <view wx:for="{{months}}" wx:key="months" style="line-height: 50px">{{item}}月</view>
+        </picker-view-column>
+      </picker-view>
+    </view>
+    <button class='left' bindtap='close_model'>
+      取消
+    </button>
+    <button class='right' bindtap='close_model'>
+      确定
+    </button>
+  </view>
+</view>
+<block wx:if='{{commis_list}}'>
+  <view class='list_con flex_between' wx:for="{{commis_list}}" wx:key="userinfo">
+    <view class='list_left'>
+        {{item.add_time}}
+    </view>
+    <view class='list_right'>
+        ￥{{item.mb_commis_totals}}
+    </view>
+  </view>
+</block>
+<view class='defaultpage' wx:else >
+   <image src='{{imgUrl}}/icondefault-asset.png'></image>
+   <view class='text'>该联盟商还没返佣</view>
+</view>

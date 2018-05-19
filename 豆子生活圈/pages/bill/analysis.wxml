@@ -1,0 +1,140 @@
+<swiper class="swiper" interval="2000" duration="1000" circular="true">
+  <image class='pos pl' src='{{imgUrl}}/bill/bg_l.png'></image>
+  <image class='pos pr' src='{{imgUrl}}/bill/bg_r.png'></image>
+  <swiper-item>
+    <view class='container1 flex_center'>
+      <view class='detail_left'>
+        <view class='select flex_center'>
+          <view class='flex_center' bindtap='selectYear'>
+            <image hidden="{{bill_time=='month'}}" src='{{imgUrl}}/bill/singleselection-c.png'></image>
+            <image hidden="{{bill_time=='year'}}" src='{{imgUrl}}/bill/singleselection-n.png'></image>
+            年度
+          </view>
+          <view class='flex_center' bindtap='selectMonth'>
+            <image hidden="{{bill_time=='year'}}" src='{{imgUrl}}/bill/singleselection-c.png'></image>
+            <image hidden="{{bill_time=='month'}}" src='{{imgUrl}}/bill/singleselection-n.png'></image>
+            月度
+          </view>
+        </view>
+        <view class='years flex_center' bindtap='selectTime'>
+          <image src='{{imgUrl}}/bill/kalendar.png'>
+          </image>
+          <view hidden="{{bill_time=='month'}}" data-year="{{year}}">
+            {{year}}
+          </view>
+          <view hidden="{{bill_time=='year'}}">
+            {{year}}/{{month}}
+          </view>
+        </view>
+      </view>
+      <view class='detail_right'>
+        <view class='n'>
+          年度总额
+        </view>
+        <view class='nm'>
+          {{orderAmountCount}}元
+        </view>
+      </view>
+    </view>
+  </swiper-item>
+  <swiper-item>
+    <view class='container1'>
+      2
+    </view>
+  </swiper-item>
+</swiper>
+<!--画图-->
+<view class='list'>
+  <view class='title'>
+    <block wx:if="{{identity =='user'}}">消费</block>
+    <block wx:if="{{identity =='store'}}">收入</block>趋势
+  </view>
+  <canvas canvas-id="lineCanvas" disable-scroll="true" class="canvass" bindtouchstart="touchHandler" bindtouchmove="moveHandler" bindtouchend="touchEndHandler"></canvas>
+</view>
+<view class='list ranking'>
+  <view class='title'>
+    <block wx:if="{{identity =='user'}}">消费</block>
+    <block wx:if="{{identity =='store'}}">客户</block>排行榜
+  </view>
+  <view class='text flex_center' wx:for="{{orderClassData}}" wx:key = "shop" wx:for-item = "i">
+    <view class='left flex_start'>
+      <image src='{{imgUrl}}/bill/no_{{index+1}}.png'></image>
+      {{i.class_name}}
+    </view>
+    <view class='center'>
+    {{i.count}}笔
+    </view>
+    <view class='rights'>
+    {{i.goods_price}}
+    </view>
+  </view>
+</view>
+<!--经常光顾的店 个人 -->
+<block wx:if="{{identity =='user'}}">
+  <view class='list often'>
+    <view class='title'>
+      经常光顾的店
+    </view>
+    <view class='text flex_center' wx:for="{{storeCountData}}" wx:for-item="i" wx:key="key">
+      <view class='left'>
+        {{i.store_name}}
+      </view>
+      <view class='center'>
+        {{i.count}}
+      </view>
+      <view class='rights'>
+        {{i.amount}}
+      </view>
+    </view>
+  </view>
+</block>
+<!--客户消费分析 商户 -->
+<block wx:if="{{identity =='store'}}">
+  <view class='list analysis'>
+    <view class='title'>
+      客户消费分析
+    </view>
+    <view class='select flex_center'>
+      <button class="{{presentid == item.id?'select_active':''}}" bindtap='select_type' wx:for="{{analys_list}}" wx:key="a_list" data-text="{{item.text}}" data-id="{{item.id}}">{{item.name}}</button>
+    </view>
+    <view class='s_text'>
+      {{presenttext}}
+    </view>
+    <!--画图-->
+    <view class="canvas_con">
+      <canvas class="canvas" canvas-id="ringCanvas"></canvas>
+      <view class="swippers canvas_right">
+        <view class='lists flex_start' wx:for="{{series}}" wx:key="colors" wx:for-item="j" wx:if="{{j.id <= 4}}">
+          <view class='color' style='background-color:{{j.color}}'>
+          </view>
+          <view class='name'>
+            {{j.name}}
+          </view>
+        </view>
+      </view>
+    </view>
+    <!--画图结束-->
+  </view>
+</block>
+<!--时间选择model-->
+<view class='model' catchtouchmove='true' hidden="{{showYearMonth}}">
+  <view class='modelcon'>
+    <view>
+      <picker-view indicator-style="height: 50px;" style="width: 100%; height: 300px; text-align:center" value="{{value}}" bindchange="changeYearMonth">
+        <picker-view-column>
+          <view wx:for="{{years}}" wx:key="years" style="line-height: 50px">{{item}}年</view>
+        </picker-view-column>
+        <!--切换到月份的时候将选择框的月份隐藏掉-->
+        <picker-view-column hidden="{{monthsHidden}}">
+          <view wx:for="{{months}}" wx:key="months" style="line-height: 50px">{{item}}月</view>
+        </picker-view-column>
+      </picker-view>
+    </view>
+    <button class='left' bindtap='closeYearMonth'>
+      取消
+    </button>
+    <button class='right' bindtap='confirmYearMonth'>
+      确定
+    </button>
+  </view>
+</view>

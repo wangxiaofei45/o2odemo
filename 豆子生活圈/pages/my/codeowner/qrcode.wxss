@@ -1,0 +1,195 @@
+.pos_con{
+  width: 100%;
+  height: 100%;
+  background-color: #ff4965;
+  font-size: 30rpx;
+  
+}
+.zw{
+  width: 100%;
+  height: 1rpx;
+}
+.pos_a{
+  color: #ffffff;
+  position: absolute;
+  right: 25rpx;
+  top: 25rpx;
+}
+.code_con{
+  width: 700rpx;
+  height: 710rpx;
+  margin: 0 auto;
+  margin-top: 100rpx;
+  background-color: #ffffff;
+  border-radius: 20rpx;
+  position: relative;
+}
+.code_con .con_ab{
+  width: 170rpx;
+  height: 170rpx;
+  border-radius: 50%;
+  background-color: #ffffff;
+  position: absolute;
+  top: -70rpx;
+  left: 50%;
+  margin-left: -70rpx;
+  text-align: center;
+}
+.code_con .con_ab image{
+  width: 110rpx;
+  height: 110rpx;
+  margin-top: 30rpx;
+}
+.code_con .s{
+   font-size: 32rpx;
+   line-height: 50rpx;
+   text-align: center;
+   padding-top: 90rpx;
+   width: 100%;
+   position: relative;
+}
+.code_con .s .select{
+  z-index: 1;
+  width: 100%;
+  background-color: #ffffff;
+  position: absolute;
+  left: 0rpx;
+  top: 102%;
+}
+.s .select .l{
+  line-height: 80rpx;
+  border-top: 1rpx solid #d6d6d6;
+}
+
+.code_con .s image{
+  width: 28rpx;
+  height: 28rpx;
+}
+.code_con image{
+  width: 24rpx;
+  height: 110rpx;
+}
+.code_con .line_l{
+  position: absolute;
+  left: 40rpx;
+  bottom: -55rpx;
+}
+.code_con .line_r{
+  position: absolute;
+  right: 40rpx;
+  bottom: -55rpx;
+}
+.code_con .top_r{
+   width: 147rpx;
+   height: 114rpx;
+   position: absolute;
+   right: 0rpx;
+   top: 0rpx;
+}
+.code_con .code{
+  width: 410rpx;
+  height: 410rpx;
+  margin: 0 auto;
+  margin-top: 35rpx;
+  position: relative;
+}
+.code_con .code .code_model{
+  width: 410rpx;
+  height: 410rpx;
+  position: absolute;
+  left: 0rpx;
+  top: 0rpx;
+  background-color: rgba(255, 255, 255, 0.9); 
+}
+.code_con .code image{
+  width: 410rpx;
+  height: 410rpx;
+  z-index: 1;
+}
+.code > canvas {
+    width: 410rpx;
+    height: 410rpx;
+}
+.code_con .bundle{
+  font-size: 28rpx;
+  margin-top: 50rpx;
+}
+.code_con .bundle .w{
+  width: 100%;
+  line-height: 50rpx;
+  text-align: center;
+}
+.code_con .bundle .input{
+  width: 400rpx;
+  height: 80rpx;
+  margin: 0 auto;
+  margin-top: 80rpx;
+  margin-bottom: 80rpx;
+}
+.code_con .bundle .input .input_con{
+  width: 350rpx;
+  height: 80rpx;
+  border-bottom: 1rpx solid #d6d6d6;
+}
+.code_con .bundle  button{
+  width: 450rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  background-color: #ff4965;
+  color: #ffffff;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+.code_con .bundle image{
+  width: 44rpx;
+  height: 44rpx;
+}
+.b{
+  width: 700rpx;
+  height: 280rpx;
+  margin: 0 auto;
+  margin-top: 16rpx;
+  background-color: #f991a1;
+  border-radius: 20rpx;
+  z-index: 0;
+}
+.b .list{
+  text-align: center;
+}
+.b .list .l1{
+  font-size: 24rpx;
+  color: #ffffff;
+  text-align:center; 
+  margin-bottom: 40rpx;
+}
+.b .list .l2{
+  font-size: 23rpx;
+  text-align:center; 
+  margin-bottom: 30rpx;
+}
+.b .list button{
+  width: 100rpx;
+  height: 50rpx;
+  line-height: 50rpx;
+  color: #ffffff;
+  font-size: 28rpx;
+  padding: 0rpx;
+  background-color: #b54f12;
+  box-sizing: content-box;
+}
+.b .list .button-hover{
+  background-color: #9b430f;
+}
+.b .list .disable{
+  background-color: #878787;
+  border: 1rpx solid #b3b3b3;
+}
+.history{
+  width: 300rpx;
+  position: absolute;
+  bottom: 25rpx;
+  left: 50%;
+  margin-left: -150rpx;
+  text-align: center;
+  color: #ffffff;
+}

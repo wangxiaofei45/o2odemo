@@ -1,0 +1,104 @@
+<view class="select_identity flex_center">
+  <view class='left flex_start' bindtap='selet'>
+    <image hidden="{{currentInfo.type==2}}" src='{{imgUrl}}/bill/nav-me-c.png'></image>
+    <image hidden="{{currentInfo.type==1}}" src='{{imgUrl}}/bill/nav-store-c.png'></image>
+    <view class="name">
+      {{currentInfo.classname}}
+    </view>
+    <image class="{{select_model?'rotate':''}}" src='{{imgUrl}}/bill/upr.png'></image>
+  </view>
+  <view class='right flex_end'>
+    <navigator url='seach'>
+      <image src='{{imgUrl}}/bill/seach.png'></image>
+    </navigator>
+    <navigator url='filter'>
+      <image src='{{imgUrl}}/bill/filter.png'></image>
+    </navigator>
+  </view>
+  <view wx:if="{{select_model}}" class="select_pos_abs" catchtouchmove='true' catchtap='close_model'>
+    <view wx:for="{{roleList}}" wx:for-item="i" wx:key="names" class='list' data-classname="{{i.classname}}" data-type="{{i.type}}" data-classid="{{i.classid}}" catchtap='changeStore'>
+      {{i.classname}}
+    </view>
+  </view>
+</view>
+<!--店铺的列表-->
+<block wx:if="{{current_type == 1}}">
+  <view class='select_type flex_center'>
+    <view class='select_con flex_center'>
+      <view class="list {{ user_type== 1?'active':''}}" data-id="1" bindtap='id_type'>联盟商户</view>
+      <view class="list {{ user_type== 2?'active':''}}" data-id='2' bindtap='id_type'>VIP客户</view>
+    </view>
+  </view>
+  <block wx:if='{{user_type == 1}}'>
+    <block wx:if="{{union_list.length>0}}">
+      <view class="containers" wx:for="{{union_list}}" wx:key="list" data-id='{{item.id}}' data-store_id='{{item.store_id}}' data-showtype='2' bindtap='clientinfo'>
+        <view class="list flex_between">
+          <view class='left flex_start' data-id='{{item.id}}' data-store_id='{{item.store_id}}'>
+            <image src='{{item.store_logo}}'></image>
+            {{item.store_name}}
+            <image hidden="{{item.is_follow == 1?false:true}}" class='star' src='{{imgUrl}}/my/Affiliate-Markstar-c.png'>
+            </image>
+          </view>
+          <view class='right'>
+            <image src='{{imgUrl}}/my/Affiliate-details.png'></image>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class='defaultpage'>
+        <image src='{{imgUrl}}/icondefault-team.png'></image>
+        <view class='text'>您还没有联盟商</view>
+        <view class='text'>快去邀请吧！</view>
+      </view>
+    </block>
+  </block>
+  <block wx:if="{{user_type == 2}}">
+    <block wx:if="{{user_list.length>0}}">
+      <view class="containers" wx:for="{{user_list}}" wx:key="list" data-id='{{item.id}}' data-member_id="{{item.member_id}}" data-showtype='1' bindtap='clientinfo'>
+        <view class="list flex_between">
+          <view class='left flex_start' data-id='{{item.id}}' data-store_id='{{item.member_id}}'>
+            <image src='{{item.member_avatar}}'></image>
+            {{item.member_name}}
+            <image hidden="{{item.is_follow == 1?false:true}}" class='star' src='{{imgUrl}}/my/Affiliate-Markstar-c.png'>
+            </image>
+          </view>
+          <view class='right'>
+            <image src='{{imgUrl}}/my/Affiliate-details.png'></image>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class='defaultpage'>
+        <image src='{{imgUrl}}/icondefault-team.png'></image>
+        <view class='text'>您还没有联盟商</view>
+        <view class='text'>快去邀请吧！</view>
+      </view>
+    </block>
+  </block>
+</block>
+<block wx:if="{{current_type == 2}}">
+  <block wx:if="{{shopuser_list.length>0}}">
+    <view class="containers" wx:for="{{shopuser_list}}" wx:key="list" data-id='{{item.id}}' data-member_id='{{item.member_id}}' data-showtype='3' bindtap='clientinfo'>
+      <view class="list flex_between">
+        <view class='left flex_start' data-id='{{item.id}}' data-store_id='{{item.store_id}}'>
+          <image src='{{item.member_avatar}}'></image>
+          {{item.member_name}}
+          <image hidden="{{item.is_follow == 1?false:true}}" class='star' src='{{imgUrl}}/my/Affiliate-Markstar-c.png'>
+          </image>
+        </view>
+        <view class='right'>
+          <image src='{{imgUrl}}/my/Affiliate-details.png'></image>
+        </view>
+      </view>
+    </view>
+  </block>
+  <block wx:else>
+    <view class='defaultpage'>
+      <image src='{{imgUrl}}/icondefault-team.png'></image>
+      <view class='text'>您还没有联盟商</view>
+      <view class='text'>快去邀请吧！</view>
+    </view>
+  </block>
+</block>

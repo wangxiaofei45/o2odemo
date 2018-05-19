@@ -1,0 +1,35 @@
+<view class="title">
+  <image src='{{imgUrl}}/DefaultAvatarset.png'></image>
+  <view class='name'>
+    江南美食(下沙店)
+  </view>
+</view>
+<view class="up">
+  <view class='title'>
+    将付款到对方账户，支付后将无法退回
+  </view>
+  <view class='money flex_center'>
+    <image src='{{imgUrl}}/rmbb.png'></image>
+    <view>
+      100
+    </view>
+  </view>
+  <!--提示-->
+  <view class="hint flex_center">
+       <image src='{{imgUrl}}/set-aboutus.png'>
+       
+       </image>
+       <view>
+          对不起，您的余额不足请充值！
+       </view>
+    </view>
+  <button>
+    充值
+  </button>
+</view>
+<view class='bottom'>
+   <navigator class='bottom' url='../Pay/elsePay' redirect="true">
+  使用其他方式支付
+  <image src='{{imgUrl}}/icon-more.png'></image>
+</navigator>
+</view>

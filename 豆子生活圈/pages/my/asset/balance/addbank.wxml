@@ -1,0 +1,34 @@
+<form bindsubmit="formSubmit" bindreset="formReset">
+  <view class="list flex_start">
+    <view class='left flex_start'>
+      <image src='{{imgUrl}}/my/star.png'></image>
+      银行开户名
+    </view>
+    <input bindinput='bank_account_name' name="bank_account_name" type='text' placeholder='请输入' auto-focus></input>
+  </view>
+  <view class="list flex_start">
+    <view class='left flex_start'>
+      <image src='{{imgUrl}}/my/star.png'></image>
+      银行账号
+    </view>
+    <input bindinput='bank_account_number' name="bank_account_number" type='number' bindblur="validateBankCard" placeholder='请输入' maxlength="19" auto-focus></input>
+  </view>
+  <view class="list flex_start">
+    <view class='left flex_start'>
+      <image src='{{imgUrl}}/my/star.png'></image>
+      开户行名称
+    </view>
+    <input bindinput='bank_name' type='text' name="bank_name" placeholder='请输入' value='{{bank_name}}' auto-focus></input>
+  </view>
+  <view class="list flex_start">
+    <view class='left flex_start'>
+      开户行所在地
+    </view>
+    <input bindinput='bank_address' type='text' name="bank_address" placeholder='请输入' auto-focus></input>
+    <image class='right' src='{{imgUrl}}/icon-details.png'></image>
+  </view>
+  <!-- <button class='sure' formType="submit">
+    确认添加
+  </button> -->
+   <button class='sure' hover-class='active' bindtap='submit'>确认添加</button>
+</form>

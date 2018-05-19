@@ -1,0 +1,111 @@
+.header_con{
+  background-color: #ffffff;
+}
+.list1{
+  padding-left: 25rpx;
+  padding-top: 25rpx;
+  font-size: 28rpx;
+  color: #666666;
+}
+.header{
+  background-color: #ffffff;
+  width: 100%;
+  height: 140rpx;
+  margin-bottom: 22rpx;
+}
+.header .left .name1{
+  font-size: 30rpx;
+  color: #333333;
+  font-weight: 600;
+}
+.header .left .number{
+  font-size: 28rpx;
+  color: #999999;
+  padding-top: 20rpx;
+}
+.header .left image{
+  width: 80rpx;
+  height: 80rpx;
+  margin-left: 25rpx;
+  margin-right: 40rpx;
+}
+.header .right{
+  width: 44rpx;
+  height: 44rpx;
+  margin-right: 25rpx;
+}
+.add{
+  width: 44rpx;
+  height: 44rpx;
+}
+/*输入框*/
+.input{
+  width: 100%;
+  background-color: #ffffff;
+}
+.input .title{
+  width: 100%;
+  height: 90rpx;
+  line-height: 90rpx;
+  color: #666666;
+  padding-left: 25rpx;
+}
+.input_con{
+  width: 700rpx;
+  height: 135rpx;
+  margin: 0 auto;
+  border-bottom: 3rpx solid #d6d6d6;
+  position: relative;
+}
+.input_con image{
+  position: absolute;
+  left: 0rpx;
+  top: 40rpx;
+  height: 50rpx;
+  width: 50rpx;
+
+}
+.input_con input{
+  width: 100%;
+  height: 135rpx;
+  font-size: 50rpx;
+  padding-left: 60rpx;
+}
+.wraning{
+  width: 100%;
+  height: 90rpx;
+}
+.wraning .left{
+  padding-left: 25rpx;
+  color: #999999;
+  font-size: 28rpx;
+}
+.wraning .right{
+  padding-right: 25rpx;
+  color: #ff4965;
+  font-size: 28rpx;
+}
+.sure_active{
+  position: fixed;
+  left: 25rpx;
+  bottom: 50rpx;
+  width: 700rpx;
+  background-color: #ff4965;
+  color: #ffffff;
+}
+.sure{
+  position: fixed;
+  left: 25rpx;
+  bottom: 50rpx;
+  width: 700rpx;
+  background-color: #d6d6d6;
+  color: #ffffff;
+}
+.active{
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.button-hover{
+  background-color: #ffffff;
+}
+
+

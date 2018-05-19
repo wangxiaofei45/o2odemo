@@ -1,0 +1,176 @@
+<view class='filter flex_center'>
+   <view class='left flex_center' bindtap='open_filter1'>
+       {{filter_1}} <image class="{{filter_1_show?'active':''}}" src='{{imgUrl}}/up.png'></image>
+      <view wx:if="{{filter_1_show}}" catchtouchmove='true' class='left_pos' catchtap='close_model'>
+         <view wx:for="{{filter1}}" wx:key="pos" data-index="{{index}}" data-name="{{item.name}}" catchtap='change' class='list flex_between'>
+            <view>
+               {{item.name}}
+            </view>
+            <block wx:if="{{filter_1_id == index}}">
+              <image src='{{imgUrl}}/hotel/tick.png'></image>
+            </block>
+         </view>
+      </view>
+   </view>
+   <view class='center flex_center' bindtap='open_filter2'>
+       {{filter_2}} <image class="{{filter_2_show?'active':''}}" src='{{imgUrl}}/up.png'></image>
+       <view wx:if="{{filter_2_show}}" catchtouchmove='true' class='left_pos' catchtap='close_model'>
+         <view wx:for="{{filter2}}" wx:key="pos" data-index="{{index}}" data-name="{{item.name}}" catchtap='change2' class='list flex_between'>
+            <view>
+               {{item.name}}
+            </view>
+            <block wx:if="{{filter_2_id == index}}">
+              <image src='{{imgUrl}}/hotel/tick.png'></image>
+            </block>
+         </view>
+      </view>
+   </view>
+   <view url='filter' catchtap='open_filter_right' class='right flex_center'>
+      筛选
+   </view>
+</view>
+<!--固定头部-->
+<view class='content'>
+<view class='onlinechoose'>
+  <view class='hotel_list flex_center' wx:for="{{items}}" wx:key="items" wx:for-item="i" data-id="{{index}}" bindtap='select'>
+    <view class='list_cons flex_start'>
+      <view class='lefts'>
+        <block wx-if="{{!i.checked}}">
+          <view class='icon_none'></view>
+        </block>
+        <block wx-if="{{i.checked}}">
+          <icon type="success" size="30" color="red" />
+        </block>
+      </view>
+      <image src='{{imgUrl}}/hotel/demoimg.jpg'></image>
+      <view class='right'>
+        <view class='name'>
+          {{i.name}}
+        </view>
+        <view class='list1 flex_between'>
+          <view class='left'>
+            <view class='condition1'>
+              16㎡|双人床|含早
+            </view>
+            <view class='condition2'>
+              <block>
+                间数：10
+              </block>
+              <block>
+                间数：2
+              </block>
+            </view>
+          </view>
+        </view>
+        <view class='list1 flex_between'>
+          <view class='left'>
+            <view class='condition2'>
+              类目一
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+</view>
+<view class='bottom flex_between'>
+  <view class='left flex_start'>
+    <block wx:if="{{select_all}}">
+      <view bindtap='select_none' class='flex_start'>
+        <icon type="success" size="30" color="red" />
+        <view>
+          全选
+        </view>
+      </view>
+    </block>
+    <block wx:if="{{!select_all}}">
+      <view bindtap='select_all' class='flex_start'>
+        <view class='select_none'>
+        </view>
+        <view>
+          全选
+        </view>
+      </view>
+    </block>
+  </view>
+  <view class='right flex_end'>
+     <view bindtap='deleteitem' class='sure'>
+      删除
+    </view>
+      <view catchtap='shangjia' class='sure up'>
+      上架
+    </view>
+    <view bindtap='' class='sure down'>
+      下架
+    </view>
+  </view>
+</view>
+
+<view class='filterright' catchtouchmove='true' wx:if="{{filterright}}">
+  <view class='title flex_start'>
+      <view class='left'>
+       
+      </view>
+      类型
+  </view>
+  <view class='list_cons flex_start_wrap'>
+     <view class='list'>
+        全部
+     </view>
+     <view class='list active'>
+        销售中
+     </view>
+      <view class='list'>
+        未上架
+     </view>
+  </view>
+   <view class='title flex_start'>
+      <view class='left'>
+      </view>
+      分类
+  </view>
+  <view class='list_cons flex_start_wrap'>
+     <view class='list'>
+        置顶商品
+     </view>
+     <view class='list'>
+        分类一
+     </view>
+      <view class='list active'>
+        分类二
+     </view>
+      <view class='list'>
+        分类二
+     </view>
+      <view class='list'>
+        分类二
+     </view>
+      <view class='list'>
+        分类二
+     </view>
+      <view class='list'>
+        分类二
+     </view>
+      <view class='list'>
+        分类二
+     </view>
+      <view class='list'>
+        分类二
+     </view>
+      <view class='list'>
+        分类二
+     </view>
+      <view class='list'>
+        分类二
+     </view>
+  </view>
+  <view class='bottom flex_center'>
+    <view class='left'>
+        清除
+    </view>
+    <view class='right' catchtap='close_filter_right'>
+        确定
+    </view>
+  </view>
+</view>

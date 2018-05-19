@@ -1,0 +1,63 @@
+<view class="title">
+  <image src='{{imgUrl}}/success.png'></image>
+  <view class='success_text'>
+    恭喜您！
+  </view>
+  <view class='success_text'>
+    生成一张优惠券
+  </view>
+</view>
+<block wx:if="{{couponInfo}}">
+  <view class='ticket_con'>
+    <view class="ticket" data-cid="{{couponInfo.coupon_id}}">
+      <view class="money clearfix  {{couponInfo.audit_state?'past':''}}">
+        <view class='left'>
+          <view class='list1'>优惠券</view>
+          <view class='list2'>
+            <image wx:if='{{couponInfo.audit_state}}' src='{{imgUrl}}/rmbb.png'></image>
+            <image wx:else src='{{imgUrl}}/money.png'></image>
+            {{couponInfo.discount_price}}
+          </view>
+          <view class='list3'>
+            {{couponInfo.coupon_state}}
+          </view>
+        </view>
+        <image wx:if="{{couponInfo.audit_state}}" class="borderimg" src='{{imgUrl}}/my/bgg.png'></image>
+        <image wx:else class="borderimg" src='{{imgUrl}}/my/bgy.png'></image>
+        <view class='right'>
+          <view class='list1 list'>
+            {{couponInfo.coupon_name}}
+          </view>
+          <view class='list2 list'>
+            {{couponInfo.coupon_des}}
+          </view>
+          <view class='list3 list'>
+            有效期：{{couponInfo.coupon_start_time}}-{{couponInfo.coupon_end_time}}
+          </view>
+        </view>
+      </view>
+      <view class='ticket_pos'>
+        <block wx:if="{{couponInfo.audit_reason}}">
+        {{couponInfo.audit_reason}}
+        </block>
+        <block wx:else>
+          已下载：{{couponInfo.download_count}}张
+        </block>
+      </view>
+      <image wx:if="{{couponInfo.audit_state == '1'}}" class='image_pos' src='{{imgUrl}}/my/icon-Expired.png'></image>
+      <image wx:if="{{couponInfo.audit_state == '2'}}" class='image_pos' src='{{imgUrl}}/my/icon-Hasthe.png'></image>
+    </view>
+  </view>
+</block>
+<view class="warning">
+  <view class='title'>
+    提示：
+  </view>
+  <view class='text'>
+    优惠券启用后方可生效，请点击下方立即启用按钮。
+  </view>
+</view>
+<view class='button flex_between' bindtap='tapToCouponList'>
+   <button>关闭</button>
+   <button>立即启用</button>
+</view>

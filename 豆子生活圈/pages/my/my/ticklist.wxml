@@ -1,0 +1,66 @@
+<!--满减券-->
+<view wx:if="{{coupontype == 1}}" class='tickt_new'>
+  <view class='ticket_con'>
+    <view class="ticket" wx:for="{{mycoupon}}" wx:key="ticket" data-condition="{{item.condition}}">
+      <view class="money clearfix {{item.use_state?'past':''}}">
+        <view class='left'>
+          <view class='list1'>优惠券</view>
+          <view class='list2'>
+            <image wx:if='{{item.use_state}}' src='{{imgUrl}}/rmbb.png'></image>
+            <image wx:else src='{{imgUrl}}/money.png'></image>
+            {{item.discount_price}}
+          </view>
+          <view class='list3'>
+            {{item.coupon_state}}
+          </view>
+        </view>
+        <image wx:if="{{item.use_state}}" class="borderimg" src='{{imgUrl}}/my/bgg.png'></image>
+        <image wx:else class="borderimg" src='{{imgUrl}}/my/bgy.png'></image>
+        <view class='right'>
+          <view class='list1 list'>
+            {{item.coupon_name}}
+          </view>
+          <view class='list2 list'>
+            {{item.coupon_des}}
+          </view>
+          <view class='list3 list'>
+            有效期：{{item.coupon_start_time}}-{{item.coupon_end_time}}
+          </view>
+        </view>
+      </view>
+      <image wx:if="{{item.use_state == '1'}}" class='image_pos' src='{{imgUrl}}/my/icon-Expired.png'></image>
+      <image wx:if="{{item.use_state == '2'}}" class='image_pos' src='{{imgUrl}}/my/icon-Hasthe.png'></image>
+    </view>
+  </view>
+</view>
+<!--购买券-->
+<view wx:if="{{coupontype == 2}}" class='defaultpage'>
+  <image src='{{imgUrl}}/icondefault-coupon.png'></image>
+  <view class='text'>功能开发中，敬请期待！</view>
+</view>
+<!--其他券-->
+<view wx:if="{{coupontype == 3}}" class='tickt_new'>
+  <view class='tickt_lists'>
+    <navigator url='' class='pos_top_r'>
+      立即使用
+    </navigator>
+    <view class='no_1 flex_start'>
+      <image src='{{imgUrl}}/demo.png'></image>
+      <view>
+        <view class='name'>智琳之家女装</view>
+        <view class='text'>送冬靴长靴1双，围巾1条</view>
+      </view>
+    </view>
+    <image class='center_line' src='{{imgUrl}}/my/tickt_line_02.png'></image>
+    <view class='no_2'>
+      <view class='name'>使用条件：本店消费满1000元可用</view>
+      <view class='name'>有效日期：2018.12.12-10-2019.21.21</view>
+    </view>
+  </view>
+</view>
+<!-- <block wx:else>
+  <view class='defaultpage'>
+    <image src='{{imgUrl}}/icondefault-coupon.png'></image>
+    <view class='text'>暂无优惠券</view>
+  </view>
+</block>  -->

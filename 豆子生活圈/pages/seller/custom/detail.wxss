@@ -1,0 +1,2 @@
+@import "../coupon/giftdetails";
+@import "index"

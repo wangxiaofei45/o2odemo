@@ -1,0 +1,28 @@
+<view class="header flex_between" hover-class="active"  wx:for="{{bankcardList}}" wx:for-item="i" wx:key="names" data-bid="{{i.bid}}" data-obj="{{i}}" bindtap='select' >
+  <view class='left flex_start'>
+    <image src='{{imgUrl}}/bank/{{i.bank_code}}.png'>
+    </image>
+    <view class='name'>
+      <view class='name1'>
+        {{i.bank_name}}
+      </view>
+      <view class='number'>
+        {{i.bank_account_number}}
+      </view>
+    </view>
+  </view>
+  <view class='right'>
+    <block wx:if="{{i.is_default == 1}}">
+        <image src='{{imgUrl}}/my/checkoff.png'></image>
+    </block>
+    <block wx:else>
+      
+    </block>
+  </view>
+</view>
+<navigator url='addbank?store_id={{store_id}}'>
+<view class="header flex_center" hover-class="active">
+  <image class='add' src='{{imgUrl}}/my/add.png'></image>
+  添加
+</view>
+</navigator>

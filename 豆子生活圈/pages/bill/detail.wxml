@@ -1,0 +1,139 @@
+<!--pages/bill/detail.wxml-->
+<view class="header">
+  <view class='1_info flex_center'>
+  <block wx:if="{{role_type == '1'}}">
+    <image src='{{order_info.store_logo}}'></image>
+     {{order_info.store_name}}
+  </block>
+  <block wx:else>
+    <image src='{{order_info.member_avatar}}'></image>
+     {{order_info.buyer_name}}
+  </block>
+     
+  </view>
+  <view class='con flex_center'>
+     ￥{{order_info.order_amount}}
+  </view>
+  <view class='state'>
+      交易完成
+  </view>
+  
+  <view class='list flex_center list1' wx:if="{{order_info.commis_credit>0}}">
+    <view class='left'>
+      奖励积分
+    </view>
+    <view class='right'>
+    <block wx:if="{{role_type == '1'}}">+</block><block wx:else> - </block> ￥{{order_info.commis_credit}}积分
+    </view>
+  </view>
+  <view class='list flex_center list1' wx:if="{{order_info.rcb_amount>0}}">
+    <view class='left'>
+      卡额支付
+    </view>
+    <view class='right'>
+      <block wx:if="{{role_type == '1'}}">-</block><block wx:else>+</block> ￥ {{order_info.rcb_amount}}
+    </view>
+  </view>
+  <view class='list flex_center list1' wx:if="{{order_info.pd_amount>0}}">
+    <view class='left'>
+      积分抵付
+    </view>
+    <view class='right'>
+      <block wx:if="{{role_type == '1'}}">-</block><block wx:else>+</block> ￥ {{order_info.pd_amount}}
+    </view>
+  </view>
+
+  <view class='list flex_center' wx:if="{{order_info.payable_amount>0}}">
+    <view class='left'>
+      {{order_info.payment_name}}
+    </view>
+    <view class='right'>
+      <block wx:if="{{role_type == '1'}}">-</block><block wx:else>+</block> ￥ {{order_info.payable_amount}}
+    </view>
+  </view>
+</view>
+<!--头部结束-->
+<view class='text_con'>
+  <view class='list flex_center'>
+    <view class='left'>
+      订单编号
+    </view>
+    <view class='right'>
+      {{order_info.order_sn}}
+    </view>
+  </view>
+  <view class='list flex_center list1'>
+    <view class='left'>
+      成交时间
+    </view>
+    <view class='right'>
+      {{order_info.add_time}}
+    </view>
+  </view>
+</view>
+
+<!--商家版-->
+<view class='text_con' wx:if="{{role_type !='1'}}">
+  <view class='list flex_center list1' hover-class='active'>
+    <view class='left'>
+      查看往来记录
+    </view>
+    <view class='right'>
+      <image src='{{imgUrl}}/icon-details.png'></image>
+    </view>
+  </view>
+  <view class='list flex_center' hover-class='active'>
+    <view class='left'>
+      主动营销
+    </view>
+    <view class='right'>
+       <image src='{{imgUrl}}/icon-details.png'></image>
+    </view>
+  </view>
+  <!--新增退款-->
+  <navigator url='refund?order_id={{order_info.order_id}}&order_sn={{order_info.order_sn}}&refund_amount={{order_info.payable_amount}}&rcb_amount={{order_info.rcb_amount}}&pd_amount={{order_info.pd_amount}}'>
+   <view class='list flex_center' hover-class='active'>
+    <view class='left'>
+      发起退款
+    </view>
+    <view class='right flex_end'>
+      <block  wx:if="{{order_info.refund_state>0}}">
+        <block wx:if="{{order_info.refund_state==1 || order_info.refund_state==2}}">退款中</block>
+        <block wx:if="{{order_info.refund_state == 4}}">退款完成</block>
+       </block>
+       <image src='{{imgUrl}}/icon-details.png'></image>
+    </view>
+  </view>
+  </navigator>
+</view>
+<!--用户版-->
+<view class='text_con' wx:if="{{role_type=='1'}}">
+   <view class='list flex_center list1' hover-class='active' bindtap='open_calltel' data-tel='{{order_info.store_tel}}'>
+    <view class='left'>
+      联系商家
+    </view>
+    <view class='right'>
+      <image src='{{imgUrl}}/icon-phone.png'></image>
+    </view>
+  </view>
+  <!-- <view class='list flex_center list1' hover-class='active'>
+    <view class='left'>
+      查看往来记录
+    </view>
+    <view class='right'>
+      <image src='{{imgUrl}}/icon-details.png'></image>
+    </view>
+  </view> -->
+  <!-- <view class='list flex_center' hover-class='active'>
+    <view class='left'>
+      投诉
+    </view>
+    <view class='right'>
+      <image src='{{imgUrl}}/icon-details.png'></image>
+    </view>
+  </view> -->
+</view>
+<view class='telmodel' catchtouchmove='true' hidden='{{open_calltel}}'>
+   <button bindtap='makecall'>{{order_info.store_tel}}</button>
+   <button bindtap='close_calltel'>关闭</button>
+</view>

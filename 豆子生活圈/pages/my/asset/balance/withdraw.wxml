@@ -1,0 +1,87 @@
+<view hidden='{{!defaultpage}}'>
+<form bindsubmit="formSubmit" bindreset="formReset">
+  <view wx:if="{{severalshop}}" class='header_con'>
+    <view class='list1'>
+      请选择提现账户
+    </view>
+    <navigator url="select_shop">
+      <view class="header flex_between">
+        <view class='left flex_start'>
+          <image src='{{store_logo}}'></image>
+          <view class='name'>
+            <view class='name1'>
+              {{store_name}}
+            </view>
+            <view class='number'>
+              可提现额度￥{{final_amount}}元
+            </view>
+          </view>
+        </view>
+        <image class='right' src='{{imgUrl}}/icon-details.png'>
+        </image>
+      </view>
+    </navigator>
+  </view>
+  <view class='header_con'>
+    <view wx:if="{{severalshop}}" class='list1'>
+      提现到银行卡
+    </view>
+    <!--添加银行卡后切换银行卡-->
+    <block wx:if="{{bankInfo}}">
+      <navigator url="changebank?store_id={{store_id}}">
+        <view class="header flex_between">
+          <view class='left flex_start'>
+            <image src='{{imgUrl}}/bank/{{bankInfo.bank_code}}.png'>
+            </image>
+            <view class='name'>
+              <view class='name1'>
+                {{bankInfo.bank_name}}
+              </view>
+              <view class='number'>
+                {{bankInfo.bank_account_number}}
+              </view>
+            </view>
+          </view>
+          <image class='right' src='{{imgUrl}}/icon-details.png'></image>
+        </view>
+      </navigator>
+    </block>
+    <!--第一次没有银行卡添加银行卡-->
+    <block wx:else>
+      <navigator url='addbank?store_id={{store_id}}'>
+      <view class="header flex_center" hover-class="active">
+        <image class='add' src='{{imgUrl}}/my/add.png'></image>
+        添加
+      </view>
+      </navigator>
+    </block>
+  </view>
+  <view class='input'>
+    <view class='title'>
+      请输入提现金额
+    </view>
+    <view class='input_con'>
+      <input type='digit' name="draw_amount" bindinput='bindinput' value='{{draw_amount}}' maxlength='10'>
+      </input>
+      <image src='{{imgUrl}}/rmbb.png'></image>
+    </view>
+    <view class='wraning flex_between'>
+      <view class='left'>
+        可提现余额￥{{final_amount}}元
+      </view>
+      <view class='right' bindtap='withdrawAll'>
+        全部提现
+      </view>
+    </view>
+  </view>
+  <input type='hidden' hidden='true' name="store_id" value='{{store_id}}' />
+  <input type='hidden' hidden='true' name="bid" value='{{bcid}}'/>
+  <button class="{{!draw_disabled?'sure_active':'sure'}}" disabled="{{draw_disabled}}"  formType="submit">
+    确认提现
+  </button>
+  </form>
+</view>
+<view class='defaultpage' hidden='{{defaultpage}}'>
+  <image src='{{imgUrl}}/icondefault-asset.png'></image>
+  <view class='text'>无可提现资产</view>
+</view>

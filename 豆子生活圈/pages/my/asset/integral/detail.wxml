@@ -1,0 +1,118 @@
+<view class='time_con'>
+<view class='detail flex_center'>
+  <view class='select flex_start'>
+    <view class='flex_center' bindtap='selectYear'>
+      <image hidden='{{year_click}}' src='{{imgUrl}}/bill/singleselection-c.png'></image>
+      <image hidden='{{!year_click}}' src='{{imgUrl}}/bill/singleselection-n.png'></image>
+      年度
+    </view>
+    <view class='flex_center' bindtap='selectMonth'>
+      <image hidden='{{!year_click}}' src='{{imgUrl}}/bill/singleselection-c.png'></image>
+      <image hidden='{{year_click}}' src='{{imgUrl}}/bill/singleselection-n.png'></image>
+      月度
+    </view>
+  </view>
+  <view class='years flex_end' bindtap='selectTime'>
+    <view hidden='{{year_click}}' data-year="{{year}}">
+      {{year}}
+    </view>
+    <view hidden='{{!year_click}}' data-yrarMontn="{{year}}{{month}}">
+      {{year}}/{{month}}
+    </view>
+    <image src='{{imgUrl}}/my/kalendar.png'>
+    </image>
+  </view>
+</view>
+  <view class='list_cons flex_center'>
+     <view class='list'>
+        <view class='n n1'>
+           赚取积分
+        </view>
+        <view class='r'>
+          ￥{{incomeCount}}
+        </view>
+     </view>
+     <view class='list'>
+       <view class='n n2'>
+         使用积分
+       </view>
+       <view class='r'>
+         ￥{{payCount}}
+       </view>
+     </view>
+     <view class='list'>
+        <view class='n n3'>
+           交易次数
+        </view>
+        <view class='r'>
+           ￥{{count}}
+        </view>
+     </view>
+  </view>
+</view>
+<!--时间选择model-->
+<view class='model' catchtouchmove='true' hidden='{{model}}'>
+  <view class='modelcon'>
+    <view>
+      <picker-view indicator-style="height: 50px;" style="width: 100%; height: 300px; text-align:center" value="{{value}}" bindchange="changeYearMonth">
+        <picker-view-column>
+          <view wx:for="{{years}}" wx:key="years" style="line-height: 50px">{{item}}年</view>
+        </picker-view-column>
+        <picker-view-column hidden="{{monthsHidden}}">
+          <view wx:for="{{months}}" wx:key="months" style="line-height: 50px">{{item}}月</view>
+        </picker-view-column>
+      </picker-view>
+    </view>
+    <button class='left' bindtap='closeYearMonth'>
+      取消
+    </button>
+    <button class='right' bindtap='confirmYearMonth'>
+      确定
+    </button>
+  </view>
+</view>
+<!--渲染列表-->
+<block wx:if="{{pd_list}}">
+  <view class='info' wx:for="{{pd_list}}" wx:key="list" wx:for-item="i">
+    <view class='info_time flex_between'>
+      <view class='left'>
+        {{index}}
+      </view>
+      <view class='right'>
+        共计{{i.available_total}}元
+      </view>
+    </view>
+    <view class="info_list flex_center " hover-class="active" wx:for="{{i.pdlist}}" wx:key="userinfo" wx:for-item="j" bindtap='goto_order_details'>
+    <!--
+      <view class='user_avatar'>
+        <image src='{{imgUrl}}/DefaultAvatarset.png'>
+        </image>
+      </view>
+     -->
+      <view class='name'>
+        <view class='names'>
+          {{j.lg_desc}}
+        </view>
+        <view class='times'>
+          {{j.add_time}}
+        </view>
+      </view>
+      <view class='number'>
+        <view class='number1'>
+          {{j.lg_av_amount}}
+        </view>
+        <!--
+        <view class='number2' wx:if="{{j.lg_freeze_amount>0}}">
+          -{{j.lg_freeze_amount}}
+        </view>
+        -->
+      </view>
+    </view>
+  </view>
+</block>
+<block wx:else >
+  <view class='defaultpage'>
+    <image src='{{imgUrl}}/icondefault-bill.png'></image>
+    <view class='text'>还没有账单信息哦</view>
+  </view>
+</block>

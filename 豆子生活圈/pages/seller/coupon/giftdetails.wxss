@@ -1,0 +1,60 @@
+@import "list.wxss";
+.detail{
+  width: 700rpx;
+  height: 80rpx;
+  margin: 0 auto;
+  background-color: #ffffff;
+  border: 1rpx solid #d6d6d6;
+  margin-top: 12rpx;
+}
+.detail image{
+  width: 40rpx;
+  height: 40rpx;
+}
+.detail .list_1{
+  font-size: 32rpx;
+  color: #333333;
+  margin-left: 22rpx;
+  margin-right: 36rpx;
+  font-weight: 700;
+}
+.detail .list_2{
+  font-size: 28rpx;
+  color: #ff4965;
+  margin-right: 36rpx;
+}
+.detail_2 {
+  width: 700rpx;
+  border: 1rpx solid #d6d6d6;
+  margin: 0 auto;
+  margin-top: 12rpx;
+  background-color: #ffffff;
+  padding: 22rpx;
+  box-sizing: border-box;
+}
+.detail_2 .header{
+  font-size: 32rpx;
+  color: #333333;
+  font-weight: 700;
+  margin-bottom: 15rpx;
+}
+.detail_2 .list{
+  height: 60rpx;
+  font-size: 28rpx;
+  color: #333333;
+}
+.detail_2 .list .left{
+  width: 160rpx;
+}
+.bottom{
+  width: 700rpx;
+  position: fixed;
+  left: 25rpx;
+  bottom: 50rpx;
+}
+.bottom button{
+  width: 340rpx;
+  height: 90rpx;
+  line-height: 90rpx;
+  background-color: #ffffff;
+}

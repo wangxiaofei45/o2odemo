@@ -1,0 +1,99 @@
+<view class="header">
+  <view class='header_list flex_start'>
+    <view class='left'>
+      账户积分
+    </view>
+  </view>
+   <view class='header_list flex_start'>
+    <view class='left'>
+      {{amount}}
+    </view>
+  </view> 
+  <image class='right_img' src='{{imgUrl}}/my/bg-jf-distribution-1.png'></image>
+</view>
+<view class='integral flex_center' wx:if="{{!is_code_master}}">
+   <view class='list listhas'>
+    <view class='name'>
+      已使用积分
+    </view>
+    <view class='number'>
+      {{payAmount}}
+    </view>
+  </view> 
+  <view class='list'>
+    <view class='name'>
+      已赚取积分
+    </view>
+    <view class='number'>
+      +{{incomeAmount}}
+    </view>
+  </view>
+</view>
+<!--码主兼个人店铺-->
+<block wx:if="{{is_code_master}}">
+<view class='integral flex_center'>
+   <view class='list listhas'>
+    <view class='name'>
+      码主部分
+    </view>
+    <view class='number'>
+      {{use_integral}}
+    </view>
+  </view>
+   <view class='list'>
+    <view class='name'>
+      商户部分
+    </view>
+    <view class='number'>
+      +{{earn_integral}}
+    </view>
+  </view>
+  <view class='list'>
+    <view class='name'>
+      个人部分
+    </view>
+    <view class='number'>
+      +{{earn_integral}}
+    </view>
+  </view>
+</view>
+</block>
+<!-- 码主提现 -->
+<view class='bar_con flex_start_wrap' wx:if="{{is_code_master}}">
+  <!--码主商铺个人部分可以提现-->
+  <navigator class='list list1' url='integral/withdraw' open-type='redirect'>
+    <image src='{{imgUrl}}/my/column-withdrawcash.png'></image>
+    <view class='name'>
+      我要提现
+    </view>
+  </navigator>
+  <navigator class='list list2' url='integral/detail' open-type='redirect'>
+    <image src='{{imgUrl}}/my/column-detail.png'></image>
+    <view class='name'>
+      积分明细
+    </view>
+  </navigator>
+
+  <navigator class='list list3' url='integral/strategy' open-type='redirect'>
+    <image src='{{imgUrl}}/my/Integralintroduction.png'></image>
+    <view class='name'>
+      积分攻略
+    </view>
+  </navigator>
+</view>
+
+<view class='bar_con flex_start_wrap' wx:if="{{!is_code_master}}">
+  <!--个人的部分的金额不允许提现-->
+  <navigator class='list list1' url='integral/detail' open-type='redirect'>
+    <image src='{{imgUrl}}/my/column-detail.png'></image>
+    <view class='name'>
+      积分明细
+    </view>
+  </navigator>
+  <navigator class='list list2' url='integral/strategy' open-type='redirect'>
+    <image src='{{imgUrl}}/my/Integralintroduction.png'></image>
+    <view class='name'>
+      积分攻略
+    </view>
+  </navigator>
+</view>

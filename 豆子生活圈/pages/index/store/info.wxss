@@ -1,0 +1,368 @@
+/* pages/index/store/store.wxss */
+
+pages {
+  background-color: #f5f5f5;
+}
+
+.info_con {
+  height: 100%;
+}
+
+.top_image {
+  width: 750rpx;
+  height: 375rpx;
+}
+
+.top_image image {
+  width: 750rpx;
+  height: 375rpx;
+}
+
+.Shopdetails {
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+  border-bottom: 3rpx solid #e1e1e1;
+  margin-bottom: 15rpx;
+}
+
+.Shopdetails button {
+  width: 162rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  background-color: #ff4965;
+  color: #fff;
+  font-size: 30rpx;
+  font-weight: 700;
+  position: absolute;
+  top: 40rpx;
+  right: 25rpx;
+}
+
+.Shopdetails .list {
+  margin: 0 auto;
+  width: 700rpx;
+  line-height: 40rpx;
+  padding: 20rpx 0rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.Shopdetails .list .left {
+  width: 660rpx;
+  height: 80rpx;
+  float: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.Shopdetails .list image {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.Shopdetails .title {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 700;
+}
+
+.activityArea {
+  background-color: #fff;
+  border-bottom: 3rpx solid #e0e0e0;
+  border-top: 3rpx solid #e0e0e0;
+  margin-bottom: 15rpx;
+}
+
+.activityArea .list {
+  width: 700rpx;
+  padding-left: 25rpx;
+  padding-right: 25rpx;
+  background-color: #fff;
+  height: 80rpx;
+  line-height: 80rpx;
+}
+
+.activityArea .list:nth-child(2) {
+  border-bottom: 3rpx solid #e0e0e0;
+}
+
+.activityArea .list .left {
+  float: left;
+  width: 40rpx;
+  height: 40rpx;
+  margin-top: 20rpx;
+}
+
+.activityArea .list .center {
+  float: left;
+  margin-left: 15rpx;
+  font-size: 25rpx;
+  color: #666;
+}
+
+.activityArea .list .right {
+  float: right;
+  width: 40rpx;
+  height: 40rpx;
+  margin-top: 20rpx;
+}
+
+.activityArea .title {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 700;
+}
+
+.aboutStore {
+  background-color: #fff;
+}
+
+.aboutStore .title {
+  width: 700rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  margin: 0 auto;
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 700;
+}
+
+.aboutStore .text {
+  width: 700rpx;
+  color: #666;
+  font-size: 25rpx;
+  margin: 0 auto;
+  text-indent: 50rpx;
+  letter-spacing: 2rpx;
+  line-height: 45rpx;
+}
+
+/*model*/
+
+.model {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  left: 0rpx;
+  bottom: 0rpx;
+}
+
+.model_con {
+  position: absolute;
+  left: 0rpx;
+  bottom: 0rpx;
+  width: 100%;
+  background-color: #fff;
+}
+
+.model_con .title {
+  width: 100%;
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 35rpx;
+  color: #333;
+  font-weight: 700;
+  text-align: center;
+}
+
+.model_con .ticket {
+  margin-bottom: 32rpx;
+  height: 206rpx;
+  width: 700rpx;
+  margin-left: 25rpx;
+  margin-right: 25rpx;
+  color: #fff;
+}
+
+.model_con .ticket .left {
+  width: 490rpx;
+  height: 206rpx;
+  border-right: 1rpx dashed #fff;
+  float: left;
+  padding-left: 25rpx;
+  box-sizing: border-box;
+}
+
+.model_con .ticket .left .list1 {
+  height: 100rpx;
+  line-height: 100rpx;
+  font-size: 50rpx;
+}
+
+.model_con .ticket .left .list1 image {
+  width: 25rpx;
+  height: 30rpx;
+}
+
+.model_con .ticket .left .list2 {
+  font-size: 28rpx;
+}
+
+.model_con .ticket .left .list3 {
+  height: 50rpx;
+  line-height: 50rpx;
+  font-size: 24rpx;
+}
+
+.model_con .ticket .right {
+  width: 210rpx;
+  float: right;
+  height: 206rpx;
+  line-height: 206rpx;
+  text-align: center;
+}
+
+.model_con .ticket1 {
+  background-color: #d6d6d6;
+}
+
+.model_con .ticket2 {
+  background-color: #f1ae2d;
+}
+
+.model_con button {
+  background-color: #ff4965;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 0rpx;
+}
+
+/*电话model*/
+
+.telmodel {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  left: 0rpx;
+  bottom: 0rpx;
+}
+
+.telmodel button {
+  width: 700rpx;
+  height: 90rpx;
+  margin-left: 25rpx;
+}
+
+.telmodel button:nth-child(1) {
+  position: absolute;
+  left: 0rpx;
+  bottom: 218rpx;
+  color: #ff4965;
+}
+
+.telmodel button:nth-child(2) {
+  position: absolute;
+  left: 0rpx;
+  bottom: 100rpx;
+  color: #333;
+}
+
+/*下面的店铺的介绍*/
+
+.onlinechoose {
+  width: 750rpx;
+  margin-top: 15rpx;
+  background-color: #fff;
+  font-size: 32rpx;
+}
+
+.onlinechoose .title {
+  width: 750rpx;
+  height: 90rpx;
+  border-top: 1rpx solid #d6d6d6;
+  border-bottom: 1rpx solid #d6d6d6;
+}
+
+.onlinechoose .title .change {
+  width: 140rpx;
+  text-align: center;
+  height: 90rpx;
+  line-height: 90rpx;
+  box-sizing: border-box;
+}
+
+.onlinechoose .title .actives {
+  border-bottom: 3rpx solid #ff4965;
+  color: #ff4965;
+}
+
+.onlinechoose .hotel_list {
+  width: 750rpx;
+  height: 260rpx;
+  border-bottom: 1rpx solid #d6d6d6;
+  background-color: #fff;
+}
+
+.onlinechoose .hotel_list .list_cons {
+  width: 700rpx;
+  height: 200rpx;
+}
+
+.list_cons image {
+  width: 200rpx;
+  height: 200rpx;
+  margin-right: 25rpx;
+}
+
+.list_cons .right {
+  width: 475rpx;
+  height: 200rpx;
+}
+
+.list_cons .right .name {
+  font-size: 32rpx;
+  color: #333;
+  font-weight: 700;
+  letter-spacing: 3rpx;
+  margin-bottom: 20rpx;
+}
+
+.list_cons .right .list1 {
+  margin-bottom: 17rpx;
+  font-size: 26rpx;
+  color: #666;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.list_cons .right .lists2 {
+  height: 36rpx;
+  font-size: 24rpx;
+}
+.list_cons .right .lists2 .left .yellow{
+  color: #ff7711;
+}
+.list_cons .right .lists2 .left .big{
+  font-size: 36rpx;
+}
+
+.list_cons .right .lists2 .rights {
+  text-align: center;
+  color: #ff4965;
+  border: 1rpx solid #ff4965;
+  padding: 5rpx;
+  box-sizing: border-box;
+  border-radius: 10rpx;
+}
+
+.about_shop {
+  width: 100%;
+}
+.about_shop .about_shop_text {
+  width: 750rpx;
+  padding: 25rpx;
+  box-sizing: border-box;
+  line-height: 45rpx;
+  color: #666;
+  font-size: 28rpx;
+  text-indent: 60rpx;
+}
+
+.about_shop image {
+  width: 100%;
+}

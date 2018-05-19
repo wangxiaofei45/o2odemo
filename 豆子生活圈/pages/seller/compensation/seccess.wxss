@@ -1,0 +1,14 @@
+@import "../coupon/seccess";
+@import "index";
+.warning{
+  margin-top: 25rpx;
+}
+.success_text{
+  margin: 0 auto;
+  width: 700rpx;
+  text-align: center;
+  color: #666666;
+  font-size: 30rpx;
+  letter-spacing:1rpx; 
+  margin-bottom: 35rpx;
+}

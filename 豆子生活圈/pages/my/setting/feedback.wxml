@@ -1,0 +1,9 @@
+<view class="containers">
+  <view class='title'>
+    反馈意见
+  </view>
+  <form bindsubmit="bindFormSubmit">
+    <textarea class='textarea' placeholder="欢迎给我们留言......" name="comment"/>
+    <button class='sure' form-type="submit"> 提交 </button>
+  </form>
+</view>

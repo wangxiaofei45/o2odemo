@@ -1,0 +1,170 @@
+<!--演示demo-->
+<view class="top_image">
+  <image src='{{store_pic}}' binderror="errorFunction"></image>
+</view>
+<view class='Shopdetails'>
+  <button bindtap='pay'>买单</button>
+  <view class='list title'>{{store_name}}
+    <block wx:if="{{store_side}}">（{{store_side}}）</block>
+  </view>
+  <view class='list'>营业时间 {{business_hour}}</view>
+  <view class='list flex_between' bindtap='open_calltel' data-tel='{{telephone}}'>
+    <view class='left'>
+      联系电话 {{telephone}}
+    </view>
+    <image src='{{imgUrl}}/icon-phone.png'></image>
+  </view>
+  <view class='list flex_between' bindtap='tapOpenLocation' data-address='{{address}}'>
+    <view class='left'>
+      详细地址 {{address}}
+    </view>
+    <image src='{{imgUrl}}/icon-address.png'></image>
+  </view>
+  <!--酒店项目新增-->
+  <view class='sever'>
+    <view class='list flex_center hotel_list'>
+      <view class='hotel_left'>
+        <view class='flex_between list1'>
+          <view class='title'>
+            设施服务
+          </view>
+          <view class='flex_center'>
+            详情<image class='right' src='{{imgUrl}}/icon-details.png'></image>
+          </view>
+        </view>
+         <view class='flex_between list1'>
+           <view class='flex_center'>
+              <image src='{{imgUrl}}/hotel/wifi.png'></image>无限上网
+          </view>
+          <view class='flex_center'>
+            <image src='{{imgUrl}}/hotel/shower.png'></image>24h热水
+          </view>
+          <view class='flex_center'>
+             <image src='{{imgUrl}}/hotel/park.png'></image>免费停车
+          </view>
+        </view>
+      </view>
+      <view class='hotel_right'>
+        4.5分
+      </view>
+    </view>
+  </view>
+</view>
+<!--服务-->
+<view class='activityArea'>
+  <view class='list title'>
+    活动专区
+  </view>
+  <!--跳到积分抵现页面-->
+  <navigator url='integral'>
+    <view class='list clearfix'>
+      <image class='left' src='{{imgUrl}}/ji.png'></image>
+      <view class='center'>
+        积分抵现，买单增积分
+      </view>
+      <image class='right' src='{{imgUrl}}/icon-details.png'></image>
+    </view>
+  </navigator>
+  <view class='list clearfix' bindtap='open_coupon'>
+    <image class='left' src='{{imgUrl}}/quan.png'></image>
+    <view class='center'>
+      领取优惠券
+    </view>
+    <image class='right' src='{{imgUrl}}/icon-details.png'></image>
+  </view>
+</view>
+<view class='onlinechoose'>
+  <view class='title flex_around'>
+    <view class="change {{present == 1?'.actives':''}}" data-present="1" bindtap='change'>
+      在线选房
+    </view>
+    <view class="change {{present == 2?'.actives':''}}" data-present="2" bindtap='change'>
+      店铺介绍
+    </view>
+  </view>
+  <block wx:if="{{present == 1}}">
+    <view class='hotel_list flex_center' wx:for="{{goodsData}}" wx:for-item="i" wx:key="room" data-good_id="{{i.id}}" catchtap='get_roominfo'>
+      <view class='list_cons flex_center'>
+        <image src='{{i.indexpic}}'></image>
+        <view class='right'>
+          <view class='name'>
+            {{i.goodsname}}
+          </view>
+          <view class='list1 flex_between'>
+            <view class='left'>
+              <view class='condition1'>
+                {{i.goodsize}}{{i.bedcount}}{{i.breakfast}}
+                <block wx:if="{{i.breakfast == 0}}">不含早</block>
+                <block wx:if="{{i.breakfast == 1}}">含早</block>
+              </view>
+              <view class='condition2'>
+                <block wx:if="{{i.freecancel == 0}}">
+                  不可取消
+                </block>
+                <block wx:if="{{i.freecancel == 1}}">
+                  <i class="act">免费取消</i>
+                </block>
+              </view>
+            </view>
+            <view class='r'>
+              ￥
+              <i class="big">{{i.price}}</i>起
+            </view>
+          </view>
+          <view class='lists2 flex_between'>
+            <view class='left'>
+              入住后返积分
+            </view>
+            <view class='right2'>
+              {{i.rate_customer}}
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </block>
+  <block wx:if="{{present == 2}}">
+    <view class='about_shop'>
+       <view class='about_shop_text'>关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺关于店铺</view>
+       <image src='../../../image/demo.png'></image>
+    </view>
+  </block>
+</view>
+
+
+<!-- 这里是优惠券的领取的地方 -->
+<view class='model' catchtouchmove='true' hidden='{{open_coupon}}'>
+  <view class='model_con'>
+    <view class='title'>
+      店铺优惠券
+    </view>
+    <!--已经领取的优惠券-->
+    <view wx:for="{{couponList}}" wx:key="couponList">
+      <view class="ticket {{item.is_receive == 1 ?'ticket1':'ticket2'}}">
+        <view class='money'>
+          <view class='left'>
+            <view class='list1 list'>
+              <image src='{{imgUrl}}/money.png'></image>{{item.discount_price}}
+            </view>
+            <view class='list2 list'>
+              {{item.coupon_des}}
+            </view>
+            <view class='list3 list'>
+              有效期：{{item.coupon_start_time}}-{{item.coupon_end_time}}
+            </view>
+          </view>
+          <view class='right'>
+            <view bindtap='receive_coupon' data-id='{{item.coupon_id}}' wx:if="{{item.is_receive == 0}}"> 立即领取 </view>
+            <view wx:if="{{item.is_receive == 1}}"> 已经领取 </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <button bindtap='close_coupon'>关闭</button>
+  </view>
+</view>
+<!--电话model-->
+<view class='telmodel' catchtouchmove='true' hidden='{{open_calltel}}'>
+  <button bindtap='makecall'>{{telephone}}</button>
+  <button bindtap='close_calltel'>关闭</button>
+</view>

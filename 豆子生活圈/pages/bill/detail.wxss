@@ -1,0 +1,93 @@
+/* pages/bill/detail.wxss */
+page{
+  background-color: #f5f5f5;
+}
+.header{
+  width: 100%;
+  background-color: #ffffff;
+  margin-bottom: 12rpx;
+  padding-top:50rpx;
+  box-sizing: border-box;
+}
+.header .user_info{
+  padding-top: 40rpx;
+  padding-bottom: 20rpx;
+  font-size: 28rpx;
+  color: #333333;
+}
+.header image{
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  margin-right: 25rpx;
+}
+ .header .con{
+  color: #393a3f;
+  font-size: 38rpx;
+  font-weight: 700;
+} 
+.header .state{
+   text-align: center;
+   font-size: 28rpx;
+   color: #666666;
+   margin-top: 25rpx;
+   padding-bottom: 25rpx;
+}
+/*头部结束*/
+.text_con{
+  width: 100%;
+  background-color: #ffffff;
+  margin-bottom: 12rpx;
+}
+.list{
+  width: 700rpx;
+  margin: 0 auto;
+  height: 90rpx;
+}
+.list1{
+  border-bottom: 0rpx solid #d6d6d6;
+}
+.list image{
+  width: 44rpx;
+  height: 44rpx;
+}
+.list .left{
+  font-size: 30rpx;
+  color: #333333;
+  font-weight: 700;
+  width: 350rpx;
+}
+.list .right{
+  font-weight: 700;
+  width: 350rpx;
+  text-align: right;
+  font-size: 22rpx;
+  color: #666666;
+}
+/*电话model*/
+.telmodel{
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  left: 0rpx;
+  bottom: 0rpx;
+}
+.telmodel button{
+  width: 700rpx;
+  height: 90rpx;
+  margin-left: 25rpx;
+  
+}
+.telmodel button:nth-child(1){
+   position: absolute;
+   left: 0rpx;
+   bottom: 218rpx;
+   color: #ff4965;
+}
+.telmodel button:nth-child(2){
+   position: absolute;
+   left: 0rpx;
+   bottom: 100rpx;
+   color: #333333;
+}

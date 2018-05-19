@@ -1,0 +1,102 @@
+<view class='header'>
+  <view class='top flex_center'>
+    <image class='mermberimg' src='{{information.member_avatar}}'></image>
+    <view class='r'>
+      <view class='n1 flex_start'>
+        沐沐
+        <image src='{{imgUrl}}/my/icon-boy.png'></image>
+        <image src='{{imgUrl}}/my/icon-girl.png'></image>
+        <image src='{{imgUrl}}/my/people.png'></image>
+        <image src='{{imgUrl}}/my/shop.png'></image>
+      </view>
+      <view class='n2'>
+        昵称:{{information.nickname}}
+      </view>
+    </view>
+  </view>
+  <view class='up flex_around'>
+    <view class='list' hover-class='active'>
+      <image src='{{imgUrl}}/my/member_message.png'></image>
+      <view>
+        发送消息
+      </view>
+    </view>
+    <view class='list' hover-class='active' bindtap='open_calltel' data-phone="{{information.member_mobile}}">
+      <image src='{{imgUrl}}/my/member_phone.png'></image>
+      <view>
+        拨打电话
+      </view>
+    </view>
+    <navigator url='detail'>
+      <view class='list' hover-class='active'>
+        <image src='{{imgUrl}}/my/member_performance.png'></image>
+        <view>
+          查询业绩
+        </view>
+      </view>
+    </navigator>
+  </view>
+</view>
+<view class='info_con'>
+  <view class='info_list flex_between'>
+    <view>
+      账号
+    </view>
+    <view>
+      {{information.member_mobile}}
+    </view>
+  </view>
+  <view class='info_list flex_between'>
+    <view>
+      昵称
+    </view>
+    <view>
+     {{information.nickname}}
+    </view>
+  </view>
+  <view class='info_list flex_between'>
+    <view>
+      备注
+    </view>
+    <view>
+      沐沐
+    </view>
+  </view>
+  <view class='info_list flex_between'>
+    <view>
+      星标
+    </view>
+    <!--添加信标  -->
+    <image bindtap='add_marker' src='{{imgUrl}}/my/Affiliate-Markstar-c.png'></image>
+  </view>
+  <view class='info_list border_none flex_between'>
+    <view>
+      绑定时间
+    </view>
+    <view>
+      {{information.bind_time}}
+    </view>
+  </view>
+</view>
+<view class="bottom" hover-class='b_active' bindtap='unbind'>
+  解绑关系
+</view>
+<!--电话model-->
+<view class='telmodel' catchtouchmove='true' hidden='{{open_calltel}}'>
+  <button bindtap='makecall'>{{telephone}}</button>
+  <button bindtap='close_calltel'>关闭</button>
+</view>
+<!--解绑关系-->
+<view class='telmodel' catchtouchmove='true' hidden='{{un_bind}}'>
+  <view class='telmodel_con'>
+    <view class='list'>
+      解除绑定后，您将不再获得该商家的红利收益
+    </view>
+    <view class='list' bindtap='sure_unbind'>
+      解除关系
+    </view>
+    <view class='list' bindtap='close_unbind'>
+      取消
+    </view>
+  </view>
+</view>
