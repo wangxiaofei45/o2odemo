@@ -1,9 +1,0 @@
-@import "../../bill/billscreen.wxss";
-.button .list{
-  width: 100rpx;
-  margin-right: 20rpx;
-  margin-bottom: 25rpx;
-}
-.button .list:nth-child(6){
-  margin-right: 0rpx;
-}

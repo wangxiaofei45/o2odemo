@@ -1,2 +1,0 @@
-<!--pages/index/pay/payHtml.wxml-->
-<web-view src="{{payUrl}}&op={{payment_type}}&token={{token}}&open_id={{open_id}}&order_sn={{order_sn}}&payment_code={{payment_code}}#wechat_redirect"></web-view>

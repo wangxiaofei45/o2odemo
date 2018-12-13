@@ -1,4 +1,0 @@
-@import "coupon.wxss";
-.tickt_new{
-   margin-top: 12rpx;
-}

@@ -1,9 +1,0 @@
-<view class="title">
-     <image src='{{imgUrl}}/success.png'></image>
-     <view class='success_text'>
-        充值成功
-     </view>
-</view>
-<button class='sure' bindtap='successPay'>
-    完成
-</button>

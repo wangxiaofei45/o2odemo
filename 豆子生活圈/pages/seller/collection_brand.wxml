@@ -1,7 +1,0 @@
-<view class='code_con'>
-    <image src='{{imgUrl}}/my/collect_small.png'></image>
-    <view class='code_container'>
-       <canvas class='code'  canvas-id="collectCode" /> 
-    </view>
-</view>
-<!-- <button catchtap='save'>保存二维码</button> -->

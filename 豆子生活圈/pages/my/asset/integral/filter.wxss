@@ -1,4 +1,0 @@
-@import "../../../bill/billscreen.wxss";
-.button .list{
-  margin-right:40rpx;
-}
