@@ -4,7 +4,7 @@
 			<img src="../../../static/img/erp_logo.png"></img>
 			<div class="text">
 				欢迎使用ERP系统
-			</div>	
+			</div>
 		</div>
 		<el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 			<div class="title-container">
@@ -134,6 +134,7 @@
 <style rel="stylesheet/scss" lang="scss">
 	/* 修复input 背景不协调 和光标变色 */
 	/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
+	
 	$bg:#283443;
 	$light_gray:#eee;
 	$cursor: #fff;
@@ -146,20 +147,21 @@
 		}
 	}
 	/* reset element-ui css */
+	
 	.login-container {
-		.logo{
+		.logo {
 			width: 80%;
 			height: 150px;
 			margin: 0 auto;
-			color:#ffffff;
+			color: #ffffff;
 			clear: both;
-			img{
+			img {
 				display: inline-block;
 				width: 150px;
 				height: 150px;
 				float: left;
 			}
-			.text{
+			.text {
 				height: 150px;
 				line-height: 150px;
 				float: left;
