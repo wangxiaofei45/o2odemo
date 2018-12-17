@@ -5,6 +5,10 @@ import store from '@/store'
 import { getToken } from '@/utils/auth'
 import Util from './util.js'
 
+//店铺登录信息完善
+Vue.prototype.$userPerfectinfo = Util.apiUrl+"user/perfectinfo";//登录完善信息
+
+
 Vue.prototype.$qiniu = Util.apiUrl+"/config/qiniu";//获取七牛云
 //组织架构列表
 Vue.prototype.$organizeList = Util.apiUrl+"/organize/list";//组织架构列表
@@ -136,7 +140,7 @@ export function deletes(url, data = {}) {
 	}
 	// create an axios instance
 	const service = axios.create({
-		baseURL: 'http://erp_panda.hzlwo.com/api', // api 的 base_url
+		baseURL: 'http://api.yilianerptest.com/api/', // api 的 base_url
 		timeout: 5000 // request timeout
 	})
 //添加请求拦截头

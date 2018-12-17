@@ -57,41 +57,32 @@ const user = {
 		LoginByUsername({
 			commit
 		}, userInfo) {
-			commit('SET_TOKEN', "123123");
-				setToken("123123");
-				commit('SET_SHOP_ID', '11');
-				setShopId("11");
-				commit('SET_ROLE_ID', '23');
-				setRoleId("23");
-				sessionStorage.setItem("token", "123123");
-				sessionStorage.setItem("role_id", "23");
-				sessionStorage.setItem("shop_id", "11");
-			const phone = userInfo.phone.trim()
-//			return new Promise((resolve, reject) => {
-//				loginByUsername(phone, userInfo.password).then(response => {
-//					let datas = response.data;
-//					if(datas.status_code == 0) {
-//						commit('SET_TOKEN', datas.tokenInfo.token);
-//						setToken(datas.tokenInfo.token);
+			const username = userInfo.username.trim()
+			return new Promise((resolve, reject) => {
+				loginByUsername(username, userInfo.password).then(response => {
+					let datas = response.data;
+					if(datas.status_code == 0) {
+						commit('SET_TOKEN', datas.data.token);
+						setToken(datas.data.token);
+						sessionStorage.setItem("token", datas.data.token);
 //						commit('SET_SHOP_ID', '11');
 //						setShopId("11");
 //						commit('SET_ROLE_ID', '23');
 //						setRoleId("23");
-//						sessionStorage.setItem("token", datas.tokenInfo.token);
 //						sessionStorage.setItem("role_id", "23");
 //						sessionStorage.setItem("shop_id", "11");
-//						resolve();
-//						this.$message({
-//							type: 'success',
-//							message: datas.message,
-//						});
-//					} else {
-//						 this.$message.error('错了哦，这是一条错误消息');
-//					}
-//				}).catch(error => {
-//					reject(error);
-//				})
-//			})
+						resolve(datas.data);
+						this.$message({
+							type: 'success',
+							message: datas.message,
+						});
+					} else {
+						 this.$message.error('错了哦，这是一条错误消息');
+					}
+				}).catch(error => {
+					reject(error);
+				})
+			})
 		},
 		// 登出
 		LogOut({
@@ -109,7 +100,6 @@ const user = {
 				})
 			})
 		},
-
 		// 前端 登出
 		FedLogOut({
 			commit

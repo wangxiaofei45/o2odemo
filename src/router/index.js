@@ -10,8 +10,6 @@ import Layout from '@/views/layout/Layout'
 import componentsRouter from './modules/components'
 import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
-//我自己定义的路由
-import myRouter from './modules/my_router'
 
 /** note: Submenu only appear when children.length>=1
  *  detail see  https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -33,7 +31,8 @@ import myRouter from './modules/my_router'
 **/
 
 //不需要动态访问的路由
-export const constantRouterMap = [{
+export const constantRouterMap = [
+	{
 		path: '/redirect',
 		component: Layout,
 		hidden: true,
@@ -57,6 +56,7 @@ export const constantRouterMap = [{
 			import('@/views/login/perfectInfo'),
 		hidden: true
 	},
+	//提示信息
 	{
 		path: '/reminder',
 		component: () =>
@@ -98,8 +98,37 @@ export const constantRouterMap = [{
 			}
 		}]
 	},
-	//自定义的系统设置的路由
-	myRouter,
+	//设置
+	{
+		path: '/Organizationlist',
+		component: Layout,
+		meta: {
+			title: "systemSettings", //中英文切换时默认是改变的title
+			icon: 'setting',
+		},
+		children: [
+			//权限设置
+			{
+				path: '/Permissionslist',
+				component: () =>
+					import('@/views/organization/Permissionslist.vue'),
+				name: 'Permissionslist',
+				meta: {
+					title: "Permissionslist",
+				},
+			},
+			//组织架构列表
+			{
+				path: '/Organizationlist',
+				component: () =>
+					import('@/views/organization/Organizationlist'),
+				name: 'Organizationlist',
+				meta: {
+					title: "Organizationlist",
+				},
+			},
+		]
+	},
 	//基础设置
 	{
 		path: '/basicSetting',
@@ -175,37 +204,37 @@ export const constantRouterMap = [{
 					title: 'TradingUnit'
 				}
 			},
-//			//角色列表
-//			{
-//				path: 'RoleManagement',
-//				component: () =>
-//					import('@/views/StoreTheData/RoleManagement'),
-//				name: 'RoleManagement',
-//				meta: {
-//					title: 'RoleManagement'
-//				}
-//			},
-//			//职员档案
-//			{
-//				path: 'StaffFiles',
-//				component: () =>
-//					import('@/views/StoreTheData/StaffFiles'),
-//				name: 'StaffFiles',
-//				meta: {
-//					title: 'StaffFiles'
-//				}
-//			},
-//			//收银方式
-//			{
-//				path: 'CollectMethod',
-//				component: () =>
-//					import('@/views/StoreTheData/CollectMethod'),
-//				name: 'CollectMethod',
-//				meta: {
-//					title: 'CollectMethod'
-//				}
-//			},
-			
+			//			//角色列表
+			//			{
+			//				path: 'RoleManagement',
+			//				component: () =>
+			//					import('@/views/StoreTheData/RoleManagement'),
+			//				name: 'RoleManagement',
+			//				meta: {
+			//					title: 'RoleManagement'
+			//				}
+			//			},
+			//			//职员档案
+			//			{
+			//				path: 'StaffFiles',
+			//				component: () =>
+			//					import('@/views/StoreTheData/StaffFiles'),
+			//				name: 'StaffFiles',
+			//				meta: {
+			//					title: 'StaffFiles'
+			//				}
+			//			},
+			//			//收银方式
+			//			{
+			//				path: 'CollectMethod',
+			//				component: () =>
+			//					import('@/views/StoreTheData/CollectMethod'),
+			//				name: 'CollectMethod',
+			//				meta: {
+			//					title: 'CollectMethod'
+			//				}
+			//			},
+
 		]
 	},
 	//商品管理
@@ -230,45 +259,45 @@ export const constantRouterMap = [{
 				},
 			},
 			//商品类型
-//			{
-//				path: 'ProductTypes',
-//				component: () =>
-//					import('@/views/ProductManagement/ProductTypes'),
-//				name: 'ProductTypes',
-//				meta: {
-//					title: 'ProductTypes'
-//				}
-//			},
+			//			{
+			//				path: 'ProductTypes',
+			//				component: () =>
+			//					import('@/views/ProductManagement/ProductTypes'),
+			//				name: 'ProductTypes',
+			//				meta: {
+			//					title: 'ProductTypes'
+			//				}
+			//			},
 			//品牌列表
-//			{
-//				path: 'BrandList',
-//				component: () =>
-//					import('@/views/ProductManagement/BrandList'),
-//				name: 'BrandList',
-//				meta: {
-//					title: 'BrandList'
-//				}
-//			},
+			//			{
+			//				path: 'BrandList',
+			//				component: () =>
+			//					import('@/views/ProductManagement/BrandList'),
+			//				name: 'BrandList',
+			//				meta: {
+			//					title: 'BrandList'
+			//				}
+			//			},
 			//商品规格
-//			{
-//				path: 'SpecificationOfGoods',
-//				component: () =>
-//					import('@/views/ProductManagement/SpecificationOfGoods'),
-//				name: 'SpecificationOfGoods',
-//				meta: {
-//					title: 'SpecificationOfGoods'
-//				}
-//			},
+			//			{
+			//				path: 'SpecificationOfGoods',
+			//				component: () =>
+			//					import('@/views/ProductManagement/SpecificationOfGoods'),
+			//				name: 'SpecificationOfGoods',
+			//				meta: {
+			//					title: 'SpecificationOfGoods'
+			//				}
+			//			},
 			//条码管理
-//			{
-//				path: 'BarCodeManagement',
-//				component: () =>
-//					import('@/views/ProductManagement/BarCodeManagement'),
-//				name: 'BarCodeManagement',
-//				meta: {
-//					title: 'BarCodeManagement'
-//				}
-//			},
+			//			{
+			//				path: 'BarCodeManagement',
+			//				component: () =>
+			//					import('@/views/ProductManagement/BarCodeManagement'),
+			//				name: 'BarCodeManagement',
+			//				meta: {
+			//					title: 'BarCodeManagement'
+			//				}
+			//			},
 		]
 	},
 	//采购管理
@@ -301,15 +330,15 @@ export const constantRouterMap = [{
 				}
 			},
 			//采购入库
-//			{
-//				path: 'PurchasingSystem',
-//				component: () =>
-//					import('@/views/purchase/PurchasingSystem'),
-//				name: 'PurchasingSystem',
-//				meta: {
-//					title: 'PurchasingSystem'
-//				}
-//			},
+			//			{
+			//				path: 'PurchasingSystem',
+			//				component: () =>
+			//					import('@/views/purchase/PurchasingSystem'),
+			//				name: 'PurchasingSystem',
+			//				meta: {
+			//					title: 'PurchasingSystem'
+			//				}
+			//			},
 			//
 			{
 				path: 'PurchaseReturn',
@@ -333,7 +362,7 @@ export const constantRouterMap = [{
 			icon: 'storage'
 		},
 		children: [
-		
+
 			//采购入库单
 			{
 				path: 'PurchaseWarehouseEntryForm',
@@ -416,8 +445,6 @@ export const constantRouterMap = [{
 			},
 		]
 	},
-	
-	
 
 	//销售管理
 	{
@@ -528,7 +555,7 @@ export const constantRouterMap = [{
 					title: 'AccountPayable'
 				}
 			},
-			
+
 		]
 	},
 	//  平台端的成员管理
@@ -553,7 +580,7 @@ export const constantRouterMap = [{
 				},
 			},
 		]
-	}	
+	}
 
 	//报表管理暂时不做
 	// {
@@ -638,82 +665,83 @@ export default new Router({
 	routes: constantRouterMap
 })
 //表示需要动态判断权限并通过动态添加的页面
-export const asyncRouterMap = [{
-		path: '/permission',
-		component: Layout,
-		redirect: '/permission/index',
-		alwaysShow: true, // will always show the root menu
-		meta: {
-			title: 'permission',
-			icon: 'lock',
-			roles: ['admin', 'editor'] // you can set roles in root nav
-		},
-		children: [{
-				path: 'page',
-				component: () =>
-					import('@/views/permission/page'),
-				name: 'PagePermission',
-				meta: {
-					title: 'pagePermission',
-					roles: ['admin'] // or you can only set roles in sub nav
-				}
-			},
-			//指令权限
-			{
-				
-				path: 'directive',
-				component: () =>
-					import('@/views/permission/directive'),
-				name: 'DirectivePermission',
-				meta: {
-					title: 'directivePermission'
-					// if do not set roles, means: this page does not require permission
-				}
-			}
-		]
-	},
-	componentsRouter,//权限测试页
-	chartsRouter,//
-	tableRouter,	
+export const asyncRouterMap = [
+//		{
+//		path: '/permission',
+//		component: Layout,
+//		redirect: '/permission/index',
+//		alwaysShow: false, // will always show the root menu
+//		meta: {
+//			title: 'permission',
+//			icon: 'lock',
+//			roles: ['admin', 'editor'] // you can set roles in root nav
+//		},
+//		children: [{
+//				path: 'page',
+//				component: () =>
+//					import('@/views/permission/page'),
+//				name: 'PagePermission',
+//				meta: {
+//					title: 'pagePermission',
+//					roles: ['admin'] // or you can only set roles in sub nav
+//				}
+//			},
+//			//指令权限
+//			{
+//
+//				path: 'directive',
+//				component: () =>
+//					import('@/views/permission/directive'),
+//				name: 'DirectivePermission',
+//				meta: {
+//					title: 'directivePermission'
+//					// if do not set roles, means: this page does not require permission
+//				}
+//			}
+//		]
+//	},
+//	componentsRouter, //权限测试页
+//	chartsRouter,
+//	tableRouter,
 	//错误日志
-	{
-		path: '/excel',
-		component: Layout,
-		redirect: '/excel/export-excel',
-		name: 'Excel',
-		meta: {
-			title: 'excel',
-			icon: 'excel'
-		},
-		children: [{
-				path: 'export-excel',
-				component: () =>
-					import('@/views/excel/exportExcel'),
-				name: 'ExportExcel',
-				meta: {
-					title: 'exportExcel'
-				}
-			},
-			{
-				path: 'export-selected-excel',
-				component: () =>
-					import('@/views/excel/selectExcel'),
-				name: 'SelectExcel',
-				meta: {
-					title: 'selectExcel'
-				}
-			},
-			{
-				path: 'upload-excel',
-				component: () =>
-					import('@/views/excel/uploadExcel'),
-				name: 'UploadExcel',
-				meta: {
-					title: 'uploadExcel'
-				}
-			}
-		]
-	},
+//	{
+//		path: '/excel',
+//		component: Layout,
+//		redirect: '/excel/export-excel',
+//		name: 'Excel',
+//		meta: {
+//			title: 'excel',
+//			icon: 'excel'
+//		},
+//		children: [{
+//				path: 'export-excel',
+//				component: () =>
+//					import('@/views/excel/exportExcel'),
+//				name: 'ExportExcel',
+//				meta: {
+//					title: 'exportExcel'
+//				}
+//			},
+//			{
+//				path: 'export-selected-excel',
+//				component: () =>
+//					import('@/views/excel/selectExcel'),
+//				name: 'SelectExcel',
+//				meta: {
+//					title: 'selectExcel'
+//				}
+//			},
+//			{
+//				path: 'upload-excel',
+//				component: () =>
+//					import('@/views/excel/uploadExcel'),
+//				name: 'UploadExcel',
+//				meta: {
+//					title: 'uploadExcel'
+//				}
+//			}
+//		]
+//	},
 	{
 		path: '*',
 		redirect: '/404',

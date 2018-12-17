@@ -12,13 +12,12 @@
 				<lang-select class="set-language" />
 			</div>
 
-			<el-form-item prop="phone">
+			<el-form-item prop="username">
 				<span class="svg-container svg-container_login">
           <svg-icon icon-class="user" />
         </span>
-				<el-input v-model="loginForm.phone" :placeholder="$t('login.phone')" name="phone" type="text" auto-complete="on" />
+				<el-input v-model="loginForm.username" :placeholder="$t('login.username')" name="username" type="text" auto-complete="on" />
 			</el-form-item>
-
 			<el-form-item prop="password">
 				<span class="svg-container">
           <svg-icon icon-class="password" />
@@ -62,11 +61,11 @@
 			}
 			return {
 				loginForm: {
-					phone: '15736748869',
+					username: '15736748889',
 					password: '123456'
 				},
 				loginRules: {
-					phone: [{
+					username: [{
 						required: true,
 						trigger: 'blur',
 						message: '账号为空',
@@ -117,9 +116,16 @@
 						this.loading = true;
 						this.$store.dispatch('LoginByUsername', this.loginForm).then((res) => {
 							this.loading = false;
-							this.$router.push({
-								path: '/'
-							})
+							if(res.dataEnd == 0){
+								this.$router.push({
+									path:'/reminder'
+								})
+							}else{
+								this.$router.push({
+									path: '/'
+								})
+							}
+
 						}).catch(() => {
 							this.loading = false
 						})

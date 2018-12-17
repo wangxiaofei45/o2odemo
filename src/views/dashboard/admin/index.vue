@@ -16,7 +16,6 @@
 				</el-row>
 				<el-form label-width="120px">
 					<el-row>
-						
 						<el-checkbox-group v-model="checkedCities1" :max="9">
 							<el-col :span="24">
 								<el-button type="text" style="margin-right: 25px;">商品</el-button><el-checkbox v-for="city in cities_1" :label="city" :key="city">{{city}}</el-checkbox>

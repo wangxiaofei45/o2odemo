@@ -6,12 +6,22 @@
 		<div class="text_con">
 			为了保证系统更好的使用,请先完善组织设置、联系人管理、商品管理信息、若信息不完整，可能影响部分功能的正常使用。
 		</div>
-		<el-button class="pos_fix"  type="primary">
+		<el-button class="pos_fix"  type="primary" @click="sure">
 			我知道了
 		</el-button>
 	</div>
 </template>
 <script>
+	export default {
+		methods: {
+			//跳转到完善信息页面
+			sure() {
+				this.$router.push({
+					path: '/perfectInfo'
+				})
+			}
+		}
+	}
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

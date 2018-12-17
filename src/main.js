@@ -26,7 +26,7 @@ import * as filters from './filters' // global filters
 
 import Print from 'vue-print-nb'
 Vue.use(Print)
-Vue.prototype.apiUrl = "http://erp_panda.hzlwo.com/api"; //全局的定义api
+Vue.prototype.apiUrl = "http://api.yilianerptest.com/api"; //全局的定义api
 Vue.use(Element, {
 	size: Cookies.get('size') || 'medium', // set element-ui default size
 	i18n: (key, value) => i18n.t(key, value)

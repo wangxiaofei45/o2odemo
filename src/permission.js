@@ -5,7 +5,7 @@ import { Message } from 'element-ui'
 import NProgress from 'nprogress' // 侧边栏
 import 'nprogress/nprogress.css' // progress bar style
 import { getToken } from '@/utils/auth' // getToken from cookie
-import Util  from './utils/util.js'
+import Util from './utils/util.js'
 
 NProgress.configure({
 	showSpinner: false
@@ -36,33 +36,43 @@ const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 
 router.beforeEach((to, from, next) => {
 	NProgress.start() // start progress bar
-	if(getToken()) { // determine if there has token	
-		if(to.path === '/login') {
-			next({
-				path: '/'
-			})
-			NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
-		} else if(to.path === '/perfectInfo'){
-			next({
-				path: '/'
-			})
-			NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
-		}else {
-			next();
+	if(getToken()) {
+		//获取到token
+
+		if(!store.state.permission.permissionList) {
+			/* 如果没有permissionList，真正的工作开始了 */
+			console.log(store.state.permission.permissionList.length);
+			//
+//			store.dispatch('permission/FETCH_PERMISSION').then(() => {
+//				next({
+//					path: to.path
+//				})
+//			})
+		} else {
+			if(to.path === '/login') {
+				next({
+					path: '/'
+				})
+				NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
+			} else {
+				next();
+			}
 		}
+
 	} else {
 		//没有token判断跳转到注册页面
-		if(to.path === '/perfectInfo'){
+		if(to.path === '/perfectInfo') {
 			next();
-		}else if(to.path === '/reminder'){
+		} else if(to.path === '/reminder') {
 			next();
-		}else if(whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
+		} else if(whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
 			next()
 		} else {
 			next(`/login?redirect=${to.path}`) // 否则全部重定向到登录页
 			NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
 		}
 	}
+	//修改
 	Util.title(to.meta.title);
 })
 
