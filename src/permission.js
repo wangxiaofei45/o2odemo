@@ -17,7 +17,7 @@ function hasPermission(roles, permissionRoles) {
 	if(!permissionRoles) return true
 	return roles.some(role => permissionRoles.indexOf(role) >= 0)
 }
-
+//获取路由表
 function addRoutes() {
 	let roles = ["admin"];
 	store.dispatch('GenerateRoutes', {
@@ -37,19 +37,7 @@ const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
 router.beforeEach((to, from, next) => {
 	NProgress.start() // start progress bar
 	if(getToken()) {
-		//获取到token
-
-		if(!store.state.permission.permissionList) {
-			/* 如果没有permissionList，真正的工作开始了 */
-			console.log(store.state.permission.permissionList.length);
-			//
-//			store.dispatch('permission/FETCH_PERMISSION').then(() => {
-//				next({
-//					path: to.path
-//				})
-//			})
-		} else {
-			if(to.path === '/login') {
+		if(to.path === '/login') {
 				next({
 					path: '/'
 				})
@@ -57,8 +45,15 @@ router.beforeEach((to, from, next) => {
 			} else {
 				next();
 			}
-		}
-
+		//获取到token
+		// if(!store.state.permission.permissionList) {
+		// 	store.dispatch('permission/FETCH_PERMISSION').then(() => {
+		// 		next({
+		// 			path: to.path
+		// 		})
+		// 	})
+		// } else {
+		// }
 	} else {
 		//没有token判断跳转到注册页面
 		if(to.path === '/perfectInfo') {
@@ -73,7 +68,7 @@ router.beforeEach((to, from, next) => {
 		}
 	}
 	//修改
-	Util.title(to.meta.title);
+	Util.title(to.meta.name);
 })
 
 router.afterEach(() => {

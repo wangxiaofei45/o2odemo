@@ -65,12 +65,6 @@ const user = {
 						commit('SET_TOKEN', datas.data.token);
 						setToken(datas.data.token);
 						sessionStorage.setItem("token", datas.data.token);
-//						commit('SET_SHOP_ID', '11');
-//						setShopId("11");
-//						commit('SET_ROLE_ID', '23');
-//						setRoleId("23");
-//						sessionStorage.setItem("role_id", "23");
-//						sessionStorage.setItem("shop_id", "11");
 						resolve(datas.data);
 						this.$message({
 							type: 'success',

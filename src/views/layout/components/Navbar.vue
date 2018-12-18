@@ -20,7 +20,7 @@
 				<!--语言切换-->
         <!--<lang-select class="international right-menu-item"/>-->
 				<!--拾色器-->
-        <el-tooltip :content="$t('navbar.theme')" effect="dark" placement="bottom">
+        <el-tooltip content="换肤" effect="dark" placement="bottom">
           <theme-picker class="theme-switch right-menu-item"/>
         </el-tooltip>
       </template>
@@ -34,7 +34,7 @@
         	<!--跳转到首页-->
           <router-link to="/">
             <el-dropdown-item>
-              {{ $t('navbar.dashboard') }}
+             	 首页
             </el-dropdown-item>
           </router-link>
           <!--跳转到项目的地址-->
@@ -45,7 +45,9 @@
           </a>-->
           <!--退出登录-->
           <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">{{ $t('navbar.logOut') }}</span>
+            <span style="display:block;" @click="logout">
+            	退出登录
+            </span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

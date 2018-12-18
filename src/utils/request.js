@@ -7,6 +7,16 @@ import Util from './util.js'
 
 //店铺登录信息完善
 Vue.prototype.$userPerfectinfo = Util.apiUrl+"user/perfectinfo";//登录完善信息
+Vue.prototype.$userView = Util.apiUrl+"user/view";//获取首页的侧边栏
+//设置
+Vue.prototype.$organizationList = Util.apiUrl+"organization/list";//店铺权限设置
+Vue.prototype.$organizationRolelist = Util.apiUrl+"organization/rolelist";//新增时打开时获取权限列表
+Vue.prototype.$organizationAddrole = Util.apiUrl+"organization/addrole";//新增提交
+
+Vue.prototype.$organizationRolenode = Util.apiUrl+"organization/rolenode";//获取公司权限组
+
+
+
 
 
 Vue.prototype.$qiniu = Util.apiUrl+"/config/qiniu";//获取七牛云

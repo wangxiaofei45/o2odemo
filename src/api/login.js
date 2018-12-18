@@ -13,6 +13,14 @@ export function loginByUsername(phone, password) {
   })
 }
 
+//获取用户路由表
+export function userView() {
+  return request({
+    url: '/user/view',
+    method: 'post',
+  })
+}
+//登出
 export function logout() {
   return request({
     url: '/login/logout',

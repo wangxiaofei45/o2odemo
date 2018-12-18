@@ -12,7 +12,7 @@
 				</el-table-column>
 				<el-table-column label="操作" width="200" align="center">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" icon="el-icon-edit" @click="amend(scope.row)">修改</el-button>
+						<el-button size="mini" type="primary" icon="el-icon-edit" @click="amend(scope.row.id)">修改</el-button>
 						<el-button size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.id)">删除</el-button>
 					</template>
 				</el-table-column>
@@ -113,31 +113,11 @@
 				activeName: 'second',
 				function_model: false, //
 				function_amend_model: false, //模板列表修改
-				data_1: [{
-						id: 1,
-						name: "权限组1"
-					},
-					{
-						id: 2,
-						name: "权限组2"
-					}
-				], //模板列表数据
+				data_1: [], //权限设置列表table
 				new_info: {
-					name: '',
-					remark: '',
-					num: ''
-				},
-				//新增功能列表
-				new_info_2: {
-					node_id: '', //
-					name: '',
-					remark: '',
-					num: '',
-					url: '',
-				},
-				//修改功能列表
-				new_info_3: {
-
+					name: '', //新增权限的name
+					//					remark: '',
+					//					num: ''
 				},
 				new_inforules: {
 					name: [{
@@ -184,23 +164,20 @@
 		},
 		//页面创建完成后
 		created() {
-			//			this.ajaxjson(); //请求模板列表的数据
+			this.ajaxjson(); //请求模板列表的数据
 		},
 		methods: {
-			handleClick(tab, event) {},
-			//请求模板列表
+			//获取权限设置列表
 			ajaxjson() {
-				let postData = {
-					page: 1,
-				};
-				//调用post请求方法
-				this.$post(this.$NodeToplist, postData).then((res) => {
+				this.$post(this.$organizationList).then((res) => {
 					let data = res;
 					if(data.status_code == 0) {
 						this.data_1 = data.data;
 					} else {}
 				});
 			},
+
+			handleClick(tab, event) {},
 			handleCheckAllChange(val) {
 				this.checkedCities = val ? cityOptions : [];
 				this.isIndeterminate = false;
@@ -244,28 +221,16 @@
 					});
 				});
 			},
-
-			//添加新用户模板列表
+			//新增权限model显示
 			open_newInfo() {
 				this.function_model = true;
-			},
-			//功能列表
-			open_newInfo_2() {
-				this.$post(this.$NodeAddlist).then((res) => {
+				//获取结点权限
+				this.$post(this.$organizationRolelist,data).then((res) => {
 					let data = res;
-					if(data.status_code == 0) {
-						this.options = data.data;
-						this.function_model_2 = true;
-					} else {
-						this.$message({
-							type: 'error',
-							message: data.message,
-						});
-					}
+					console.log(res);
 				});
-
 			},
-			//新增添加新的用户
+			//新增权限model
 			submitForm(e) {
 				this.$refs[e].validate((valid) => {
 					if(valid) {
@@ -292,7 +257,7 @@
 					}
 				});
 			},
-
+			//修改权限列表
 			submitamendForm(e) {
 				this.$refs[e].validate((valid) => {
 					if(valid) {
@@ -325,21 +290,15 @@
 			cancel_newInfo() {
 				this.function_model = false;
 			},
-			//取消添加功能列表
-			cancel_newInfo_2() {
-				this.function_model_2 = false;
-			},
 			//模板列表修改
 			amend(e) {
 				this.amend_info = e;
 				this.function_amend_model = true;
 			},
-
 			//取消保存用户信息
 			cancel_amend_newInfo() {
 				this.function_amend_model = false;
 			},
-
 			//重置表单
 			resetForm(formName) {
 				this.$refs[formName].resetFields();
@@ -369,16 +328,19 @@
 		padding: 20px;
 		box-sizing: border-box;
 	}
+	
 	.model_title {
 		border-bottom: 1px solid #d6d6d6;
 		margin-bottom: 20px;
 	}
+	
 	.check_group {
 		padding: 20px;
 		border: 1px solid #E0E0E0;
 		margin-bottom: 20px;
 	}
-	.check_group_con{
+	
+	.check_group_con {
 		margin-top: 20px;
 		border-bottom: 1px dashed #E0E0E0;
 		padding-bottom: 25px;

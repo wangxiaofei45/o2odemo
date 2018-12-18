@@ -31,8 +31,7 @@ import tableRouter from './modules/table'
 **/
 
 //不需要动态访问的路由
-export const constantRouterMap = [
-	{
+export const constantRouterMap = [{
 		path: '/redirect',
 		component: Layout,
 		hidden: true,
@@ -93,17 +92,30 @@ export const constantRouterMap = [
 			name: 'Dashboard',
 			meta: {
 				title: 'dashboard',
+				name:'首页',
 				icon: 'dashboard',
-				noCache: true
 			}
 		}]
 	},
-	//设置
+
+]
+
+export default new Router({
+	// mode: 'history', // require service support
+	scrollBehavior: () => ({
+		y: 0
+	}),
+	routes: constantRouterMap
+})
+
+//表示需要动态判断权限并通过动态添加的页面
+export const asyncRouterMap = [
 	{
-		path: '/Organizationlist',
+		path: '/organization',
 		component: Layout,
+		redirect: '/organization/Permissionslist',
 		meta: {
-			title: "systemSettings", //中英文切换时默认是改变的title
+			title: "设置", //中英文切换时默认是改变的title
 			icon: 'setting',
 		},
 		children: [
@@ -115,6 +127,7 @@ export const constantRouterMap = [
 				name: 'Permissionslist',
 				meta: {
 					title: "Permissionslist",
+					name:"权限设置"
 				},
 			},
 			//组织架构列表
@@ -125,18 +138,19 @@ export const constantRouterMap = [
 				name: 'Organizationlist',
 				meta: {
 					title: "Organizationlist",
+					name:"组织架构列表",
 				},
 			},
 		]
 	},
-	//基础设置
+	
 	{
 		path: '/basicSetting',
 		component: Layout,
 		redirect: '/basicSetting/storeFiles',
 		alwaysShow: true,
 		meta: {
-			title: 'basicSetting',
+			title: '基础设置',
 			icon: 'basicSetting'
 		},
 		children: [
@@ -147,7 +161,8 @@ export const constantRouterMap = [
 					import('@/views/basicSetting/companyArchives'),
 				name: 'companyArchives',
 				meta: {
-					title: 'companyArchives'
+					title: 'companyArchives',
+					name:'公司档案',
 				}
 			},
 			//店铺档案
@@ -157,7 +172,8 @@ export const constantRouterMap = [
 					import('@/views/basicSetting/storeFiles'),
 				name: 'storeFiles',
 				meta: {
-					title: 'storeFiles'
+					title: 'storeFiles',
+					name:'店铺档案',
 				}
 			},
 			//个人档案
@@ -167,7 +183,8 @@ export const constantRouterMap = [
 					import('@/views/basicSetting/personalFiles'),
 				name: 'personalFiles',
 				meta: {
-					title: 'personalFiles'
+					title: 'personalFiles',
+					name:'个人档案',
 				}
 			},
 		]
@@ -179,7 +196,7 @@ export const constantRouterMap = [
 		redirect: '/StoreTheData/CustomerList',
 		alwaysShow: true,
 		meta: {
-			title: 'contactManagement',
+			title: '联系人管理',
 			//联系人管理
 			icon: 'StoreTheData'
 		},
@@ -191,7 +208,8 @@ export const constantRouterMap = [
 					import('@/views/StoreTheData/CustomerList'),
 				name: 'CustomerList',
 				meta: {
-					title: 'CustomerList'
+					title: 'CustomerList',
+					name:'会员管理',
 				}
 			},
 			//往来单位
@@ -201,40 +219,10 @@ export const constantRouterMap = [
 					import('@/views/StoreTheData/TradingUnit'),
 				name: 'TradingUnit',
 				meta: {
-					title: 'TradingUnit'
+					title: 'TradingUnit',
+					name:'往来单位',
 				}
 			},
-			//			//角色列表
-			//			{
-			//				path: 'RoleManagement',
-			//				component: () =>
-			//					import('@/views/StoreTheData/RoleManagement'),
-			//				name: 'RoleManagement',
-			//				meta: {
-			//					title: 'RoleManagement'
-			//				}
-			//			},
-			//			//职员档案
-			//			{
-			//				path: 'StaffFiles',
-			//				component: () =>
-			//					import('@/views/StoreTheData/StaffFiles'),
-			//				name: 'StaffFiles',
-			//				meta: {
-			//					title: 'StaffFiles'
-			//				}
-			//			},
-			//			//收银方式
-			//			{
-			//				path: 'CollectMethod',
-			//				component: () =>
-			//					import('@/views/StoreTheData/CollectMethod'),
-			//				name: 'CollectMethod',
-			//				meta: {
-			//					title: 'CollectMethod'
-			//				}
-			//			},
-
 		]
 	},
 	//商品管理
@@ -244,7 +232,7 @@ export const constantRouterMap = [
 		redirect: '/ProductManagement/ProductTypes',
 		alwaysShow: true,
 		meta: {
-			title: 'ProductManagement',
+			title: '商品管理',
 			icon: 'ProductManagement'
 		},
 		children: [
@@ -255,49 +243,10 @@ export const constantRouterMap = [
 					import('@/views/ProductManagement/ProductRegistration'),
 				name: 'ProductRegistration',
 				meta: {
-					title: 'ProductRegistration'
+					title: 'ProductRegistration',
+					name:'商品注册',
 				},
 			},
-			//商品类型
-			//			{
-			//				path: 'ProductTypes',
-			//				component: () =>
-			//					import('@/views/ProductManagement/ProductTypes'),
-			//				name: 'ProductTypes',
-			//				meta: {
-			//					title: 'ProductTypes'
-			//				}
-			//			},
-			//品牌列表
-			//			{
-			//				path: 'BrandList',
-			//				component: () =>
-			//					import('@/views/ProductManagement/BrandList'),
-			//				name: 'BrandList',
-			//				meta: {
-			//					title: 'BrandList'
-			//				}
-			//			},
-			//商品规格
-			//			{
-			//				path: 'SpecificationOfGoods',
-			//				component: () =>
-			//					import('@/views/ProductManagement/SpecificationOfGoods'),
-			//				name: 'SpecificationOfGoods',
-			//				meta: {
-			//					title: 'SpecificationOfGoods'
-			//				}
-			//			},
-			//条码管理
-			//			{
-			//				path: 'BarCodeManagement',
-			//				component: () =>
-			//					import('@/views/ProductManagement/BarCodeManagement'),
-			//				name: 'BarCodeManagement',
-			//				meta: {
-			//					title: 'BarCodeManagement'
-			//				}
-			//			},
 		]
 	},
 	//采购管理
@@ -307,7 +256,7 @@ export const constantRouterMap = [
 		redirect: '/purchase/PurchasingManagement',
 		alwaysShow: true,
 		meta: {
-			title: 'purchase',
+			title: '采购管理',
 			icon: 'purchase'
 		},
 		children: [{
@@ -316,7 +265,8 @@ export const constantRouterMap = [
 					import('@/views/purchase/PurchasingManagement'),
 				name: 'PurchasingManagement',
 				meta: {
-					title: 'PurchasingManagement'
+					title: 'PurchasingManagement',
+					name:'采购单',
 				}
 			},
 			//商品成本
@@ -326,27 +276,18 @@ export const constantRouterMap = [
 					import('@/views/purchase/costOfGoods'),
 				name: 'costOfGoods',
 				meta: {
-					title: 'costOfGoods'
+					title: 'costOfGoods',
+					name:'商品成本'
 				}
 			},
-			//采购入库
-			//			{
-			//				path: 'PurchasingSystem',
-			//				component: () =>
-			//					import('@/views/purchase/PurchasingSystem'),
-			//				name: 'PurchasingSystem',
-			//				meta: {
-			//					title: 'PurchasingSystem'
-			//				}
-			//			},
-			//
 			{
 				path: 'PurchaseReturn',
 				component: () =>
 					import('@/views/purchase/PurchaseReturn'),
 				name: 'PurchaseReturn',
 				meta: {
-					title: 'PurchaseReturn'
+					title: 'PurchaseReturn',
+					name:'采购退货',
 				}
 			},
 		]
@@ -358,11 +299,10 @@ export const constantRouterMap = [
 		redirect: '/storage/InventoryList',
 		alwaysShow: true,
 		meta: {
-			title: 'storage',
+			title: '仓库管理',
 			icon: 'storage'
 		},
 		children: [
-
 			//采购入库单
 			{
 				path: 'PurchaseWarehouseEntryForm',
@@ -370,7 +310,8 @@ export const constantRouterMap = [
 					import('@/views/storage/PurchaseWarehouseEntryForm'),
 				name: 'PurchaseWarehouseEntryForm',
 				meta: {
-					title: 'PurchaseWarehouseEntryForm'
+					title: 'PurchaseWarehouseEntryForm',
+					name:'采购入库单'
 				}
 			},
 			//调拨入库
@@ -380,7 +321,8 @@ export const constantRouterMap = [
 					import('@/views/storage/AllocatingStorage'),
 				name: 'AllocatingStorage',
 				meta: {
-					title: 'AllocatingStorage'
+					title: 'AllocatingStorage',
+					name:'调拨入库'
 				}
 			},
 			//调拨出库
@@ -390,7 +332,8 @@ export const constantRouterMap = [
 					import('@/views/storage/AllocatingOutbound'),
 				name: 'AllocatingOutbound',
 				meta: {
-					title: 'AllocatingOutbound'
+					title: 'AllocatingOutbound',
+					name:'调拨出库'
 				}
 			},
 			//在途商品
@@ -400,7 +343,8 @@ export const constantRouterMap = [
 					import('@/views/storage/GoodsInTransit'),
 				name: 'GoodsInTransit',
 				meta: {
-					title: 'GoodsInTransit'
+					title: 'GoodsInTransit',
+					name:'在途商品'
 				}
 			},
 			//库存盘点
@@ -410,7 +354,8 @@ export const constantRouterMap = [
 					import('@/views/storage/StockTaking'),
 				name: 'StockTaking',
 				meta: {
-					title: 'StockTaking'
+					title: 'StockTaking',
+					name:'库存盘点'
 				}
 			},
 			//报溢单
@@ -420,7 +365,8 @@ export const constantRouterMap = [
 					import('@/views/storage/TheOverflowOfSingle'),
 				name: 'TheOverflowOfSingle',
 				meta: {
-					title: 'TheOverflowOfSingle'
+					title: 'TheOverflowOfSingle',
+					name:'报溢单',
 				}
 			},
 			//报损单
@@ -430,7 +376,8 @@ export const constantRouterMap = [
 					import('@/views/storage/ReportedLossOfSingle'),
 				name: 'ReportedLossOfSingle',
 				meta: {
-					title: 'ReportedLossOfSingle'
+					title: 'ReportedLossOfSingle',
+					name:'报损单'
 				}
 			},
 			//库存列表
@@ -440,7 +387,8 @@ export const constantRouterMap = [
 					import('@/views/storage/InventoryList'),
 				name: 'InventoryList',
 				meta: {
-					title: 'InventoryList'
+					title: 'InventoryList',
+					name:'库存列表'
 				}
 			},
 		]
@@ -453,7 +401,7 @@ export const constantRouterMap = [
 		redirect: '/sell/retail',
 		alwaysShow: true,
 		meta: {
-			title: 'sell',
+			title: '销售管理',
 			icon: 'sell'
 		},
 		children: [{
@@ -462,7 +410,8 @@ export const constantRouterMap = [
 					import('@/views/sell/retail'),
 				name: 'retail',
 				meta: {
-					title: 'retail'
+					title: 'retail',
+					name:'零售开票'
 				}
 			},
 			{
@@ -471,7 +420,8 @@ export const constantRouterMap = [
 					import('@/views/sell/sales'),
 				name: 'sales',
 				meta: {
-					title: 'sales'
+					title: 'sales',
+					name:'销货订单'
 				}
 			},
 			{
@@ -480,7 +430,8 @@ export const constantRouterMap = [
 					import('@/views/sell/CashierInventory'),
 				name: 'CashierInventory',
 				meta: {
-					title: 'CashierInventory'
+					title: 'CashierInventory',
+					name:'收银盘点'
 				}
 			},
 			//收银交班表
@@ -490,7 +441,8 @@ export const constantRouterMap = [
 					import('@/views/sell/cashierWatch'),
 				name: 'cashierWatch',
 				meta: {
-					title: 'cashierWatch'
+					title: 'cashierWatch',
+					name:'收银交班表'
 				}
 			},
 			//收银接班表
@@ -500,7 +452,8 @@ export const constantRouterMap = [
 					import('@/views/sell/successionTable'),
 				name: 'successionTable',
 				meta: {
-					title: 'successionTable'
+					title: 'successionTable',
+					name:'收银接班表'
 				}
 			},
 		]
@@ -512,7 +465,7 @@ export const constantRouterMap = [
 		redirect: '/financial/CostOfGoods',
 		alwaysShow: true,
 		meta: {
-			title: 'financial',
+			title: '财务管理',
 			icon: 'financial'
 		},
 		children: [
@@ -523,7 +476,8 @@ export const constantRouterMap = [
 					import('@/views/financial/Otherbillsofpayment'),
 				name: 'Otherbillsofpayment',
 				meta: {
-					title: 'Otherbillsofpayment'
+					title: 'Otherbillsofpayment',
+					name:'其他支出单'
 				}
 			},
 			// 其他收入单
@@ -533,7 +487,8 @@ export const constantRouterMap = [
 					import('@/views/financial/otherReceipts'),
 				name: 'otherReceipts',
 				meta: {
-					title: 'otherReceipts'
+					title: 'otherReceipts',
+					name:'其他收入单',
 				}
 			},
 			// 定金
@@ -543,7 +498,8 @@ export const constantRouterMap = [
 					import('@/views/financial/deposit'),
 				name: 'deposit',
 				meta: {
-					title: 'deposit'
+					title: 'deposit',
+					name:'定金',
 				}
 			},
 			{
@@ -552,7 +508,8 @@ export const constantRouterMap = [
 					import('@/views/financial/AccountPayable'),
 				name: 'AccountPayable',
 				meta: {
-					title: 'AccountPayable'
+					title: 'AccountPayable',
+					name:'应付款',
 				}
 			},
 
@@ -565,7 +522,7 @@ export const constantRouterMap = [
 		redirect: '/memberManagement/ProductTypes',
 		alwaysShow: true,
 		meta: {
-			title: 'memberManagement',
+			title: '成员管理',
 			icon: 'memberManagement'
 		},
 		children: [
@@ -576,134 +533,50 @@ export const constantRouterMap = [
 					import('@/views/memberManagement/storeList'),
 				name: 'storeList',
 				meta: {
-					title: 'storeList'
+					title: 'storeList',
+					name:'商品注册'
 				},
 			},
 		]
-	}
-
-	//报表管理暂时不做
-	// {
-	// 	path: '/statement',
-	// 	component: Layout,
-	// 	redirect: '/statement/DailyReport',
-	// 	alwaysShow: true,
-	// 	meta: {
-	// 		title: 'statement',
-	// 		icon: 'statement'
-	// 	},
-	// 	children: [
-	// 		//日结报表
-	// 		{
-	// 			path: 'DailyReport',
-	// 			component: () =>
-	// 				import('@/views/statement/DailyReport'),
-	// 			name: 'DailyReport',
-	// 			meta: {
-	// 				title: 'DailyReport'
-	// 			}
-	// 		},
-	// 		//在途单据
-	// 		{
-	// 			path: 'InTransitDocuments',
-	// 			component: () =>
-	// 				import('@/views/statement/InTransitDocuments'),
-	// 			name: 'InTransitDocuments',
-	// 			meta: {
-	// 				title: 'InTransitDocuments'
-	// 			}
-	// 		},
-	// 		//零售报表
-	// 		{
-	// 			path: 'RetailReport',
-	// 			component: () =>
-	// 				import('@/views/statement/RetailReport'),
-	// 			name: 'RetailReport',
-	// 			meta: {
-	// 				title: 'RetailReport'
-	// 			}
-	// 		},
-	// 		//库存统计
-	// 		{
-	// 			path: 'InventoryStatistics',
-	// 			component: () =>
-	// 				import('@/views/statement/InventoryStatistics'),
-	// 			name: 'InventoryStatistics',
-	// 			meta: {
-	// 				title: 'InventoryStatistics'
-	// 			}
-	// 		},
-	// 		//仓库进出存
-	// 		{
-	// 			path: 'WarehouseInAndOut',
-	// 			component: () =>
-	// 				import('@/views/statement/WarehouseInAndOut'),
-	// 			name: 'WarehouseInAndOut',
-	// 			meta: {
-	// 				title: 'WarehouseInAndOut'
-	// 			}
-	// 		},
-	// 		//店铺进出存
-	// 		{
-	// 			path: 'StoreInAndOut',
-	// 			component: () =>
-	// 				import('@/views/statement/StoreInAndOut'),
-	// 			name: 'StoreInAndOut',
-	// 			meta: {
-	// 				title: 'StoreInAndOut'
-	// 			}
-	// 		},
-	// 	]
-	// },
-]
-
-export default new Router({
-	// mode: 'history', // require service support
-	scrollBehavior: () => ({
-		y: 0
-	}),
-	routes: constantRouterMap
-})
-//表示需要动态判断权限并通过动态添加的页面
-export const asyncRouterMap = [
-//		{
-//		path: '/permission',
-//		component: Layout,
-//		redirect: '/permission/index',
-//		alwaysShow: false, // will always show the root menu
-//		meta: {
-//			title: 'permission',
-//			icon: 'lock',
-//			roles: ['admin', 'editor'] // you can set roles in root nav
-//		},
-//		children: [{
-//				path: 'page',
-//				component: () =>
-//					import('@/views/permission/page'),
-//				name: 'PagePermission',
-//				meta: {
-//					title: 'pagePermission',
-//					roles: ['admin'] // or you can only set roles in sub nav
-//				}
-//			},
-//			//指令权限
-//			{
-//
-//				path: 'directive',
-//				component: () =>
-//					import('@/views/permission/directive'),
-//				name: 'DirectivePermission',
-//				meta: {
-//					title: 'directivePermission'
-//					// if do not set roles, means: this page does not require permission
-//				}
-//			}
-//		]
-//	},
-//	componentsRouter, //权限测试页
-//	chartsRouter,
-//	tableRouter,
-	//错误日志
+	},
+	//		{
+	//		path: '/permission',
+	//		component: Layout,
+	//		redirect: '/permission/index',
+	//		alwaysShow: false, // will always show the root menu
+	//		meta: {
+	//			title: 'permission',
+	//			icon: 'lock',
+	//			roles: ['admin', 'editor'] // you can set roles in root nav
+	//		},
+	//		children: [{
+	//				path: 'page',
+	//				component: () =>
+	//					import('@/views/permission/page'),
+	//				name: 'PagePermission',
+	//				meta: {
+	//					title: 'pagePermission',
+	//					roles: ['admin'] // or you can only set roles in sub nav
+	//				}
+	//			},
+	//			//指令权限
+	//			{
+	//
+	//				path: 'directive',
+	//				component: () =>
+	//					import('@/views/permission/directive'),
+	//				name: 'DirectivePermission',
+	//				meta: {
+	//					title: 'directivePermission'
+	//					// if do not set roles, means: this page does not require permission
+	//				}
+	//			}
+	//		]
+	//	},
+	//	componentsRouter, //权限测试页
+	//	chartsRouter,
+	//	tableRouter,
+	//	错误日志
 //	{
 //		path: '/excel',
 //		component: Layout,
@@ -742,9 +615,5 @@ export const asyncRouterMap = [
 //			}
 //		]
 //	},
-	{
-		path: '*',
-		redirect: '/404',
-		hidden: true
-	}
+
 ]
