@@ -1,14 +1,17 @@
 <!-- 平台的组织架构列表 -->
 <template>
 	<div class="container">
-		<el-button type="primary" @click="addOrganization" v-if="can_add == 1">
+		<el-button type="primary" @click="addOrganization">
 			新增组织
 		</el-button>
 		<el-row class="title">
-			{{showName}}
+			杭州领沃
 		</el-row>
 		<!--default-expand-all 是否全部展开-->
 		<el-tree :props="props1" node-key="index" :load="loadNode1" lazy :render-content="renderContent" style="margin-left: 50px;">
+		</el-tree>
+
+		<el-tree :data="treeData2" node-key="value" :expand-on-click-node="true" :props="defaultProps" style="margin-left: 50px;">
 		</el-tree>
 		<!--添加组织-->
 		<div class="model" v-show="model == 1">
@@ -54,7 +57,7 @@
 				</el-row>
 				<el-form :model="junior_info" ref="junior_info" :rules="junior_inforules" label-width="120px">
 					<el-row>
-						<el-col :span="12">
+						<el-col :span="24">
 							<el-form-item label="上级组织" prop="oid">
 								<el-input v-model="junior_info.oid" v-show="false"></el-input>
 								<el-input v-model="junior_role_name" disabled></el-input>
@@ -76,13 +79,20 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="确定密码" prop="repassword">
-								<el-input type="password" v-model="junior_info.repassword"></el-input>
+							<el-form-item label="确定密码" prop="password_two">
+								<el-input type="password" v-model="junior_info.password_two"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="邮箱" prop="email">
-								<el-input v-model="junior_info.email"></el-input>
+							<el-form-item label="性别" prop="sex">
+								<el-select v-model="junior_info.sex" placeholder="请选择">
+									<el-option label="女" value="0">
+									</el-option>
+									<el-option label="男" value="1">
+									</el-option>
+									<el-option label="保密" value="2">
+									</el-option>
+								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
@@ -117,94 +127,6 @@
 						<el-form-item>
 							<el-button @click="cancel_member_model">取消</el-button>
 							<el-button type="primary" @click="sureJunior('junior_info')">保存</el-button>
-						</el-form-item>
-					</el-row>
-				</el-form>
-			</div>
-		</div>
-		<!-- 新增组织及成员 -->
-		<div class="junior_model" v-show="model == 4">
-			<div class="model_con">
-				<el-row class="model_title" align="bottom">
-					<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
-						新增下级组织及成员
-					</el-col>
-					<el-col :span="12" style="text-align: right;">
-						<el-button type="text" @click="cancel_member_model">
-							<svg-icon icon-class="cancel" />
-						</el-button>
-					</el-col>
-				</el-row>
-				<el-form :model="organizationMembers" ref="organizationMembers" :rules="organizationMembersRules" label-width="120px">
-					<el-row>
-						<el-col :span="12">
-							<el-form-item label="上级组织" prop="poid">
-								<el-input v-model="organizationMembers.poid" v-show="false"></el-input>
-								<el-input v-model="junior_role_name" disabled></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="组织名称" prop="organization_name">
-								<el-input v-model="organizationMembers.organization_name"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="手机号" prop="phone">
-								<el-input v-model="organizationMembers.phone"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="姓名" prop="name">
-								<el-input v-model="organizationMembers.name"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="密码" prop="password">
-								<el-input type="password" v-model="organizationMembers.password"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="确定密码" prop="repassword">
-								<el-input type="password" v-model="organizationMembers.repassword"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="邮箱" prop="email">
-								<el-input v-model="organizationMembers.email"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="身份证" prop="idcard">
-								<el-input v-model="organizationMembers.idcard"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="设置权限" prop="permission">
-								<el-select v-model="select" multiple placeholder="请选择">
-									<el-option v-for="item in options" :key="item.role_name" :label="item.role_name" :value="item.id">
-									</el-option>
-								</el-select>
-								<el-button type="text" @click="open_check_group">
-									<i class="el-icon-circle-plus" style="font-size: 20px;"></i>
-								</el-button>
-							</el-form-item>
-						</el-col>
-					</el-row>
-					<el-row class="show_list" v-show="show_list_1">
-						<el-input style="width: 200px;" placeholder="新增权限组名称"></el-input>
-						<!--选择框-->
-						<el-row class="check_group">
-							<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-							<div style="margin: 15px 0;"></div>
-							<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-								<el-checkbox v-for="city in city" :label="city" :key="city">{{city}}</el-checkbox>
-							</el-checkbox-group>
-						</el-row>
-					</el-row>
-					<el-row>
-						<el-form-item>
-							<el-button @click="cancel_member_model">取消</el-button>
-							<el-button type="primary" @click="sureOrganizationMembers('organizationMembers')">保存</el-button>
 						</el-form-item>
 					</el-row>
 				</el-form>
@@ -313,8 +235,6 @@
 	export default {
 		data() {
 			return {
-				can_add:'0',//是否可以显示新增组织按钮
-				showName:'',//显示的店铺的名字
 				props1: {
 					label: 'name',
 					children: 'zones',
@@ -330,6 +250,10 @@
 				//2级新增
 				members_model: false,
 				amend_model: false,
+				defaultProps: {
+					children: 'children',
+					label: 'label'
+				},
 				//测试数据
 				cities: [{
 					value: 'Beijing',
@@ -351,6 +275,7 @@
 					label: '广州'
 				}],
 				treeData1: [], //树形图
+				treeData2: [],
 				junior_role_name: "",
 				//新增组织名称
 				new_info: {
@@ -387,20 +312,8 @@
 					name: '', //姓名
 					idcard: '', //身份证
 					password: '', //密码
-					repassword: '', //确认密码
-					email:'',//邮箱
-				},
-				//新增组织及成员的
-				organizationMembers:{
-					poid: '', //上级id
-					organization_name:'',//新增组织名称
-					phone: '', //手机
-					name: '', //姓名
-					password: '', //密码
-					repassword: '', //确认密码
-					email:'',//邮箱
-					idcard: '', //身份证
-					role_id: '', //权限组的id
+					password_two: '', //确认密码
+					sex: '', //性别
 				},
 				select: [], //选择的权限
 				amendSelect:[],//修改的选择
@@ -436,39 +349,6 @@
 						message: '请选择性别',
 						trigger: 'change'
 					}]
-				},
-				// 新增组织及成员的验证
-				organizationMembersRules:{
-					poid: [{
-						required: true,
-						message: '上级名称为空',
-						trigger: 'blur'
-					}],
-					organization_name:[{
-						required: true,
-						message: '组织名称为空',
-						trigger: 'blur'
-					}],
-					phone: [{
-						required: true,
-						message: '手机号为空',
-						trigger: 'blur'
-					}],
-					name: [{
-						required: true,
-						message: '姓名为空',
-						trigger: 'blur'
-					}],
-					password: [{
-						required: true,
-						message: '密码为空',
-						trigger: 'blur'
-					}],
-					repassword: [{
-						required: true,
-						message: '请确认密码',
-						trigger: 'blur'
-					}],
 				},
 				// 修改时候的验证
 				amend_info: {
@@ -519,32 +399,30 @@
 			this.ajaxjson();
 		},
 		methods: {
-			// 点击展示下一级
 			loadNode1(node, resolve) {
 				if(node.level === 0) {
 					let postData = {
 						page: 1,
 					};
-					this.$post(this.$organizationList, postData).then((res) => {
+					this.$post(this.$platformList, postData).then((res) => {
 						let data = res;
 						if(data.status_code == 0) {
-							let datas = [
-								{
-									name:res.data.name,
-									can_add_child:res.data.can_add_child,
-									id:res.data.id,
-								}
-							]
-							return resolve(datas);
+							let datas = JSON.parse(JSON.stringify(data.data));
+							let data1 = [];
+							data1.push(datas[0]);
+							return resolve(data1);
 						} else {}
 					});
 				}
 				// 请求平台下面的组织
 				if(node.level == 1) {
-					this.$post(this.$organizationList).then((res) => {
+					let postData = {
+						id: node.data.id
+					}
+					this.$post(this.$platformChildrenList, postData).then((res) => {
 						let data = res;
 						if(data.status_code == 0) {
-							let datas = JSON.parse(JSON.stringify(data.data.list));
+							let datas = JSON.parse(JSON.stringify(data.data));
 							resolve(datas);
 						} else {
 
@@ -554,9 +432,9 @@
 				} else if(node.level == 2) {
 					// 请求组织下面的成员
 					let postData = {
-						oid: node.data.id,
+						id: node.data.id,
 					}
-					this.$post(this.$organizationGetuser, postData).then((res) => {
+					this.$post(this.$platformOrgUser, postData).then((res) => {
 						let data = res;
 						if(data.status_code == 0) {
 							let datas = JSON.parse(JSON.stringify(data.data));
@@ -573,13 +451,19 @@
 			},
 			//首次的默认的请求
 			ajaxjson() {
-				// 这里什么都没做只是修改了一下显示的的店铺的名称
-				this.$post(this.$organizationList).then((res) => {
+				let postData = {
+					page: 1,
+				};
+				this.$post(this.$platformList, postData).then((res) => {
 					let data = res;
 					if(data.status_code == 0) {
 						let datas = JSON.parse(JSON.stringify(data.data));
-						this.showName = datas.name;
-						this.can_add = datas.can_add;
+						let data1 = [];
+						let data2 = [];
+						data1.push(datas[0]);
+						data2.push(datas[1]);
+						this.treeData1 = data1;
+						this.treeData2 = data2;
 					} else {
 
 					}
@@ -593,13 +477,14 @@
 			cancelOrganization() {
 				this.model = 0;
 			},
-			//确定下面新增组织
+			//确定提交平台下面新增组织
 			sureOrganization(e) {
 				this.$refs[e].validate((valid) => {
 					if(valid) {
 						//新增之后的操作
 						let postData = this.new_info;
-						this.$post(this.$organizationAdd, postData).then((res) => {
+						console.log(postData);
+						this.$post(this.$platformAddGroup, postData).then((res) => {
 							let data = res;
 							if(data.status_code == 0) {
 								this.model = 0;
@@ -609,7 +494,7 @@
 								});
 								this.ajaxjson();
 							} else {
-								this.$message.error(data.message);
+								this.$message.error('错了哦，这是一条错误消息');
 							}
 						});
 					} else {
@@ -621,48 +506,13 @@
 			//平台组织下面添加成员
 			open_junior_model(data) {
 				this.model = 2;
-				this.junior_role_name = data.name;
+				this.junior_role_name = data.label;
 				this.junior_info.oid = data.id;
 				this.getRoleGroup();
 			},
-			// 店铺下面新增组织及成员
-			openOrganizationMembers(data){
-				console.log(data);
-				this.model = 4;
-				this.junior_role_name = data.name;
-				this.organizationMembers.poid = data.id;
-				this.getRoleGroup();
-			},
-			// 店铺下面新增组织及成员
-			sureOrganizationMembers(e){
-				this.$refs[e].validate((valid) => {
-					if(valid) {
-						let select = coppyArray(this.select);
-						let postData = this.organizationMembers;
-						postData.role_id = select.join(',');
-						this.$post(this.$organizationAddroleuser, postData).then((res) => {
-							let data = res;
-							if(data.status_code == 0) {
-								this.model = 0;
-								this.$message({
-									message: data.message,
-									type: 'success'
-								});
-								this.ajaxjson();
-								this.model = 0;
-							} else {
-								this.$message.error(data.message);
-							}
-						});
-					} else {
-						console.log('error submit!!');
-						return false;
-					}
-				});
-			},
 			//获取平台的权限组
 			getRoleGroup(){
-				this.$post(this.$organizationGetOrganizeRoleList).then((res) => {
+				this.$post(this.$platformRoleGroup).then((res) => {
 					let data = res;
 					if(data.status_code == 0) {
 						this.options = data.data;
@@ -684,7 +534,7 @@
 						let select = coppyArray(this.select);
 						let postData = this.junior_info;
 						postData.role_id = select.join(',');
-						this.$post(this.$organizationAdduser, postData).then((res) => {
+						this.$post(this.$platformAddUser, postData).then((res) => {
 							let data = res;
 							if(data.status_code == 0) {
 								this.model = 0;
@@ -817,7 +667,7 @@
 								size: 'small',
 							},
 							style: {
-								display: data.can_add_child == 1 ? '' : 'none',
+								display: !data.pid ? 'none' : '',
 								width: '14px',
 								height: '14px',
 								padding: "0px",
@@ -830,32 +680,7 @@
 							},
 							on: {
 								click: () => {
-									//打开新增组织及店铺
-									this.openOrganizationMembers(data);
-								}
-							}
-						}, ''),
-						//新增成员
-						h('el-button', {
-							props: {
-								type: 'text',
-								size: 'small',
-							},
-							style: {
-								display: data.can_add_child == 0 ? '' : 'none',
-								width: '14px',
-								height: '14px',
-								padding: "0px",
-								backgroundImage: "url(" + require("../../../static/img/newmember.png") + ")",
-								backgroundRepeat: "no-repeat",
-								backgroundPosition: 'center',
-								backgroundSize: '14px 14px',
-								marginLeft: '8px',
-								marginRight: '8px'
-							},
-							on: {
-								click: () => {
-									// 新增成员
+									console.log(node);
 									this.open_junior_model(data);
 								}
 							}
@@ -868,7 +693,7 @@
 								size: 'small',
 							},
 							style: {
-								display: data.is_user ? '' : 'none',
+								display: data.phone ? '' : 'none',
 								width: '14px',
 								height: '14px',
 								padding: "0px",
@@ -892,7 +717,7 @@
 								size: 'small',
 							},
 							style: {
-								display: data.can_add_child == 0 ? '' : 'none',
+								display: data.pid == 15 ? '' : 'none',
 								width: '14px',
 								height: '14px',
 								padding: "0px",
@@ -908,7 +733,7 @@
 									let postData = {
 										oid: data.id,
 									}
-									this.$post(this.$organizationDelete, postData).then((res) => {
+									this.$post(this.$platformDelOrg, postData).then((res) => {
 										let data = res;
 										console.log(res);
 										if(data.status_code == 0) {
@@ -935,7 +760,7 @@
 								size: 'small',
 							},
 							style: {
-								display: data.is_user ? '' : 'none',
+								display: data.phone ? '' : 'none',
 								width: '14px',
 								height: '14px',
 								padding: "0px",
@@ -949,9 +774,9 @@
 							on: {
 								click: () => {
 									let postData = {
-										user_id: data.id,
+										id: data.id,
 									}
-									this.$post(this.$organizationDeleteuser, postData).then((res) => {
+									this.$post(this.$platformDelreMember, postData).then((res) => {
 										let data = res;
 										if(data.status_code == 0) {
 											this.$message({

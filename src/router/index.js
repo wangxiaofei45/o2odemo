@@ -515,6 +515,54 @@ export const asyncRouterMap = [
 
 		]
 	},
+
+
+	// 平台端的设置
+	{
+		path: '/theCompanySetUp',
+		component: Layout,
+		redirect: '/theCompanySetUp/permissionSetting',
+		alwaysShow: true,
+		meta: {
+			title: '设置',
+			icon: 'setting'
+		},
+		children: [
+			//权限设置
+			{
+				path: 'permissionSetting',
+				component: () =>
+					import('@/views/theCompanySetUp/permissionSetting'),
+				name: 'permissionSetting',
+				meta: {
+					title: 'permissionSetting',
+					name:'权限设置'
+				},
+			},
+			// 功能列表
+			{
+				path: 'functionList',
+				component: () =>
+					import('@/views/theCompanySetUp/functionList'),
+				name: 'functionList',
+				meta: {
+					title: 'functionList',
+					name:'功能列表'
+				},
+			},
+			// 组织架构列表
+			{
+				path: 'organizationalStructureList',
+				component: () =>
+					import('@/views/theCompanySetUp/organizationalStructureList'),
+				name: 'organizationalStructureList',
+				meta: {
+					title: 'organizationalStructureList',
+					name:'组织架构列表'
+				},
+			},
+		]
+	},
 	//  平台端的成员管理
 	{
 		path: '/memberManagement',
@@ -539,6 +587,54 @@ export const asyncRouterMap = [
 			},
 		]
 	},
+	//平台端的商品管理
+	{
+		path: '/terraceGoodsManager',
+		component: Layout,
+		redirect: '/terraceGoodsManager/brandManagement',
+		alwaysShow: true,
+		meta: {
+			title: '商品管理',
+			icon: 'memberManagement'
+		},
+		children: [
+			// 商品管理 -商品分类
+			{
+				path: 'goodsClass',
+				component: () =>
+					import('@/views/terraceGoodsManager/goodsClass'),
+				name: 'goodsClass',
+				meta: {
+					title: 'goodsClass',
+					name:'商品分类'
+				},
+			},
+			// 规格管理
+			{
+				path: 'specificationManagement',
+				component: () =>
+					import('@/views/terraceGoodsManager/specificationManagement'),
+				name: 'specificationManagement',
+				meta: {
+					title: 'specificationManagement',
+					name:'规格管理'
+				},
+			},
+			//商品管理
+			{
+				path: 'brandManagement',
+				component: () =>
+					import('@/views/terraceGoodsManager/brandManagement'),
+				name: 'brandManagement',
+				meta: {
+					title: 'brandManagement',
+					name:'品牌管理'
+				},
+			},
+		
+		]
+	},
+
 	//		{
 	//		path: '/permission',
 	//		component: Layout,
@@ -575,7 +671,7 @@ export const asyncRouterMap = [
 	//	},
 	//	componentsRouter, //权限测试页
 	//	chartsRouter,
-	//	tableRouter,
+		tableRouter,
 	//	错误日志
 //	{
 //		path: '/excel',

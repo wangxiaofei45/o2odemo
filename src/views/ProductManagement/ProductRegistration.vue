@@ -15,25 +15,25 @@
 				<el-row>
 					<el-col :span="8">一级分类</el-col>
 					<el-col :span="8">二级分类</el-col>
-					<el-col :span="8">三级分类</el-col>
+					<el-col :span="8">品牌分类</el-col>
 				</el-row>
 				<el-row class="content_2">
 					<el-col :span="8" class="content_3">
-						<div v-bind:class="[isActive == index ? actives : '', select]" v-for="(i,index) in options" @click="select_1(i,index)" :key="i.value">
-							{{i.label}}
+						<div v-bind:class="[isActive == index ? actives : '', select]" v-for="(i,index) in list_1_options" @click="select_1(i,index)" :key="i.value">
+							{{i.name}}
 						</div>
 					</el-col>
 					<!--第二层循环-->
 					<el-col :span="8" class="content_3">
-						<div v-bind:class="[isActive_2 == index_2 ? actives : '', select]" v-for="(j,index_2) in options[select1].children" @click="select_2(j,index_2)" :key="j.value">
-							{{j.label}}
+						<div v-bind:class="[isActive_2 == index_2 ? actives : '', select]" v-for="(j,index_2) in list_2_options" @click="select_2(j,index_2)" :key="j.value">
+							{{j.name}}
 						</div>
 					</el-col>
 					<!--第三层循环-->
 					<el-col :span="8" class="content_3">
 						<el-row>
-							<div v-bind:class="[isActive_3 == index_3 ? actives : '', select]" class="select" v-for="(z,index_3) in options[select1].children[select2].children" @click="select_3(z,index_3)" :key="z.value">
-								{{z.label}}
+							<div v-bind:class="[isActive_3 == index_3 ? actives : '', select]" class="select" v-for="(z,index_3) in brandlist" @click="select_3(z,index_3)" :key="z.brand_id">
+								{{z.brand_name}}
 							</div>
 						</el-row>
 						<!--<el-button type="primary">申请添加品牌</el-button>-->
@@ -41,13 +41,13 @@
 
 				</el-row>
 			</div>
-			<!--下一步点击按钮-->
 			<el-row>
-				<el-button type="info" plain style="width: 100%;" @click="next(1)" long>
-					下一步
-				</el-button>
+				<el-col :span="8" :offset="8">
+					<el-button type="primary" style="width: 100%;" @click="next(1)">
+					 	下一步
+					</el-button>
+				</el-col>
 			</el-row>
-
 		</div>
 		<div class="step_2" v-show="active == 1">
 			<div class="form">
@@ -204,25 +204,31 @@
 									<div class="selectColor" v-for="(item,index) in centerColor">
 										<el-input @focus="showColor(item,index)" @blur="closeColor(item,index)" v-model="item.colorName" style="width: 200px;" placeholder="选择或输入主色"></el-input>
 										<el-input style="width: 200px; height: 36px;" v-model="item.colorRemark" placeholder="备注(如偏深偏浅等)"></el-input>
-										<el-button>上传图片</el-button>
+										<image v-if="item.showImg" :src="item.showImg"></image>
+										
+										<el-upload style="display: inline-block" :multiple="true" action="http://up.qiniu.com/" accept="image/jpeg,image/gif,image/png,image/bmp" :data="postData" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+										  <el-button size="small" type="primary" @click="upLoadListImg(item,index)">上传图片</el-button>
+										</el-upload>
+										
+											
 										<!--定位元素-->
 										<div class="colorArr" v-show="showColorModel == index">
 											<!--<div class="colorArr">-->
 											<!--左边的鼠标移动上去-->
 											<div class="left">
-												<div class="list" v-for="(item,index) in colorArrs" :key="item.groupId" v-bind:class="[showGroupId == item.groupId ? actives : '', select]" @mouseenter="sidebarHover(item)">
+												<div class="list" v-for="(item,index) in colorArrs" :key="item.id" v-bind:class="[showGroupId == item.id ? actives : '', select]" @mouseenter="sidebarHover(item)">
 													<div class="titleColor" :style="{backgroundColor:item.rgb}"></div>
-													<span class="text">{{item.text}}</span>
+													<span class="text">{{item.name}}</span>
 												</div>
 											</div>
 											<!--右边的显示-->
 											<div class="right">
 												<p class="title">常用标准颜色</p>
-												<el-row v-for="(item,index) in colorArrs" :key="item.groupId" v-show="showGroupId==item.groupId">
-													<el-col :span="6" v-for="(i,j) in item.colors" :key="i.value">
+												<el-row v-for="(item,index) in colorArrs" :key="item.id" v-show="showGroupId==item.id">
+													<el-col :span="6" v-for="(i,j) in item.child" :key="i.name">
 														<div class="list" @mousedown="sureColor(i)">
 															<div class="titleColor" :style="{backgroundColor:i.rgb}"></div>
-															<span class="text">{{i.text}}</span>
+															<span class="text">{{i.name}}</span>
 														</div>
 													</el-col>
 												</el-row>
@@ -319,8 +325,7 @@
 	</div>
 </template>
 <script>
-	import Tinymce from '@/components/Tinymce';
-
+	//深copy 要删除
 	function coppyArray(arr) {
 		return arr.map((e) => {
 			if(typeof e === 'object') {
@@ -330,308 +335,47 @@
 			}
 		})
 	};
-
 	function objDeepCopy(source) {
 		var sourceCopy = {};
 		for(var item in source) sourceCopy[item] = typeof source[item] === 'object' ? objDeepCopy(source[item]) : source[item];
 		return sourceCopy;
 	}
 	export default {
-		name: 'TinymceDemo',
-		components: {
-			Tinymce
-		},
 		data() {
 			return {
+				//提交的数据
+				fromItem:{
+					category_id:'40',//分类Id
+					brand_id:'56',//品牌Id
+				},
+				//选择分类列表
+				list_1_options:[],//第一级分类选择
+				list_2_options:[],//第二级分类选择
+				brandlist:[],//品牌列表
+				//选择分类时候的高亮
+				name1:'请选择',//一级分类名称
+				name2:'请选择',//二级分类名称
+				name3:'请选择',//品牌分类名称
+				
+				isActive: -1, //第一层高亮
+				isActive_2: -1, //第二层高亮
+				isActive_3: -1, //第三层循环
+				UploadImgIndex:'',//添加颜色上传图片时候的中间变量
+				//静态之前
 				showGroupId: '', //鼠标hover事件显示的颜色组
 				showValue: '', //点击选择颜色的时候
 				amendIndex: '', //点击选择的中间变量
 				amendItem: '', //点击选择的中间Item变量
 				//颜色组
-				colorArrs: [{
-					"groupId": 19547332,
-					"text": "白色系",
-					"rgb": "#ffffff",
-					"colors": [{
-						"value": 28321,
-						"text": "乳白色",
-						"rgb": "#fffbf0"
-					}, {
-						"value": 28320,
-						"text": "白色"
-					}, {
-						"value": 4266701,
-						"text": "米白色",
-						"rgb": "#eedeb0"
-					}]
-				}, {
-					"groupId": 8121627,
-					"text": "灰色系",
-					"rgb": "#808080",
-					"colors": [{
-						"value": 28332,
-						"text": "浅灰色",
-						"rgb": "#e4e4e4"
-					}, {
-						"value": 3232478,
-						"text": "深灰色",
-						"rgb": "#666666"
-					}, {
-						"value": 28334,
-						"text": "灰色",
-						"rgb": "#808080"
-					}, {
-						"value": 28330,
-						"text": "银色",
-						"rgb": "#c0c0c0"
-					}]
-				}, {
-					"groupId": 3516042,
-					"text": "黑色系",
-					"rgb": "#000000",
-					"colors": [{
-						"value": 28341,
-						"text": "黑色",
-						"rgb": "#000000"
-					}]
-				}, {
-					"groupId": 3325939,
-					"text": "红色系",
-					"rgb": "#ff0000",
-					"colors": [{
-						"value": 4950473,
-						"text": "桔红色",
-						"rgb": "#ff7500"
-					}, {
-						"value": 3594022,
-						"text": "玫红色",
-						"rgb": "#df1b76"
-					}, {
-						"value": 3232480,
-						"text": "粉红色",
-						"rgb": "#ffb6c1"
-					}, {
-						"value": 28326,
-						"text": "红色",
-						"rgb": "#ff0000"
-					}, {
-						"value": 4464174,
-						"text": "藕色",
-						"rgb": "#eed0d8"
-					}, {
-						"value": 3743025,
-						"text": "西瓜红",
-						"rgb": "#f05654"
-					}, {
-						"value": 28327,
-						"text": "酒红色",
-						"rgb": "#990000"
-					}]
-				}, {
-					"groupId": 3427736,
-					"text": "黄色系",
-					"rgb": "#ffff00",
-					"colors": [{
-						"value": 28331,
-						"text": "卡其色",
-						"rgb": "#c3b091"
-					}, {
-						"value": 15409374,
-						"text": "姜黄色",
-						"rgb": "#ffc773"
-					}, {
-						"value": 20412615,
-						"text": "明黄色",
-						"rgb": "#ffff01"
-					}, {
-						"value": 30155,
-						"text": "杏色",
-						"rgb": "#f7eed6"
-					}, {
-						"value": 132476,
-						"text": "柠檬黄",
-						"rgb": "#ffec43"
-					}, {
-						"value": 90554,
-						"text": "桔色",
-						"rgb": "#ffa500"
-					}, {
-						"value": 60092,
-						"text": "浅黄色",
-						"rgb": "#faff72"
-					}, {
-						"value": 6134424,
-						"text": "荧光黄",
-						"rgb": "#eaff56"
-					}, {
-						"value": 28328,
-						"text": "金色",
-						"rgb": "#ffd700"
-					}, {
-						"value": 130166,
-						"text": "香槟色"
-					}, {
-						"value": 28324,
-						"text": "黄色",
-						"rgb": "#ffff00"
-					}]
-				}, {
-					"groupId": 6303197,
-					"text": "绿色系",
-					"rgb": "#008000",
-					"colors": [{
-						"value": 3232483,
-						"text": "军绿色",
-						"rgb": "#5d762a"
-					}, {
-						"value": 80557,
-						"text": "墨绿色",
-						"rgb": "#'057748"
-					}, {
-						"value": 30156,
-						"text": "浅绿色",
-						"rgb": "#98fb98"
-					}, {
-						"value": 28335,
-						"text": "绿色",
-						"rgb": "#008000"
-					}, {
-						"value": 8588036,
-						"text": "翠绿色",
-						"rgb": "#0aa344"
-					}, {
-						"value": 6535235,
-						"text": "荧光绿",
-						"rgb": "#23fa07"
-					}, {
-						"value": 3455405,
-						"text": "青色",
-						"rgb": "#00e09e"
-					}]
-				}, {
-					"groupId": 3547657,
-					"text": "蓝色系",
-					"rgb": "#0000fe",
-					"colors": [{
-						"value": 3232484,
-						"text": "天蓝色",
-						"rgb": "#44cef6"
-					}, {
-						"value": 5138330,
-						"text": "孔雀蓝",
-						"rgb": "#00a4c5"
-					}, {
-						"value": 3707775,
-						"text": "宝蓝色",
-						"rgb": "#4b5cc4"
-					}, {
-						"value": 28337,
-						"text": "浅蓝色",
-						"rgb": "#d2f0f4"
-					}, {
-						"value": 28340,
-						"text": "深蓝色",
-						"rgb": "#041690"
-					}, {
-						"value": 5483105,
-						"text": "湖蓝色",
-						"rgb": "#30dff3"
-					}, {
-						"value": 28338,
-						"text": "蓝色",
-						"rgb": "#0000fe"
-					}, {
-						"value": 28866,
-						"text": "藏青色",
-						"rgb": "#2e4e7e"
-					}]
-				}, {
-					"groupId": 3560058,
-					"text": "紫色系",
-					"rgb": "#800080",
-					"colors": [{
-						"value": 4104877,
-						"text": "浅紫色",
-						"rgb": "#ede0e6"
-					}, {
-						"value": 3232479,
-						"text": "深紫色",
-						"rgb": "#430653"
-					}, {
-						"value": 5167321,
-						"text": "紫红色",
-						"rgb": "#8b0062"
-					}, {
-						"value": 80882,
-						"text": "紫罗兰",
-						"rgb": "#b7ace4"
-					}, {
-						"value": 28329,
-						"text": "紫色",
-						"rgb": "#800080"
-					}]
-				}, {
-					"groupId": 5497335,
-					"text": "棕色系",
-					"rgb": "#7c4b00",
-					"colors": [{
-						"value": 129819,
-						"text": "咖啡色",
-						"rgb": "#603912"
-					}, {
-						"value": 3232481,
-						"text": "巧克力色",
-						"rgb": "#d2691e"
-					}, {
-						"value": 6071353,
-						"text": "栗色",
-						"rgb": "#60281e"
-					}, {
-						"value": 30158,
-						"text": "浅棕色",
-						"rgb": "#b35c44"
-					}, {
-						"value": 3232482,
-						"text": "深卡其布色",
-						"rgb": "#bdb76b"
-					}, {
-						"value": 6588790,
-						"text": "深棕色",
-						"rgb": "#7c4b00"
-					}, {
-						"value": 132069,
-						"text": "褐色",
-						"rgb": "#855b00"
-					}, {
-						"value": 3224419,
-						"text": "驼色",
-						"rgb": "#a88462"
-					}]
-				}, {
-					"groupId": 14089179,
-					"text": "花色系",
-					"rgb": "assortment",
-					"colors": [{
-						"value": 130164,
-						"text": "花色"
-					}]
-				}, {
-					"groupId": 15495009,
-					"text": "透明系",
-					"rgb": "transparent",
-					"colors": [{
-						"value": 107121,
-						"text": "透明",
-						"rgb": "transparent"
-					}]
-				}],
-
+				colorArrs: [],
 				//选择颜色
 				showColorModel: '-1',
 				centerColor: [{
 					color: "",
 					colorName: '',
 					colorRemark: '',
+					imgUrl:'',
+					showImg:'',
 				}, ],
 				//选择尺码
 				customSize:'',
@@ -737,9 +481,6 @@
 				activeClass: 'active',
 				titleActive: 'basicMessage', //锚点的信息
 				actives: 'active',
-				isActive: 0, //第一层高亮
-				isActive_2: 0, //第二层高亮
-				isActive_3: 0, //第三层循环
 				select1: 0,
 				select2: 0,
 				select3: 0,
@@ -749,214 +490,6 @@
 				//第二层添加图片
 				postData: {}, //上传图片时携带的其他的数据
 				imageUrl_1: [], // 图片上传完成后显示出来的照片
-				//选择商品信息
-				options: [{
-						value: 'zhinan',
-						label: '指南',
-						children: [{
-								value: 'shejiyuanze',
-								label: '设计原则',
-								children: [{
-									value: 'yizhi',
-									label: '一致'
-								}, {
-									value: 'fankui',
-									label: '反馈'
-								}, {
-									value: 'xiaolv',
-									label: '效率'
-								}, {
-									value: 'kekong',
-									label: '可控'
-								}, ]
-							},
-							{
-								value: 'daohang',
-								label: '导航',
-								children: [{
-										value: 'cexiangdaohang',
-										label: '侧向导航'
-									},
-									{
-										value: 'dingbudaohang',
-										label: '顶部导航'
-									}
-								]
-							}
-						]
-					},
-					{
-						value: 'zujian',
-						label: '组件',
-						children: [{
-								value: 'basic',
-								label: 'Basic',
-								children: [{
-									value: 'layout',
-									label: 'Layout 布局'
-								}, {
-									value: 'color',
-									label: 'Color 色彩'
-								}, {
-									value: 'typography',
-									label: 'Typography 字体'
-								}, {
-									value: 'icon',
-									label: 'Icon 图标'
-								}, {
-									value: 'button',
-									label: 'Button 按钮'
-								}]
-							},
-							{
-								value: 'form',
-								label: 'Form',
-								children: [{
-									value: 'radio',
-									label: 'Radio 单选框'
-								}, {
-									value: 'checkbox',
-									label: 'Checkbox 多选框'
-								}, {
-									value: 'input',
-									label: 'Input 输入框'
-								}, {
-									value: 'input-number',
-									label: 'InputNumber 计数器'
-								}, {
-									value: 'select',
-									label: 'Select 选择器'
-								}, {
-									value: 'cascader',
-									label: 'Cascader 级联选择器'
-								}, {
-									value: 'switch',
-									label: 'Switch 开关'
-								}, {
-									value: 'slider',
-									label: 'Slider 滑块'
-								}, {
-									value: 'time-picker',
-									label: 'TimePicker 时间选择器'
-								}, {
-									value: 'date-picker',
-									label: 'DatePicker 日期选择器'
-								}, {
-									value: 'datetime-picker',
-									label: 'DateTimePicker 日期时间选择器'
-								}, {
-									value: 'upload',
-									label: 'Upload 上传'
-								}, {
-									value: 'rate',
-									label: 'Rate 评分'
-								}, {
-									value: 'form',
-									label: 'Form 表单'
-								}]
-							},
-							{
-								value: 'data',
-								label: 'Data',
-								children: [{
-									value: 'table',
-									label: 'Table 表格'
-								}, {
-									value: 'tag',
-									label: 'Tag 标签'
-								}, {
-									value: 'progress',
-									label: 'Progress 进度条'
-								}, {
-									value: 'tree',
-									label: 'Tree 树形控件'
-								}, {
-									value: 'pagination',
-									label: 'Pagination 分页'
-								}, {
-									value: 'badge',
-									label: 'Badge 标记'
-								}]
-							},
-							{
-								value: 'notice',
-								label: 'Notice',
-								children: [{
-									value: 'alert',
-									label: 'Alert 警告'
-								}, {
-									value: 'loading',
-									label: 'Loading 加载'
-								}, {
-									value: 'message',
-									label: 'Message 消息提示'
-								}, {
-									value: 'message-box',
-									label: 'MessageBox 弹框'
-								}, {
-									value: 'notification',
-									label: 'Notification 通知'
-								}]
-							},
-							{
-								value: 'navigation',
-								label: 'Navigation',
-								children: [{
-									value: 'menu',
-									label: 'NavMenu 导航菜单'
-								}, {
-									value: 'tabs',
-									label: 'Tabs 标签页'
-								}, {
-									value: 'breadcrumb',
-									label: 'Breadcrumb 面包屑'
-								}, {
-									value: 'dropdown',
-									label: 'Dropdown 下拉菜单'
-								}, {
-									value: 'steps',
-									label: 'Steps 步骤条'
-								}]
-							},
-							{
-								value: 'others',
-								label: 'Others',
-								children: [{
-									value: 'dialog',
-									label: 'Dialog 对话框'
-								}, {
-									value: 'tooltip',
-									label: 'Tooltip 文字提示'
-								}, {
-									value: 'popover',
-									label: 'Popover 弹出框'
-								}, {
-									value: 'card',
-									label: 'Card 卡片'
-								}, {
-									value: 'carousel',
-									label: 'Carousel 走马灯'
-								}, {
-									value: 'collapse',
-									label: 'Collapse 折叠面板'
-								}]
-							}
-						]
-					}, {
-						value: 'ziyuan',
-						label: '资源',
-						children: [{
-							value: 'axure',
-							label: 'Axure Components'
-						}, {
-							value: 'sketch',
-							label: 'Sketch Templates'
-						}, {
-							value: 'jiaohu',
-							label: '组件交互文档'
-						}]
-					}
-				],
 				//添加商品信息
 				good_info: {
 					good_class: '', //商品分类
@@ -974,11 +507,141 @@
 			}
 		},
 		created() {
-			this.GetTheValue();
-			//this.get_qiniu_token();
+			this.getListOne();//首次进来 获取列表第一级列表
+			this.get_qiniu_token();//获取七牛上传信息
+			this.goodsGetColor();//获取颜色属性
+			this.goodsGetSize();//获取尺码属性
 		},
 		//计算属性
 		methods: {
+			//首次进入获取的第一级的分类
+			getListOne(){
+				let postData = {
+					pid:0,
+				};
+				this.$post(this.$goodsclassGetlist,postData).then((res) =>{
+					if(res.status_code == 0){
+						this.list_1_options = res.data;
+					}else{
+						this.$message({
+							type:'error',
+							message:res.message,
+						})
+					}
+				})
+			},
+			//获取颜色属性
+			goodsGetColor(){
+				let postData = {
+					type:1,
+					class_id:this.fromItem.category_id,
+				};
+				this.$post(this.$goodsGetattribute,postData).then((res) =>{
+					if(res.status_code == 0){
+						console.log(res);
+						this.colorArrs = res.data[0].child;
+					}else{
+						this.$message({
+							type:'error',
+							message:res.message,
+						})
+					}
+				})
+			},
+			//获取尺码属性
+			goodsGetSize(){
+				let postData = {
+					type:1,
+					class_id:this.fromItem.category_id,
+				};
+				this.$post(this.$goodsGetattribute,postData).then((res) =>{
+					if(res.status_code == 0){
+//						this.list_1_options = res.data;
+					}else{
+						this.$message({
+							type:'error',
+							message:res.message,
+						})
+					}
+				})
+			},
+			// 点击一级分类获取二级分类
+			select_1(i, index) {
+				this.isActive = index;
+				this.name1 = i.name;
+				this.name2 = '请选择';
+				this.name3 = '请选择';
+				this.isActive_2 = -1;
+				this.isActive_3 = -1;
+				this.fromItem.category_id = '';
+				this.fromItem.brand_id = '';
+				let postData = {
+					pid:i.id,
+				};
+				//获取二级分类列表
+				this.$post(this.$goodsclassGetlist,postData).then((res) =>{
+					if(res.status_code == 0){
+						this.list_2_options = res.data;
+					}else{
+						this.$message({
+							type:'error',
+							message:res.message,
+						})
+					}
+				})
+				//获取品牌列表
+				let postDatas = {
+					class_id:i.id,
+				};
+				this.$post(this.$goodsbrandGetlist,postDatas).then((res) =>{
+					if(res.status_code == 0){
+						this.brandlist = res.data;
+					}else{
+						this.$message({
+							type:'error',
+							message:res.message,
+						})
+					}
+				});
+				this.GetTheValue();
+			},
+			//第二层选择
+			select_2(i, index) {
+				this.isActive_2 = index;
+				this.name2 = i.name;
+				this.isActive_3 = -1;
+				this.name3 = '请选择';
+				this.fromItem.category_id = i.id;
+				this.fromItem.brand_id = '';
+				this.GetTheValue();
+			},
+			//第三层选择
+			select_3(i, index) {
+				this.isActive_3 = index;
+				this.fromItem.brand_id = i.brand_id;
+				this.name3 = i.brand_name;
+				this.GetTheValue();
+			},
+			//获取最终的想要获取的值,方法被调用
+			GetTheValue() {
+				let showArr = [this.name1,this.name2,this.name3];
+				this.show_value = showArr.join('->');
+			},
+			upLoadListImg(e,index){
+				this.UploadImgIndex = index;
+			},
+			//上传图片之前
+			beforeAvatarUpload(file) {
+				const isJPG = file.type === 'image/jpeg';
+				const isLt2M = file.size / 1024 / 1024 < 2;
+				this.postData.key = file.name; //上传时控制文件名
+			},
+			//上传图片成功  身份证与人合照
+			handleAvatarSuccess(res, file) {
+				this.centerColor[this.UploadImgIndex].showImg = URL.createObjectURL(file.raw)
+				this.centerColor[this.UploadImgIndex].imgUrl = res.key
+				console.log(this.centerColor);
+			},
 			//自定义添加尺码
 			customAdd(){
 				let index = '';
@@ -1043,16 +706,17 @@
 					}    
 				}
 			},
-			
 			sidebarHover(item) {
-				this.showGroupId = item.groupId;
+				this.showGroupId = item.id;
 			},
 			//点击色块选择颜色
 			sureColor(i) {
 				let obj = {
 					color: "#e4e4e4",
-					colorName: i.text,
+					colorName: i.name,
 					colorRemark: i.value,
+					imgUrl:'',
+					showImg:'',
 				}
 				this.amendItem = obj
 				//点击添加同样需要判断
@@ -1065,6 +729,8 @@
 							color: "",
 							colorName: '',
 							colorRemark: '',
+							imgUrl:'',
+							showImg:'',
 						};
 						this.centerColor.push(obj);
 					}
@@ -1084,6 +750,8 @@
 								color: "",
 								colorName: '',
 								colorRemark: '',
+								imgUrl:'',
+								showImg:'',
 							};
 							this.centerColor.push(obj);
 						}
@@ -1165,7 +833,20 @@
 			},
 			//点击下一步
 			next(e) {
-				this.active++;
+				if(!this.fromItem.category_id){
+					this.$message({
+						type:'error',
+						message:'请先选择商品分类',
+					})
+				}else if(!this.fromItem.brand_id){
+					this.$message({
+						type:'error',
+						message:'请选择品牌分类',
+					})
+				}else{
+					console.log(this.fromItem);
+					this.active++;
+				}
 				if(e >= 3) {
 					console.log("已经完成,点击跳转!");
 				}
@@ -1175,51 +856,8 @@
 				this.active = 0;
 				this.$refs[FormName].resetFields();
 			},
-			//选择第一步
-			select_1(i, index) {
-				this.isActive = index;
-				this.select1 = index;
-				this.isActive_2 = 0; //点击切换的时候的高亮显示
-				this.isActive_3 = 0; //点击切换的时候的高亮的显示
-				this.select2 = 0; //点击切换的时候渲染的第二层为第一个
-				this.select3 = 0; //点击切换的时候渲染的第三层为第一个
-				this.GetTheValue();
-			},
-			//第二层选择
-			select_2(i, index) {
-				this.isActive_2 = index;
-				this.isActive_3 = 0;
-				this.select2 = index;
-				this.GetTheValue();
-			},
-			//第三层选择
-			select_3(i, index) {
-				this.isActive_3 = index;
-				this.GetTheValue();
-			},
-			//获取最终的想要获取的值,方法被调用
-			GetTheValue() {
-				let arr = [];
-				let obj_1 = {};
-				//获取第一层的值
-				obj_1.id = this.options[this.isActive].value;
-				obj_1.name = this.options[this.isActive].label;
-				arr.push(obj_1);
-				let obj_2 = {};
-				obj_2.id = this.options[this.isActive].children[this.isActive_2].value;
-				obj_2.name = this.options[this.isActive].children[this.isActive_2].label;
-				arr.push(obj_2);
-				let obj_3 = {};
-				obj_3.id = this.options[this.isActive].children[this.isActive_2].children[this.isActive_3].value;
-				obj_3.name = this.options[this.isActive].children[this.isActive_2].children[this.isActive_3].label;
-				arr.push(obj_3);
-				this.options_data = arr;
-				let showArr = [];
-				for(let i = 0; i < arr.length; i++) {
-					showArr.push(arr[i].name);
-				}
-				this.show_value = showArr.join('->');
-			},
+
+			
 			//上传图片
 			get_qiniu_token() {
 				this.$post(this.$qiniu).then((res) => {
@@ -1444,13 +1082,14 @@
 	
 	.select {
 		line-height: 30px;
-		font-size: 16px;
+		color: #333333;
+		font-size: 14px;
 		cursor: pointer;
 	}
 	/*步骤一 选择时候 的添加高亮样式*/
-	
 	.active {
-		background-color: #eeeeee;
+		background-color: #18ccba;
+		color: #fff;
 	}
 	/*第一步的样式列表完成*/
 	/*步骤2样式*/

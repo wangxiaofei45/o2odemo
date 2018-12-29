@@ -56,7 +56,6 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-
 						<el-row align="center">
 							<el-col :span="12">
 								<el-form-item label="身份证反面">
@@ -89,14 +88,12 @@
 							</el-col>
 						</el-row>
 						<!--暂时保留-->
-
 						<el-row align="center" class="submit_button">
 							<el-col :span="6" align="center">
 								<el-button>取消</el-button>
 								<el-button type="primary">保存</el-button>
 							</el-col>
 						</el-row>
-
 					</el-form>
 				</el-row>
 			</el-row>

@@ -6,14 +6,12 @@
 				<el-col :span="24">
 					<el-button type="primary" @click="addMember">添加会员</el-button>
 					<el-input placeholder="输入搜索" style="width:240px" v-model="searchVal"></el-input>
-					<el-button type="primary">搜索</el-button>
+					<el-button type="primary" @click="searchMember">搜索</el-button>
 				</el-col>
 			</el-row>
 		</div>
 		<div class="tTable">
-			<el-table :data="data" stripe border style="width: 100%;" size="mini" @selection-change="SelectionChange">
-				<!--<el-table-column type="selection" width="60" fixed align="center">
-				</el-table-column>-->
+			<el-table :data="data" stripe border style="width: 100%;" size="mini">
 				<el-table-column prop="id" label="id" width="60" align="center">
 				</el-table-column>
 				<el-table-column prop="name" label="用户名" width="150" align="center">
@@ -22,17 +20,20 @@
 				</el-table-column>
 				<el-table-column prop="enable" label="是否启用" width="200" align="center">
 					<template slot-scope="scope">
-						<el-button v-if="scope.row.enable == 1" type="text">开启</el-button>
-						<el-button v-if="scope.row.enable == 2" type="text" style="color: #666;">禁用</el-button>
+						<el-button v-if="scope.row.status == 0" @click="SiteMember(scope.row)" type="text">开启</el-button>
+						<el-button v-if="scope.row.status == 1" @click="SiteMember(scope.row)" type="text" style="color: #666;">禁用</el-button>
 					</template>
 				</el-table-column>
-				<el-table-column prop="balance" label="余额(元)" min-width="200" align="center">
+				<el-table-column prop="balance" label="会员折扣" min-width="200" align="center">
+				</el-table-column>
+				<el-table-column prop="balance" label="余额余额" min-width="200" align="center">
 				</el-table-column>
 				<el-table-column label="操作" width="300" fixed="right" align="center">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" icon="el-icon-edit" @click="amendMember(scope.row.role_id)">编辑</el-button>
+						<el-button size="mini" type="primary" icon="el-icon-edit" @click="amendMember(scope.row.id)">编辑</el-button>
 						<el-button size="mini" type="primary" @click="recharge(scope.row.role_id)">充值</el-button>
-						<el-button size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.role_id)">删除</el-button>
+						<el-button size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.id)">删除</el-button>
+
 					</template>
 				</el-table-column>
 			</el-table>
@@ -63,6 +64,14 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
+							<el-form-item label="会员等级" prop="member_grade">
+								<el-select v-model="form.member_grade" placeholder="店长">
+									<el-option label="男" value="1"></el-option>
+									<el-option label="女" value="2"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
 							<el-form-item label="性别" prop="sex">
 								<el-select v-model="form.sex" placeholder="店长">
 									<el-option label="男" value="1"></el-option>
@@ -86,18 +95,18 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="身份证" prop="identityCard">
-								<el-input v-model="form.identityCard"></el-input>
+							<el-form-item label="身份证" prop="id_card">
+								<el-input v-model="form.id_card"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="职业" prop="profession">
-								<el-input v-model="form.profession"></el-input>
+							<el-form-item label="职业" prop="job">
+								<el-input v-model="form.job"></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="24">
-							<el-form-item label="尺码轮廓" prop="outlineSize">
-								<el-input v-model="form.outlineSize"></el-input>
+						<el-col :span="12">
+							<el-form-item label="尺码轮廓" prop="size">
+								<el-input v-model="form.size"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24">
@@ -138,6 +147,14 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
+							<el-form-item label="会员等级" prop="member_grade">
+								<el-select v-model="amendForm.member_grade" placeholder="店长">
+									<el-option label="男" value="1"></el-option>
+									<el-option label="女" value="2"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
 							<el-form-item label="性别" prop="sex">
 								<el-select v-model="amendForm.sex" placeholder="店长">
 									<el-option label="男" value="1"></el-option>
@@ -161,18 +178,18 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="身份证" prop="identityCard">
-								<el-input v-model="amendForm.identityCard"></el-input>
+							<el-form-item label="身份证" prop="id_card">
+								<el-input v-model="amendForm.id_card"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="职业" prop="profession">
-								<el-input v-model="amendForm.profession"></el-input>
+							<el-form-item label="职业" prop="job">
+								<el-input v-model="amendForm.job"></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="24">
-							<el-form-item label="尺码轮廓" prop="outlineSize">
-								<el-input v-model="amendForm.outlineSize"></el-input>
+						<el-col :span="12">
+							<el-form-item label="尺码轮廓" prop="size">
+								<el-input v-model="amendForm.size"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24">
@@ -182,7 +199,7 @@
 						</el-col>
 					</el-row>
 					<el-row style="text-align: center;">
-						<el-button type="primary" @click="submitAmendForm('form')" align="center">添加</el-button>
+						<el-button type="primary" @click="submitAmendForm('amendForm')" align="center">保存</el-button>
 					</el-row>
 				</el-form>
 			</div>
@@ -200,52 +217,53 @@
 						</el-button>
 					</el-col>
 				</el-row>
-				<el-form :model="rechargeFrom" ref="rechargeFrom" label-width="100px">
+				<el-form :model="rechargeFrom" ref="rechargeFrom" :rules="rechargeRule" label-width="100px">
 					<el-row>
 						<el-col :span="24" class="recharge_title">
 							<svg-icon icon-class="dot" />支付金额
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="充值金额" prop="phone">
-								<el-input placeholder="请输入" v-model="rechargeFrom.phone">
+							<el-form-item label="充值金额" prop="pay_money">
+								<el-input placeholder="请输入" v-model="rechargeFrom.pay_money">
 									<template slot="append" class="append">元</template>
 								</el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row>
+
 						<el-col :span="24" class="recharge_title">
 							<svg-icon icon-class="dot" />支付方式
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="现金" prop="cash">
-								<el-input v-model="rechargeFrom.cash">
+							<el-form-item label="现金" prop="cash_pay">
+								<el-input v-model="rechargeFrom.cash_pay">
 									<template slot="append" class="append">元</template>
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="微信" prop="WeChat">
-								<el-input v-model="rechargeFrom.WeChat">
+							<el-form-item label="微信" prop="wechat_pay">
+								<el-input v-model="rechargeFrom.wechat_pay">
 									<template slot="append" class="append">元</template>
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="支付宝" prop="Alipay">
-								<el-input v-model="rechargeFrom.Alipay">
+							<el-form-item label="支付宝" prop="alipay_pay">
+								<el-input v-model="rechargeFrom.alipay_pay">
 									<template slot="append" class="append">元</template>
 								</el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="银行卡" prop="bankCard">
-								<el-input v-model="rechargeFrom.bankCard">
+							<el-form-item label="银行卡" prop="bank_card">
+								<el-input v-model="rechargeFrom.bank_card">
 									<template slot="append" class="append">元</template>
 								</el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="12">
+						<!-- <el-col :span="12">
 							<el-form-item label="付款合计" prop="total">
 								<el-input v-model="rechargeFrom.total">
 									<template slot="append" class="append">元</template>
@@ -258,7 +276,7 @@
 									<template slot="append" class="append">元</template>
 								</el-input>
 							</el-form-item>
-						</el-col>
+						</el-col> -->
 					</el-row>
 					<el-row style="text-align: center;">
 						<el-button @click="cancelRecharge">取消</el-button>
@@ -278,33 +296,19 @@
 				new_info_model: false, //添加会员控制的弹窗
 				amend_info_model: false, //修改会员信息时候的弹窗
 				recharge_model: false,//会员充值时候的弹窗
-				//表格数据
-				data: [{
-						id: 1,
-						name: '王天佑',
-						phone: '15736748856',
-						enable: 1, //是否启用1、启用 2、不启用
-						balance: 1000,
-					},
-					{
-						id: 2,
-						name: '王老爹',
-						phone: '15736748866',
-						enable: 2, //是否启用1、启用 2、不启用
-						balance: 5000,
-					}
-				],
+				data: [],//表格数据
 				//添加提交的表单
 				form: {
-					phone: '15736748899',
-					name: '小狗蛋',
+					name: '小狗蛋',//姓名
+					phone: '15736748899',//手机号
+					member_grade:'',//会员等级
 					sex: '',
 					birthday: '', //生日
+					discount: '',//折扣
 					email: '', //邮箱
-					discount: '',
-					identityCard: '', //身份证
-					profession: '', //z职业
-					outlineSize: '', //尺码轮廓
+					id_card: '', //身份证
+					job:'',//职业
+					size: '', //尺码轮廓
 					address: '', //住址
 				},
 				form_rule: {
@@ -321,15 +325,16 @@
 				},
 				//修改信息
 				amendForm: {
-					phone: '15736748899',
-					name: '小狗蛋',
+					name: '',//姓名
+					phone: '',//手机号
+					member_grade:'',//会员等级
 					sex: '',
 					birthday: '', //生日
+					discount: '',//折扣
 					email: '', //邮箱
-					discount: '',
-					identityCard: '', //身份证
-					profession: '', //z职业
-					outlineSize: '', //尺码轮廓
+					id_card: '', //身份证
+					job:'',//职业
+					size: '', //尺码轮廓
 					address: '', //住址
 				},
 				amendFormRule: {
@@ -346,24 +351,71 @@
 				},
 				//充值
 				rechargeFrom: {
-					rechargeAmount: '', //充值金额
-					cash: '', //现金
-					WeChat: '', //微信
-					Alipay: '', //支付宝
-					bankCard: '', //银行卡
-					total: '', //合计
-					change: '', //找零
+					pay_money: '', //充值金额
+					cash_pay: '', //现金
+					wechat_pay: '', //微信
+					alipay_pay: '', //支付宝
+					bank_card: '', //银行卡
+					// total: '', //合计
+					// change: '', //找零
+				},
+				rechargeRule:{
+					pay_money: {
+						required: true,
+						message: '请输入充值金额',
+						trigger: 'blur'
+					},
 				}
 
 			};
 		},
+		created() {
+			this.ajaxjson(); //请求模板列表的数据
+		},
 		methods: {
-			SelectionChange(val) {
-				let arrays = [];
-				for(let i = 0; i < val.length; i++) {
-					arrays.push(val[i].gc_id);
+			// 首次进入加载的数据
+			ajaxjson() {
+				let postData = {
+					page:1,
 				};
-				this.multipleSelection = arrays;
+				this.$post(this.$memberMemberList,postData).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.data = data.data;
+					} else {}
+				});
+			},
+			// 会员设置开启和禁用
+			SiteMember(e){
+				let postData = {
+					id:e.id
+				}
+				this.$post(this.$memberSiteMember,postData).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.$message({
+				          message: data.message,
+				          type: 'success'
+				        });
+				        this.ajaxjson();
+					} else {
+						this.$message.error(data.message);
+					}
+				});
+			},
+			// 搜索会员
+			searchMember(){
+				let postData = {
+					search: this.searchVal,
+					page:'1',
+					pageNum:'20',
+				};
+				this.$post(this.$memberSearchMember,postData).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.data = data.data;
+					} else {}
+				});
 			},
 			//添加会员
 			addMember() {
@@ -377,25 +429,71 @@
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
-						alert('submit!');
+						let postData = this.form;
+					this.$post(this.$memberAddMember,postData).then((res) => {
+						let data = res;
+						if(data.status_code == 0) {
+							this.$message({
+					          message: data.message,
+					          type: 'success'
+					        });
+					        this.ajaxjson();
+					        this.new_info_model = false;
+						} else {
+							this.$message.error(data.message);
+						}
+					});
 					} else {
 						console.log('error submit!!');
 						return false;
 					}
 				});
 			},
+			// 删除会员
+			deletes(e){
+				let data ={
+					id:e,
+				}
+				this.$delete(this.$memberDelMember,data)
+			},
 			//打开编辑
 			amendMember(e) {
-				console.log(e);
-				this.amend_info_model = true
+				let postData = {
+					id:e,
+				};
+				this.$post(this.$memberMemberDetail,postData).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						console.log(data);
+						this.amendForm = data.data
+				       this.amend_info_model = true
+					} else {
+						this.$message.error(data.message);
+					}
+				});
 			},
+			// 取消修改会员信息
 			cancelAmendInfo() {
 				this.amend_info_model = false;
 			},
+			// 编辑会员信息
 			submitAmendForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
-						alert('submit!');
+						let postData = this.amendForm;
+						this.$post(this.$memberEditMember,postData).then((res) => {
+							let data = res;
+							if(data.status_code == 0) {
+								this.$message({
+						          message: data.message,
+						          type: 'success'
+						        });
+						        this.ajaxjson();
+						        this.amend_info_model = false;
+							} else {
+								this.$message.error(data.message);
+							}
+						});
 					} else {
 						console.log('error submit!!');
 						return false;
@@ -414,7 +512,20 @@
 			submitrechargeForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
-						alert('充值 !');
+						let postData = this.rechargeFrom;
+						this.$post(this.$memberRecharge,postData).then((res) => {
+							let data = res;
+							if(data.status_code == 0) {
+								this.$message({
+						          message: data.message,
+						          type: 'success'
+						        });
+						        this.ajaxjson();
+						        this.recharge_model = false;
+							} else {
+								this.$message.error(data.message);
+							}
+						});
 					} else {
 						console.log('error submit!!');
 						return false;

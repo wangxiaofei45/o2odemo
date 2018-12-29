@@ -14,54 +14,79 @@
 						<el-row align="center">
 							<el-col :span="12">
 								<el-form-item label="店铺名称">
-									<el-input v-model="form.BodyShop" placeholder="请输入"></el-input>
+									<el-input v-model="form.name" placeholder="请输入"></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row align="center">
 							<el-col :span="24">
 								<el-form-item label="经营地址">
-									<el-col :span="4"><el-input v-model="form.area"></el-input></el-col>
-									<el-col :span="4"><el-input v-model="form.area"></el-input></el-col>
-									<el-col :span="4"><el-input v-model="form.area"></el-input></el-col>
+									<el-col :span="4">
+										 <el-select v-model="form.province_id" placeholder="请选择" style="width:180px" @change="selectOptions1">
+										    <el-option
+										      v-for="item in options1"
+										      :key="item.region_id"
+										      :label="item.region_name"
+										      :value="item.region_id">
+										    </el-option>
+										  </el-select>
+									</el-col>
+									<el-col :span="4">
+										 <el-select v-model="form.city_id" placeholder="请选择" style="width:180px" @change="selectOptions2">
+										    <el-option
+										      v-for="item in options2"
+										      :key="item.region_id"
+										      :label="item.region_name"
+										      :value="item.region_id">
+										    </el-option>
+										  </el-select>
+									</el-col>
+									<el-col :span="4">
+										<el-select v-model="form.area_id" placeholder="请选择" style="width:180px">
+										    <el-option
+										      v-for="item in options3"
+										      :key="item.region_id"
+										      :label="item.region_name"
+										      :value="item.region_id">
+										    </el-option>
+										  </el-select>
+									</el-col>
 								</el-form-item>
 							</el-col>
 						</el-row>
 
 						<el-row align="center">
 							<el-col :span="12">
-								<el-form-item label="">
-									<el-input v-model="form.detailAddress" placeholder="请输入店铺经营地址"></el-input>
+								<el-form-item label="经营地址">
+									<el-input v-model="form.address" placeholder="请输入店铺经营地址"></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row align="center">
 							<el-col :span="6">
 								<el-form-item label="早班时间">
-									<el-time-picker v-model="form.theAerlyTime" is-range start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围" style="width: 200px;">
+									<el-time-picker format="HH:mm" value-format="timestamp" v-model="form.theAerlyTime" is-range start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围" style="width: 200px;">
 									</el-time-picker>
-									<!--<el-input v-model="form.theAerlyTime"></el-input>-->
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
+								<!-- value-format="HH:mm" -->
 								<el-form-item label="午班时间">
-									<el-time-picker v-model="form.AfternoonTime" is-range start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围" style="width: 200px;">
+									<el-time-picker format="HH:mm" value-format="timestamp" v-model="form.AfternoonTime" is-range start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围" style="width: 200px;">
 									</el-time-picker>
-									<!--<el-input v-model="form.AfternoonTime"></el-input>-->
 								</el-form-item>
 							</el-col>
 							<el-col :span="6">
 								<el-form-item label="晚班时间">
-									<el-time-picker v-model="form.nightTime" is-range start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围" style="width: 200px;">
+									<el-time-picker format="HH:mm"  value-format="timestamp" v-model="form.nightTime" is-range start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围" style="width: 200px;">
 									</el-time-picker>
-									<!--<el-input v-model="form.nightTime"></el-input>-->
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row align="center">
 							<el-col :span="12">
 								<el-form-item label="联系人">
-									<el-input v-model="form.linkMen"></el-input>
+									<el-input v-model="form.contacts_name"></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -75,20 +100,20 @@
 						<el-row align="center">
 							<el-col :span="12">
 								<el-form-item label="固定电话">
-									<el-input v-model="form.fixedLinePhone" placeholder="请输入"></el-input>
+									<el-input v-model="form.telphone" placeholder="请输入"></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row align="center">
 							<el-col :span="12">
 								<el-form-item label="经营描述">
-									<el-input type="textarea" v-model="form.describe" placeholder="请输入"></el-input>
+									<el-input type="textarea" v-model="form.context" placeholder="请输入"></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
 						<el-row align="center" class="submit_button">
 							<el-col :span="24" align="center">
-								<el-button type="primary">保存</el-button>
+								<el-button type="primary" @click="onSubmit">保存</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -104,23 +129,118 @@
 				imageUrl: '',
 				imageUrl_1: '',
 				postData: {}, //七牛上传参数
-				form: {
-					BodyShop: '', //店铺主体
-					area: '', //所在区域
-					detailAddress: '', //详细地址
-					theAerlyTime: '', //早班时间
-					AfternoonTime: '', //午班时间
-					nightTime: '', //晚班时间 
-					linkMen: '', //联系人
-					phone: '', //联系电话
-					fixedLinePhone: '', //固定电话
-					describe: '', //描述
-				}
+				form: {},
+				options1:[],//省
+				options2:[],//市
+				options3:[],//区
+			    formRules:{
+			    	name: [{
+						required: true,
+						message: '店铺名称为空',
+						trigger: 'blur'
+					}],
+					address: [{
+						required: true,
+						message: '经营地址为空',
+						trigger: 'blur'
+					}],
+					name: [{
+						required: true,
+						message: '店铺名称为空',
+						trigger: 'blur'
+					}],
+					name: [{
+						required: true,
+						message: '店铺名称为空',
+						trigger: 'blur'
+					}],
+					name: [{
+						required: true,
+						message: '店铺名称为空',
+						trigger: 'blur'
+					}],
+					
+			    }
+
 			}
 		},
+		created() {
+			this.ajaxjson(); //请求模板列表的数据
+			this.getadress();
+		},
 		methods: {
+			ajaxjson() {
+				this.$post(this.$archivesList).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.form = data.data;
+					} else {}
+				});
+			},
+			getadress() {
+				this.$post(this.$staticGetAddress).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.options1 = data.data.address;
+						console.log(this.options1);						
+					} else {}
+				});
+			},
+			selectOptions1(e){
+				let postData = {
+					region_id:e,
+				};
+				this.options2 = [];
+				this.form.city_id = '';
+				this.options3 = []; 
+				this.area_id = '';
+				this.$post(this.$staticGetAddress,postData).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.options2 = data.data.address;
+					} else {}
+				});
+			},
+			selectOptions2(e){
+				let postData = {
+					region_id:e,
+				};
+				this.options3 = []; 
+				this.form.area_id = '';
+				this.$post(this.$staticGetAddress,postData).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.options3= data.data.address;
+					} else {}
+				});
+			},
 			onSubmit() {
-				console.log('submit!');
+				let form = this.$objDeepCopy(this.form);
+				form.theAerlyTime = this.CombinationOfTime(form.theAerlyTime);
+				form.AfternoonTime = this.CombinationOfTime(form.AfternoonTime);
+				form.nightTime = this.CombinationOfTime(form.nightTime);
+				this.$post(this.$archivesEditShop, form).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.$message({
+							type: 'success',
+							message: data.message,
+						});
+						this.ajaxjson();
+						this.function_model = false;
+					} else {
+						this.$message({
+							type: 'error',
+							message: data.message,
+						});
+					}
+				});
+			},
+			// 时间格式
+			CombinationOfTime(arr){
+				let str1 = arr[0]/1000;
+				let str2 = arr[1]/1000;
+				return str1 +"," +str2;
 			},
 		}
 	}

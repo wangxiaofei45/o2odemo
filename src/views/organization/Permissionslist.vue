@@ -8,11 +8,11 @@
 			<el-table :data="data_1" style="width: 100%">
 				<el-table-column prop="id" label="Id" width="180">
 				</el-table-column>
-				<el-table-column prop="name" label="权限组">
+				<el-table-column prop="role_name" label="权限组">
 				</el-table-column>
 				<el-table-column label="操作" width="200" align="center">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" icon="el-icon-edit" @click="amend(scope.row.id)">修改</el-button>
+						<el-button size="mini" type="primary" icon="el-icon-edit" @click="amend(scope.row)">修改</el-button>
 						<el-button size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.id)">删除</el-button>
 					</template>
 				</el-table-column>
@@ -31,6 +31,16 @@
 						</el-button>
 					</el-col>
 				</el-row>
+				<el-row>
+					<el-form>
+						<el-form-item label="类型">
+							<el-radio-group v-model="radio" @change="checkRadio">
+								<el-radio label="1">公司</el-radio>
+								<el-radio label="2">店铺</el-radio>
+							</el-radio-group>
+						</el-form-item>
+						</el-form>
+				</el-row>
 				<el-form :model="new_info" ref="new_info" :rules="new_inforules" label-width="100px">
 					<el-row>
 						<el-col :span="24">
@@ -39,16 +49,16 @@
 							</el-form-item>
 						</el-col>
 					</el-row>
-					<el-row class="check_group">
-						<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-						<el-row class="check_group_con">
-							<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-							<div style="margin: 15px 0;"></div>
-							<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-								<el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
-							</el-checkbox-group>
-						</el-row>
-					</el-row>
+					  <el-row class="check_group">
+			           <el-checkbox-group v-model="checkList">
+			              <el-row v-for="(item,index) in checkGroup" :key="item.id">
+			                <el-checkbox style="margin:15px 0px" :label="item.id" @change="check1(item)">{{item.name}}</el-checkbox>
+			                <el-row v-if="item.children" style="margin:15px 0px;padding-left:25px">
+			                  <el-checkbox v-for="j in item.children" :key="j.id" :label="j.id" @change="check2(j)">{{j.name}}</el-checkbox>
+			                </el-row>
+			              </el-row>
+			            </el-checkbox-group>
+			          </el-row>
 					<el-row>
 						<el-form-item>
 							<el-button type="primary" @click="submitForm('new_info')">保存</el-button>
@@ -58,7 +68,7 @@
 				</el-form>
 			</div>
 		</div>
-		<!--模板列表-->
+		<!--权限-->
 		<div class="model" v-show="function_amend_model">
 			<div class="model_con">
 				<el-row class="model_title" align="bottom">
@@ -75,20 +85,20 @@
 					<el-row>
 						<el-col :span="24">
 							<el-form-item label="权限组名称" prop="name">
-								<el-input v-model="new_info.name" style="width: 200px;"></el-input>
+								<el-input v-model="amend_info.name" style="width: 200px;"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
-					<el-row class="check_group">
-						<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-						<el-row class="check_group_con">
-							<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-							<div style="margin: 15px 0;"></div>
-							<el-checkbox-group v-model="checkedCities" @change="handleCheckedCitiesChange">
-								<el-checkbox v-for="city in cities" :label="city" :key="city">{{city}}</el-checkbox>
-							</el-checkbox-group>
-						</el-row>
-					</el-row>
+					 <el-row class="check_group">
+				           <el-checkbox-group v-model="anemdCheckList">
+				              <el-row v-for="(item,index) in checkGroup" :key="item.id">
+				                <el-checkbox style="margin:15px 0px" :label="item.id" @change="check3(item)">{{item.name}}</el-checkbox>
+				                <el-row v-if="item.children" style="margin:15px 0px;padding-left:25px">
+				                  <el-checkbox v-for="j in item.children" :key="j.id" :label="j.id" @change="check3(j)">{{j.name}}</el-checkbox>
+				                </el-row>
+				              </el-row>
+				            </el-checkbox-group>
+				          </el-row>
 					<el-row>
 						<el-form-item>
 							<el-button type="primary" @click="submitamendForm('amend_info')">保存</el-button>
@@ -103,9 +113,27 @@
 </template>
 <script>
 	const cityOptions = ['上海', '北京', '广州', '深圳'];
+	function coppyArray(arr) {
+		return arr.map((e) => {
+			if(typeof e === 'object') {
+				return Object.assign({}, e);
+			} else {
+				return e;
+			}
+		})
+	};
+	function objDeepCopy(source) {
+		var sourceCopy = {};
+		for(var item in source) sourceCopy[item] = typeof source[item] === 'object' ? objDeepCopy(source[item]) : source[item];
+		return sourceCopy;
+	}
 	export default {
 		data() {
 			return {
+				radio:'1',//默认是店铺
+				checkGroup:[],//权限选择
+				checkList:[],//权限选择的
+				anemdCheckList:[],//修改时候的
 				checkAll: false,
 				checkedCities: ['上海', '北京'],
 				cities: cityOptions,
@@ -116,47 +144,29 @@
 				data_1: [], //权限设置列表table
 				new_info: {
 					name: '', //新增权限的name
-					//					remark: '',
-					//					num: ''
+					idstr:'',//id字符串
+					type:'',//类型
+					shop_id:'',//店铺id
 				},
 				new_inforules: {
 					name: [{
 						required: true,
-						message: '模块名称为空',
-						trigger: 'blur'
-					}],
-					remark: [{
-						required: true,
-						message: '说明为空',
-						trigger: 'blur'
-					}],
-					num: [{
-						required: true,
-						message: '排序数值为空',
+						message: '权限组名称为空',
 						trigger: 'blur'
 					}],
 				},
 				//修改模板信息
 				amend_info: {
 					name: '',
-					remark: '',
-					num: ''
+					idstr: '',
+					type:'',//类型
+					shop_id:'',//店铺id
 				},
 				//规则
 				amend_inforules: {
 					name: [{
 						required: true,
 						message: '模块名称为空',
-						trigger: 'blur'
-					}],
-					remark: [{
-						required: true,
-						message: '说明为空',
-						trigger: 'blur'
-					}],
-					num: [{
-						required: true,
-						message: '排序数值为空',
 						trigger: 'blur'
 					}],
 				},
@@ -169,10 +179,10 @@
 		methods: {
 			//获取权限设置列表
 			ajaxjson() {
-				this.$post(this.$organizationList).then((res) => {
+				this.$post(this.$organizationRolelist).then((res) => {
 					let data = res;
 					if(data.status_code == 0) {
-						this.data_1 = data.data;
+						this.data_1 = data.data.data;
 					} else {}
 				});
 			},
@@ -187,55 +197,66 @@
 				this.checkAll = checkedCount === this.cities.length;
 				this.isIndeterminate = checkedCount > 0 && checkedCount < this.cities.length;
 			},
-			//表格删除用户删除操作
+			//权限设置删除
 			deletes(e) {
-				this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-					confirmButtonText: '确定',
-					cancelButtonText: '取消',
-					type: 'warning'
-				}).then(() => {
-					let postData = {
-						node_id: e + '',
-					};
-					this.$post(this.$NodeTopdelete, postData).then((res) => {
+				let data = {
+					role_id :e,
+				}
+				this.$delete(this.$organizationRoleDelete,data)
+			},
+			//新增权限显示model层
+			open_newInfo() {
+				//获取结点权限
+				this.function_model = true;
+				let postData = {
+					type:this.radio,
+					role_id:this.role_id,
+				};
+				this.$post(this.$organizationRolenode,postData).then((res) => {
+					let data = res;
+					if(data.status_code == 0){
+						this.checkGroup = data.data;
+					}
+				});
+			},
+			// 选择店铺去切换
+			checkRadio(e){
+				let postData = {
+					type:e,
+				}
+				if(e == 2){
+					this.$post(this.$organizationGetCompanyShop,postData).then((res) => {
 						let data = res;
+						if(data.status_code == 0){
 
-						if(data.status_code == 0) {
-							this.$message({
-								type: 'success',
-								message: data.message,
-							});
-							this.ajaxjson();
-							this.ajaxjson_2();
-						} else {
-							this.$message({
-								type: 'error',
-								message: data.message,
-							});
+						}else{
+							this.$message.error(data.message);
 						}
 					});
-				}).catch(() => {
-					this.$message({
-						type: 'info',
-						message: '已取消删除'
-					});
-				});
+				}
 			},
-			//新增权限model显示
-			open_newInfo() {
-				this.function_model = true;
-				//获取结点权限
-				this.$post(this.$organizationRolelist,data).then((res) => {
-					let data = res;
-					console.log(res);
-				});
+			// 选择后的
+			check1(val){
+				let str = this.checkList.join(",");
+				this.new_info.idstr = str;
 			},
-			//新增权限model
+			check2(){
+				let str = this.checkList.join(",");
+				this.new_info.idstr = str;
+			},
+
+			check3(){
+				let str = this.anemdCheckList.join(",");
+				this.amend_info.idstr = str;
+			},
+			//新增权限提交
 			submitForm(e) {
 				this.$refs[e].validate((valid) => {
 					if(valid) {
-						let postData = this.new_info;
-						this.$post(this.$NodeTopadd, postData).then((res) => {
+						let postData = objDeepCopy(this.new_info);
+						console.log(postData);
+						postData.type = this.radio;
+						this.$post(this.$organizationAddrole, postData).then((res) => {
 							let data = res;
 							if(data.status_code == 0) {
 								this.$message({
@@ -261,10 +282,9 @@
 			submitamendForm(e) {
 				this.$refs[e].validate((valid) => {
 					if(valid) {
-						let postData = this.amend_info;
-						postData.node_id = postData.id;
-						delete postData.id;
-						this.$post(this.$NodeTopModify, postData).then((res) => {
+						let postData = objDeepCopy(this.amend_info);
+						console.log(postData);
+						this.$post(this.$organizationRoleUpdate, postData).then((res) => {
 							let data = res;
 							if(data.status_code == 0) {
 								this.$message({
@@ -290,10 +310,39 @@
 			cancel_newInfo() {
 				this.function_model = false;
 			},
-			//模板列表修改
+			//修改权限
 			amend(e) {
-				this.amend_info = e;
-				this.function_amend_model = true;
+				let postData = {
+					type:this.radio,
+					role_id:e.id,
+				};
+				this.$post(this.$organizationRolenode,postData).then((res) => {
+					let data = res;
+					if(data.status_code == 0){
+						let datas = res.data;
+						let arr = [];
+						for (var i = 0; i < datas.length; i++) {
+							if(datas[i].is_hide == 1){
+								arr.push(datas[i].id);
+							}
+							if(datas[i].children){
+								for (var j = 0; j < datas[i].children.length; j++) {
+									if(datas[i].children[j].is_hide == 1){
+										arr.push(datas[i].children[j].id);
+									}
+									
+								}
+							}
+						}
+						this.anemdCheckList = arr;
+						this.checkGroup = data.data;
+						this.function_amend_model = true;
+						this.amend_info.name = e.role_name;
+						this.amend_info.idstr = arr.join(",");
+						this.amend_info.type = e.is_shop?'0':'1';
+						this.amend_info.role_id = e.id;
+					}
+				});
 			},
 			//取消保存用户信息
 			cancel_amend_newInfo() {

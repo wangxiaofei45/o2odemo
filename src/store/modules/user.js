@@ -59,12 +59,11 @@ const user = {
 		}, userInfo) {
 			const username = userInfo.username.trim()
 			return new Promise((resolve, reject) => {
-				loginByUsername(username, userInfo.password).then(response => {
-					let datas = response.data;
+				loginByUsername(username, userInfo.password).then(response => {					let datas = response.data;
 					if(datas.status_code == 0) {
-						commit('SET_TOKEN', datas.data.token);
-						setToken(datas.data.token);
-						sessionStorage.setItem("token", datas.data.token);
+						commit('SET_TOKEN', datas.data.tokenArr.token);
+						setToken(datas.data.tokenArr.token);
+						sessionStorage.setItem("token", datas.data.tokenArr.token);
 						resolve(datas.data);
 						this.$message({
 							type: 'success',

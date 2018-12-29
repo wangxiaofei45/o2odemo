@@ -7,10 +7,12 @@ export function loginByUsername(phone, password) {
     password
   }
   return request({
-    url: '/user/login',
+//		url: '/user/platformLogin',平台
+		url: '/user/login',
     method: 'post',
     data
   })
+  // 平台和店铺的登录都走这个接口
 }
 
 //获取用户路由表

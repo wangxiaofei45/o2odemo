@@ -4,6 +4,10 @@ export default {
     // 平台端的成员管理
     memberManagement:'成员管理',
     storeList:'商家列表',
+    // 平台端的设置
+    permissionSetting:'权限设置',
+    functionList:'功能列表',
+    organizationalStructureList:'组织架构列表',
   	//报表管理
   	statement:'报表管理',
   	DailyReport:'日结报表',
@@ -43,14 +47,15 @@ export default {
   	ReportedLossOfSingle:'报损单',
   	InventoryList:'库存列表',
   
-  	
   	//商品管理
-  	BarCodeManagement:'条码管理',
+  	// BarCodeManagement:'条码管理',
   	ProductRegistration:'商品注册',
-  	SpecificationOfGoods:'商品规格',
   	BrandList:'品牌列表',
   	ProductTypes:'商品类型',
   	ProductManagement:'商品管理',
+    brandManagement:'商品管理',
+    goodsClass:'商品分类',
+    specificationManagement:'规格管理',
   	//店铺资料
   	StaffFiles:'职员档案',
   	RoleManagement:'角色列表',

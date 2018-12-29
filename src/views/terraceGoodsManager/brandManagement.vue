@@ -4,26 +4,28 @@
 		<div class="title">
 			<el-row>
 				<el-col :span="24">
-					<el-button type="primary" @click="addMember">添加供应商</el-button>
-					<el-input placeholder="输入供应商名称、手机号" style="width:240px" v-model="searchVal"></el-input>
-					<el-button type="primary">搜索</el-button>
+					<el-button type="primary" @click="addMember">添加</el-button>
 				</el-col>
 			</el-row>
 		</div>
 		<div class="tTable">
 			<el-table :data="data" stripe border style="width: 100%;" size="mini" @selection-change="SelectionChange">
-				<el-table-column prop="id" label="序号" width="60" align="center">
+				<el-table-column prop="brand_id" label="序号" width="60" align="center">
 				</el-table-column>
-				<el-table-column prop="name" label="供应商" width="150" align="center">
+				<el-table-column prop="brand_name" label="品牌名称" align="center">
 				</el-table-column>
-				<el-table-column prop="contacts_tel" label="手机号" width="180" align="center">
-				</el-table-column>
-				<el-table-column prop="address" label="地址" align="center">
+				<el-table-column prop="disabled" label="是否显示" align="center">
+					<template slot-scope="scope">
+						<el-button type="text">
+							<el-button v-if="scope.row.disabled == 0" @click="SiteMember(scope.row)" type="text">是</el-button>
+							<el-button v-if="scope.row.disabled == 1" @click="SiteMember(scope.row)" type="text" style="color: #666;">否</el-button>
+						</el-button>
+					</template>
 				</el-table-column>
 				<el-table-column label="操作" width="300" fixed="right" align="center">
 					<template slot-scope="scope">
 						<el-button size="mini" type="primary" icon="el-icon-edit" @click="amendMember(scope.row)">编辑</el-button>
-						<el-button size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.id)">删除</el-button>
+						<el-button size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.brand_id)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -33,7 +35,7 @@
 			<div class="model_con">
 				<el-row class="model_title">
 					<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
-						添加供应商
+						新增
 					</el-col>
 					<el-col :span="12" style="text-align: right;">
 						<el-button type="text" @click="cancel_newInfo">
@@ -44,67 +46,58 @@
 				<el-form :model="form" :rules="form_rule" ref="form" label-width="100px">
 					<el-row>
 						<el-col :span="12">
-							<el-form-item label="供应商名称" prop="name">
-								<el-input v-model="form.name"></el-input>
+							<el-form-item label="品牌名称" prop="brand_name">
+								<el-input v-model="form.brand_name"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="联系人" prop="contacts_name">
-								<el-input v-model="form.contacts_name"></el-input>
+							<el-form-item label="品牌首字母" prop="brand_initial">
+								<el-input v-model="form.brand_initial"></el-input>
 							</el-form-item>
 						</el-col>
-
+					
 						<el-col :span="12">
-							<el-form-item label="移动电话" prop="contacts_tel">
-								<el-input v-model="form.contacts_tel"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="固定电话" prop="contacts_phone">
-								<el-input v-model="form.contacts_phone"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="价格方式" prop="price_type">
-								<el-select v-model="form.price_type" placeholder="请选择">
-									<el-option label="进价" value="1"></el-option>
-									<el-option label="零售价" value="2"></el-option>
+							<el-form-item label="商品分类" prop="class_id">
+								<el-select v-model="form.class_id" placeholder="请选择">
+									<el-option v-for="item in goodClass" :key="item.id" :label="item.name" :value="item.id"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="进货折扣" prop="discounts">
-								<el-input v-model="form.discounts"></el-input>
+							<el-form-item label="是否显示" prop="disabled">
+								<el-radio-group v-model="form.disabled">
+								    <el-radio :label="0">是</el-radio>
+								    <el-radio :label="1">否</el-radio>
+								  </el-radio-group>
 							</el-form-item>
 						</el-col>
-						<el-col :span="12">
-							<el-form-item label="开户银行" prop="bankname">
-								<el-input v-model="form.bankname"></el-input>
+						<el-col :span="24">
+							<el-form-item label="详情介绍" prop="brand_introduction">
+								<el-input v-model="form.brand_introduction"></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="12">
-							<el-form-item label="银行账号" prop="bankcode">
+						<el-col :span="24">
+							<el-form-item label="官方地址" prop="brand_official_web">
+								<el-input v-model="form.brand_official_web"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24">
+							<el-form-item label="公司名称" prop="shop_name">
 								<el-input v-model="form.bankcode"></el-input>
 							</el-form-item>
 						</el-col>
+
 						<el-col :span="12">
-							<el-form-item label="税号" prop="dutycode">
-								<el-input v-model="form.dutycode"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="地址" prop="address">
-								<el-input v-model="form.address"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="邮编" prop="zipcode">
-								<el-input v-model="form.zipcode"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="备注" prop="remark">
-								<el-input v-model="form.remark"></el-input>
+							<el-form-item label="品牌logo" prop="brand_pic">
+								<el-input v-model="form.brand_pic" v-show="false"></el-input>
+									<el-upload class="avatar-uploader" :multiple="true" action="http://up.qiniu.com/" accept="image/jpeg,image/gif,image/png,image/bmp" :data="postData" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+										<div class="upload_img"  v-if="imageUrl_1">
+											<img :src="imageUrl_1" class="avatar">
+										</div>
+										<div class="upload_img" v-else>
+											上传图片
+										</div>
+									</el-upload>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -119,7 +112,7 @@
 			<div class="model_con">
 				<el-row class="model_title">
 					<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
-						编辑供应商
+						编辑
 					</el-col>
 					<el-col :span="12" style="text-align: right;">
 						<el-button type="text" @click="cancelAmendInfo">
@@ -130,66 +123,44 @@
 				<el-form :model="amendForm" :rules="amendFormRule" ref="amendForm" label-width="100px">
 					<el-row>
 						<el-col :span="12">
-							<el-form-item label="供应商名称" prop="name">
-								<el-input v-model="amendForm.name"></el-input>
+							<el-form-item label="品牌名称" prop="brand_name">
+								<el-input v-model="amendForm.brand_name"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="联系人" prop="contacts_name">
-								<el-input v-model="amendForm.contacts_name"></el-input>
+							<el-form-item label="品牌首字母" prop="brand_initial">
+								<el-input v-model="amendForm.brand_initial"></el-input>
 							</el-form-item>
 						</el-col>
-
+					
 						<el-col :span="12">
-							<el-form-item label="移动电话" prop="contacts_tel">
-								<el-input v-model="amendForm.contacts_tel"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="固定电话" prop="contacts_phone">
-								<el-input v-model="amendForm.contacts_phone"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="价格方式" prop="price_type">
-								<el-select v-model="amendForm.price_type" placeholder="请选择">
-									<el-option v-for= "i in options" :key="i.value" :label="i.label" :value="i.value"></el-option>
+							<el-form-item label="商品分类" prop="class_id">
+								<el-select v-model="amendForm.class_id" placeholder="请选择">
+									<el-option v-for="item in goodClass" :key="item.id" :label="item.name" :value="item.id"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item label="进货折扣" prop="discounts">
-								<el-input v-model="amendForm.discounts"></el-input>
+							<el-form-item label="是否显示" prop="disabled">
+								<el-radio-group v-model="amendForm.disabled">
+								    <el-radio :label="0">是</el-radio>
+								    <el-radio :label="1">否</el-radio>
+								  </el-radio-group>
 							</el-form-item>
 						</el-col>
-						<el-col :span="12">
-							<el-form-item label="开户银行" prop="bankname">
-								<el-input v-model="amendForm.bankname"></el-input>
+						<el-col :span="24">
+							<el-form-item label="详情介绍" prop="brand_introduction">
+								<el-input v-model="amendForm.brand_introduction"></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="12">
-							<el-form-item label="银行账号" prop="bankcode">
+						<el-col :span="24">
+							<el-form-item label="官方地址" prop="brand_official_web">
+								<el-input v-model="amendForm.brand_official_web"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24">
+							<el-form-item label="公司名称" prop="shop_name">
 								<el-input v-model="amendForm.bankcode"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="税号" prop="dutycode">
-								<el-input v-model="amendForm.dutycode"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="地址" prop="address">
-								<el-input v-model="amendForm.address"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="邮编" prop="zipcode">
-								<el-input v-model="amendForm.zipcode"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="备注" prop="remark">
-								<el-input v-model="amendForm.remark"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -205,41 +176,45 @@
 	export default {
 		data() {
 			return {
-				searchVal: '',
-				new_info_model: false, //添加供应商弹窗
-				amend_info_model: false, //修改供应商弹窗
+				postData: {}, //七牛上传参数
+				new_info_model: false, //添加弹窗
+				amend_info_model: false, //修改弹窗
 				//表格数据
-				data: [],
+				data: [{
+						id: 1,
+						name: '王天佑',
+						phone: '15736748856',
+						location:'杭州市西湖区天恒大厦1505',//地址
+					},
+					{
+						id: 2,
+						name: '王老爹',
+						phone: '15736748866',
+						location:'杭州市西湖区天恒大厦1506',//地址
+					}
+				],
 				//添加提交的表单
 				form: {
-					name: '',//供应商名称
-					contacts_name:'',//联系人
-					contacts_tel: '',//联系电话
-					contacts_phone:'',//固定电话
-					price_type:'',//价格方式 1进价 2 零售价
-					discounts:'',//折扣
-					bankname:'',//开户银行
-					bankcode:'',//银行账号
-					dutycode:'',//税号
-					address: '', //住址
-					zipcode:'',//邮编
-					remark:'',//备注
+					brand_name:'',//品牌名称
+					brand_initial:'',//品牌首字母
+					class_id:'',//商品分类
+					disabled:'',//是否显示
+					brand_introduction:'',//详情介绍
+					brand_official_web:'',//官方地址
+					shop_name:'',//公司名称
+					brand_pic:'',//品牌logo
+					brand_class:'女人装',//商品分类名称
 				},
 				form_rule: {
-					name: [{
+					brand_name: [{
 						required: true,
 						message: '供应商名称为空',
 						trigger: 'blur'
 					}, ],
-					contacts_name:{
+					class_id:{
 						required: true,
 						message: '联系人为空',
-						trigger: 'blur'
-					},
-					contacts_tel: {
-						required: true,
-						message: '手机号为空',
-						trigger: 'blur'
+						trigger: 'change'
 					},
 				},
 				options:[
@@ -252,41 +227,78 @@
 						label:'零售价'
 					}
 				],
+				goodClass:[],//商品分类
+				imageUrl_1:'',
 				//修改信息
 				amendForm: {},
 				amendFormRule: {
-					name: [{
+					brand_name: [{
 						required: true,
 						message: '供应商名称为空',
 						trigger: 'blur'
 					}, ],
-					contacts_name:{
+					class_id:{
 						required: true,
 						message: '联系人为空',
-						trigger: 'blur'
-					},
-					contacts_tel: {
-						required: true,
-						message: '手机号为空',
-						trigger: 'blur'
+						trigger: 'change'
 					},
 				},
 			};
 		},
 		created() {
 			this.ajaxjson(); //请求模板列表的数据
+			this.get_qiniu_token();//获取到的七牛云上传配置信息
 		},
 		methods: {
 			ajaxjson() {
 				let postData = {
 					page:1,
 				};
-				this.$post(this.$supplierSupplierList,postData).then((res) => {
+				this.$post(this.$goodsbrandList,postData).then((res) => {
 					let data = res;
 					if(data.status_code == 0) {
-						this.data = data.data;
-					} else {}
+						this.data = data.data.data;
+					} else {
+
+					}
 				});
+			},
+			// 
+			get_qiniu_token() {
+				this.$post(this.$qiniu).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.actionPath = data.data.QiNiuFileUrl + "erp-app";
+						this.postData.token = data.data.token;
+					} else {
+						console.log("加载出错", res);
+					}
+				});
+			},
+			// 获取分类列表
+			getClass(){
+				let postData = {
+					pid:0,
+				}
+				this.$post(this.$goodsclassGetlist,postData).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.goodClass = data.data;
+					} else {
+
+					}
+				});
+			},
+			//上传图片之前
+			beforeAvatarUpload(file) {
+				const isJPG = file.type === 'image/jpeg';
+				const isLt2M = file.size / 1024 / 1024 < 2;
+				this.postData.key = file.name; //上传时控制文件名
+			},
+			//上传图片成功  身份证与人合照
+			handleAvatarSuccess(res, file) {
+				this.imageUrl_1 = URL.createObjectURL(file.raw) //暂时展示 的还是本地添加图片
+				this.form.brand_pic = res.key //本地地址上传展示
 			},
 			// 全选
 			SelectionChange(val) {
@@ -298,18 +310,19 @@
 			},
 			//添加会员
 			addMember() {
-				this.new_info_model = true
+				this.getClass();
+				this.new_info_model = true;
 			},
 			//取消添加新的供应商
 			cancel_newInfo() {
 				this.new_info_model = false;
 			},
-			//确定添加供应商
+			//确定添加
 			submitForm(formName) {
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let postData = this.form;
-						this.$post(this.$supplierAddSupplier,postData).then((res) => {
+						this.$post(this.$goodsbrandAdd,postData).then((res) => {
 							let data = res;
 							if(data.status_code == 0) {
 								this.$message({
@@ -328,17 +341,55 @@
 						}
 				});
 			},
+			// 
+			SiteMember(e){
+				let postData = e;
+				postData.disabled = e.disabled?0:1;
+				this.$post(this.$goodsbrandModify,postData).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.data = data.data.data;
+					} else {
+
+					}
+				});
+			},
+			
 			// 删除供应商
 			deletes(e){
 				let data ={
-					id:e,
+					brand_id:e+'',
 				}
-				this.$delete(this.$supplierDelSupplier,data)
+				this.$delete(this.$goodsbrandDelete,data)
 			},
 			// 打开编辑
 			amendMember(e) {
-				this.amendForm = e;
-				this.amend_info_model = true
+				let postData = {
+					pid:0,
+				}
+				// 首先获取到商品分类再去获取商品的详细信息 否者展示效果会出错
+				this.$post(this.$goodsclassGetlist,postData).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.goodClass = data.data;
+						let postDatas = {
+							brand_id:e.brand_id,
+						}
+						this.$post(this.$goodsbrandInfo,postDatas).then((res) => {
+							let data = res;
+							if(data.status_code == 0) {
+								this.amendForm = data.data;
+								this.amend_info_model = true
+							} else {
+
+							}
+						});
+					} else {
+
+					}
+				});
+				
+				
 			},
 			cancelAmendInfo() {
 				this.amend_info_model = false;
@@ -348,7 +399,7 @@
 				this.$refs[formName].validate((valid) => {
 					if(valid) {
 						let postData = this.amendForm;
-						this.$post(this.$supplierEditSupplier,postData).then((res) => {
+						this.$post(this.$goodsbrandModify,postData).then((res) => {
 							let data = res;
 							if(data.status_code == 0) {
 								this.$message({
@@ -356,7 +407,7 @@
 						          type: 'success'
 						        });
 						        this.ajaxjson();
-						        this.new_info_model = false;
+						        this.amend_info_model = false;
 							} else {
 								this.$message.error(data.message);
 							}
@@ -489,9 +540,8 @@
 </style>
 
 <!--添加店铺照片时候 的样式-->
-<style>
+<style rel="stylesheet/scss" lang="scss" scoped>
 	.avatar-uploader .el-upload {
-		border: 1px dashed #d9d9d9;
 		border-radius: 6px;
 		cursor: pointer;
 		position: relative;
@@ -499,7 +549,7 @@
 	}
 	
 	.avatar-uploader .el-upload:hover {
-		border-color: #409eff;
+		border-color: #409EFF;
 	}
 	
 	.avatar-uploader-icon {
@@ -514,6 +564,19 @@
 	.avatar {
 		width: 178px;
 		height: 178px;
-		display: block;
+		float: left;
+		margin-right: 15px;
+	}
+	
+	.upload_img {
+		width: 178px;
+		height: 178px;
+		line-height: 178px;
+		/*background-color: #D6D6D6;*/
+		border: 1px dashed #d9d9d9;
+	}
+	
+	.upload_img:hover {
+		background-color: #d9d9d9;
 	}
 </style>

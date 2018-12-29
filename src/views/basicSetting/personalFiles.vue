@@ -1,9 +1,7 @@
-<!--公司档案 -->
+<!--个人档案 -->
 <template>
 	<div class="tab-container">
-		<!--<div style="padding-left:20%;padding-top:5%;">-->
 		<div>
-
 			<el-row align="center">
 				<el-row :span="20">
 					<el-form ref="form" :model="form" label-width="90px" style="width:80%;">
@@ -76,22 +74,35 @@
 		data() {
 			return {
 				form: {
-					name: '', //企业名称
-					address: '', //经营地址
-					license: '', //营业执照
-					enterpriseLegalPerson: '', //企业法人
-					theFrontOfIdcard: '', //身份证正面
-					backFaceOfIdCard: '', //身份证背面
-					linkman: '', //联系人
+					name: '', //姓名
+					sex:'',// 性别
 					phone: '', //联系电话
+					birth_time:'',//出生日期
 				}
 			}
 		},
+		created() {
+			this.ajaxjson(); //请求模板列表的数据
+		},
 		methods: {
+			// 提交数据的接口
 			onSubmit() {
-				console.log('submit!');
+				let postData = this.form;
+				this.$post(this.$archivesEditUser,postData).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.form = data.data;
+					} else {}
+				});
 			},
-
+			ajaxjson() {
+				this.$post(this.$archivesList).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.form = data.data;
+					} else {}
+				});
+			},
 		}
 	}
 </script>
