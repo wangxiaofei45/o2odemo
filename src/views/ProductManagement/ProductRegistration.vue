@@ -44,14 +44,14 @@
 			<el-row>
 				<el-col :span="8" :offset="8">
 					<el-button type="primary" style="width: 100%;" @click="next(1)">
-					 	下一步
+						下一步
 					</el-button>
 				</el-col>
 			</el-row>
 		</div>
 		<div class="step_2" v-show="active == 1">
 			<div class="form">
-				<el-form :model="good_info" ref="good_info" label-width="80px">
+				<el-form :model="fromItem" ref="fromItem" :rules="rulefromItem" label-width="80px">
 					<!--锚点-->
 					<el-row class="aAnchor">
 						<a href="javascript:void(0)" @click="goAnchor('basicMessage')">
@@ -66,7 +66,6 @@
 							<el-col v-bind:class="[titleActive == 'imgMessage' ? activeClass : '',list]" :span="2">图文描述</el-col>
 						</a>
 					</el-row>
-
 					<!--锚点-->
 					<el-row class="step2_info">
 						<el-row class="step2_info_1">
@@ -76,116 +75,23 @@
 							<el-form-item label="商品分类" prop="good_class">
 								<el-input v-model="show_value" style="width: 200px;" disabled></el-input>
 							</el-form-item>
-							<el-form-item label="商品名称" prop="good_name">
-								<el-input v-model="good_info.good_name" style="width: 200px;" min="3" max="50" placeholder="请输入"></el-input>
+							<el-form-item label="商品名称" prop="goods_name">
+								<el-input v-model="fromItem.goods_name" style="width: 200px;" placeholder="请输入"></el-input>
 								<div class="hint">商品标题名称长度至少3个字符,最长50个汉字</div>
+							</el-form-item>
+							<el-form-item label="货号" prop="freight_number">
+								<el-input v-model="fromItem.freight_number" style="width: 200px;" placeholder="请输入" maxlength="8"></el-input>
+								<div class="hint">货号最长8位</div>
 							</el-form-item>
 							<el-form-item label="类目属性">
 								<div class="hint">商品标题名称长度至少3个字符,最长50个汉字</div>
 							</el-form-item>
+							
 							<el-row class="type">
-								<el-col :span="12">
-									<el-form-item label="品牌" prop="good_name">
-										<el-input v-model="good_info.good_name" style="width: 200px;" min="3" max="50" placeholder="请输入"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="衣长" prop="good_name">
-										<el-select v-model="good_info.good_name" placeholder="请选择">
-											<el-option label="454545" value="454545">
-											</el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="货号" prop="good_name">
-										<el-input v-model="good_info.good_name" style="width: 200px;" min="3" max="50" placeholder="请输入"></el-input>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="图案" prop="good_name">
-										<el-select v-model="good_info.good_name" placeholder="请选择">
-											<el-option label="454545" value="454545">
-											</el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="流行元素" prop="good_name">
-										<el-select v-model="good_info.good_name" placeholder="请选择">
-											<el-option label="454545" value="454545">
-											</el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="质地" prop="good_name">
-										<el-select v-model="good_info.good_name" placeholder="请选择">
-											<el-option label="454545" value="454545">
-											</el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="风格" prop="good_name">
-										<el-select v-model="good_info.good_name" placeholder="请选择">
-											<el-option label="454545" value="454545">
-											</el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="成分含量" prop="good_name">
-										<el-select v-model="good_info.good_name" placeholder="请选择">
-											<el-option label="454545" value="454545">
-											</el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="服装版型" prop="good_name">
-										<el-select v-model="good_info.good_name" placeholder="请选择">
-											<el-option label="454545" value="454545">
-											</el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="克重" prop="good_name">
-										<el-select v-model="good_info.good_name" placeholder="请选择">
-											<el-option label="454545" value="454545">
-											</el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="款式" prop="good_name">
-										<el-select v-model="good_info.good_name" placeholder="请选择">
-											<el-option label="454545" value="454545">
-											</el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="使用年龄" prop="good_name">
-										<el-select v-model="good_info.good_name" placeholder="请选择">
-											<el-option label="454545" value="454545">
-											</el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="组合方式" prop="good_name">
-										<el-select v-model="good_info.good_name" placeholder="请选择">
-											<el-option label="454545" value="454545">
-											</el-option>
-										</el-select>
-									</el-form-item>
-								</el-col>
-								<el-col :span="12">
-									<el-form-item label="年份季节" prop="good_name">
-										<el-select v-model="good_info.good_name" placeholder="请选择">
-											<el-option label="454545" value="454545">
+								<el-col :span="12" v-for="(item,index) in categoryAttributes" :key="item.id">
+									<el-form-item :label="item.name">
+										<el-select v-model="item.modelName" placeholder="请选择">
+											<el-option v-for="(j,z) in item.child" :label="j.name" :value="j.id" :key="j.id">
 											</el-option>
 										</el-select>
 									</el-form-item>
@@ -204,13 +110,10 @@
 									<div class="selectColor" v-for="(item,index) in centerColor">
 										<el-input @focus="showColor(item,index)" @blur="closeColor(item,index)" v-model="item.colorName" style="width: 200px;" placeholder="选择或输入主色"></el-input>
 										<el-input style="width: 200px; height: 36px;" v-model="item.colorRemark" placeholder="备注(如偏深偏浅等)"></el-input>
-										<image v-if="item.showImg" :src="item.showImg"></image>
-										
-										<el-upload style="display: inline-block" :multiple="true" action="http://up.qiniu.com/" accept="image/jpeg,image/gif,image/png,image/bmp" :data="postData" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-										  <el-button size="small" type="primary" @click="upLoadListImg(item,index)">上传图片</el-button>
+										<img v-if="item.showImg" style="width: 36px;height: 36px;position: absolute;top: auto; margin-left: 15px;" :src="item.showImg" />
+										<el-upload v-else style="display: inline-block" :multiple="true" action="http://up.qiniu.com/" accept="image/jpeg,image/gif,image/png,image/bmp" :data="postData" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+											<el-button size="small" type="primary" @click="upLoadListImg(item,index)">上传图片</el-button>
 										</el-upload>
-										
-											
 										<!--定位元素-->
 										<div class="colorArr" v-show="showColorModel == index">
 											<!--<div class="colorArr">-->
@@ -240,7 +143,7 @@
 									<div class="hint">选择标准尺码可增加搜索/导购机会,标准尺码还可填写尺码备注信息(偏小,偏大等)</div>
 									<div class="size">
 										<el-radio-group v-model="size">
-											<el-radio v-for="(item,index) in sizeArr" :key="item.value" :label="item.value">{{item.label}}</el-radio>
+											<el-radio v-for="(item,index) in sizeArr" :key="item.id" :label="item.id">{{item.name}}</el-radio>
 										</el-radio-group>
 									</div>
 									<div class="diySize">
@@ -248,10 +151,10 @@
 										<el-button @click="customAdd">添加</el-button>
 									</div>
 									<div class="check_group" v-for="(item,index) in sizeArr" :key="item.value">
-										<div v-show="item.value == size">
+										<div v-show="item.id == size">
 											<el-checkbox-group v-model="checkedSize" style="width: 800px;">
-												<el-checkbox style="width: 140px;padding: 0px;margin: 0px;" v-for="j in item.size" :label="j.value" :key="j.value" @change="uniterming(j)">{{j.value}}
-													<el-input v-show="j.checked" style="width: 90px;" size="mini" placeholder="请输入备注"></el-input>
+												<el-checkbox style="width: 140px;padding: 0px;margin: 0px;" v-for="j in item.child" :label="j.name" :key="j.id" @change="uniterming(j,item)">{{j.name}}
+													<!--<el-input v-show="j.checked" style="width: 90px;" size="mini" placeholder="请输入备注"></el-input>-->
 												</el-checkbox>
 											</el-checkbox-group>
 										</div>
@@ -259,34 +162,29 @@
 								</el-form-item>
 								<!--总数量-->
 								<!--:span-method="objectSpanMethod"-->
-								<el-table :data="fromTable" max-height="600" border style="width: 760px" v-show="fromTable.length">
+								<el-table :data="fromTable" max-height="600" border style="width: 760px;" v-show="fromTable.length">
 									<el-table-column prop="colorName" label="颜色" width="80">
 									</el-table-column>
 									<el-table-column prop="size" label="尺码" width="80">
 									</el-table-column>
-									<el-table-column prop="price" label="价格" width="150" align="center">
+									<el-table-column prop="sku_price" label="价格" width="200" align="center">
 										<template slot-scope="scope">
-											<el-input v-model="scope.row.price"></el-input>
+											<el-input v-model="scope.row.sku_price"></el-input>
 										</template>
 									</el-table-column>
-									<el-table-column prop="number" label="数量" width="150" align="center">
+									<el-table-column prop="stock" label="库存" width="200" align="center">
 										<template slot-scope="scope">
-											<el-input v-model="scope.row.number"></el-input>
+											<el-input v-model="scope.row.stock"></el-input>
 										</template>
 									</el-table-column>
-									<el-table-column prop="code" label="商家编码" width="150" align="center">
+									<el-table-column prop="shop_code" label="商家编码" width="200" align="center">
 										<template slot-scope="scope">
-											<el-input v-model="scope.row.code"></el-input>
-										</template>
-									</el-table-column>
-									<el-table-column prop="barCode" label="商品条形码" width="150" align="center">
-										<template slot-scope="scope">
-											<el-input v-model="scope.row.barCode"></el-input>
+											<el-input v-model="scope.row.shop_code"></el-input>
 										</template>
 									</el-table-column>
 								</el-table>
-								<el-form-item label="商品库存" prop="commodity_stocks">
-									<el-input v-model="good_info.commodity_stocks" style="width: 200px;" disabled></el-input>
+								<el-form-item label="商品库存" prop="stock">
+									<el-input v-model="good_info.stock" style="width: 200px;" disabled></el-input>
 								</el-form-item>
 							</el-row>
 						</el-row>
@@ -296,76 +194,79 @@
 								图文描述
 							</el-row>
 							<el-form-item label="商品图片">
-								<div v-if="imageUrl_1.length>0" v-for="(item,index) in imageUrl_1" :key="index">
-									<img :src="item" class="avatar">
+								<div class="hint">商品主图不能超过1mb,建议尺寸700*700像素</div>
+								<div v-for="(item,index) in imageUrl_1" :key="index" style="float: left;margin-right: 15px;">
+									<el-upload class="avatar-uploader" :multiple="true" action="http://up.qiniu.com/" accept="image/jpeg,image/gif,image/png,image/bmp" :data="postData" :show-file-list="false" :on-success="handleAvatarSuccess_1" :before-upload="beforeAvatarUpload">
+										<img v-if="item.showImg" :src="item.showImg" class="avatar">
+										<div v-else class="upload_img" @click="upList(index)">
+											上传图片
+										</div>
+									</el-upload>
 								</div>
-								<el-upload class="avatar-uploader" :multiple="true" action="http://up.qiniu.com/" accept="image/jpeg,image/gif,image/png,image/bmp" :data="postData" :show-file-list="false" :on-success="handleAvatarSuccess_1" :before-upload="beforeAvatarUpload">
-									<div class="upload_img">
-										上传图片
-									</div>
-								</el-upload>
 							</el-form-item>
 						</el-row>
 					</el-row>
 				</el-form>
 			</div>
-			<!--<el-button type="primary" @click="next(2)">
-				下一步
-			</el-button>-->
-		</div>
-		<div class="step_3" v-show="active == 2">
-			步骤3
-			<el-button @click="next(3)">
-				完成
-			</el-button>
-			<el-button @click="ContinueToAdd('good_info')">
-				继续添加
+			<el-button type="primary" @click="submit">
+				提交
 			</el-button>
 		</div>
 	</div>
 </template>
 <script>
-	//深copy 要删除
-	function coppyArray(arr) {
-		return arr.map((e) => {
-			if(typeof e === 'object') {
-				return Object.assign({}, e);
-			} else {
-				return e;
-			}
-		})
-	};
-	function objDeepCopy(source) {
-		var sourceCopy = {};
-		for(var item in source) sourceCopy[item] = typeof source[item] === 'object' ? objDeepCopy(source[item]) : source[item];
-		return sourceCopy;
-	}
 	export default {
 		data() {
 			return {
 				//提交的数据
-				fromItem:{
-					category_id:'40',//分类Id
-					brand_id:'56',//品牌Id
+				fromItem: {
+					category_id: '', //分类Id
+					brand_id: '', //品牌Id
+					goods_name: '', //商品名称
+					freight_number:'',//货号
+					basic_attr_value:'',//类目属性 字符串
+					sale_attr_value:'',//销售属性
+					stock:'1',			
+					skuData:'',//
+					imgData:['','','','',''],//图片信息
+					min_price:'1',//价格最小值
+					max_price:'100',//价格最大值
+				},
+				rulefromItem: {
+					goods_name: [{
+						required: true,
+						message: '请输入商品名称',
+						trigger: 'blur'
+					}],
+					freight_number:[{
+						required: true,
+						message: '请输入货号',
+						trigger: 'blur'
+					}]
+				},
+				good_info: {
+					goods_images: [], //商品图片
 				},
 				//选择分类列表
-				list_1_options:[],//第一级分类选择
-				list_2_options:[],//第二级分类选择
-				brandlist:[],//品牌列表
+				list_1_options: [], //第一级分类选择
+				list_2_options: [], //第二级分类选择
+				brandlist: [], //品牌列表
 				//选择分类时候的高亮
-				name1:'请选择',//一级分类名称
-				name2:'请选择',//二级分类名称
-				name3:'请选择',//品牌分类名称
-				
+				name1: '请选择', //一级分类名称
+				name2: '请选择', //二级分类名称
+				name3: '请选择', //品牌分类名称
+
 				isActive: -1, //第一层高亮
 				isActive_2: -1, //第二层高亮
 				isActive_3: -1, //第三层循环
-				UploadImgIndex:'',//添加颜色上传图片时候的中间变量
+				UploadImgIndex: '', //添加颜色上传图片时候的中间变量
+				categoryAttributes: [], //类目属性
 				//静态之前
 				showGroupId: '', //鼠标hover事件显示的颜色组
 				showValue: '', //点击选择颜色的时候
 				amendIndex: '', //点击选择的中间变量
 				amendItem: '', //点击选择的中间Item变量
+				salesProperty:'',//提交时组装销售信息中介项
 				//颜色组
 				colorArrs: [],
 				//选择颜色
@@ -374,106 +275,18 @@
 					color: "",
 					colorName: '',
 					colorRemark: '',
-					imgUrl:'',
-					showImg:'',
+					color_attr_name:'',
+					color_attr_id:'',
+					id:'',
+					imgUrl: '',
+					showImg: '',
 				}, ],
 				//选择尺码
-				customSize:'',
+				customSize: '',
 				size: 1,
 				checkedSize: [], //选择之后的尺码
-				sizeArr: [{
-						label: "美国码",
-						value: 1,
-						size: [{
-								checked: false,
-								value: 0
-							},
-							{
-								checked: false,
-								value: 2
-							},
-							{
-								checked: false,
-								value: 4
-							},
-							{
-								checked: false,
-								value: 6
-							},
-							{
-								checked: false,
-								value: 8
-							},
-							{
-								checked: false,
-								value: 10
-							},
-							{
-								checked: false,
-								value: 12
-							},
-							{
-								checked: false,
-								value: 14
-							},
-							{
-								checked: false,
-								value: 16
-							}
-						],
-					},
-					{
-						label: "中国码",
-						value: 2,
-						size: [{
-								checked: false,
-								value: "xxs"
-							},
-							{
-								checked: false,
-								value: "xs"
-							},
-
-							{
-								checked: false,
-								value: "s"
-							},
-							{
-								checked: false,
-								value: "m"
-							},
-							{
-								checked: false,
-								value: "l"
-							},
-							{
-								checked: false,
-								value: "xl"
-							},
-							{
-								checked: false,
-								value: "2xl"
-							},
-							{
-								checked: false,
-								value: "3xl"
-							},
-							{
-								checked: false,
-								value: "4xl"
-							},
-							{
-								checked: false,
-								value: "5xl"
-							},
-							{
-								checked: false,
-								value: "6xl"
-							}
-						],
-					}
-				],
-
+				sizeArr: [], //尺码组
+				centerSizeArr:[],//判断的尺码组
 				checkList: [], //选择时候 的选择框
 				fromTable: [], //最终提交的数据
 				select: 'select',
@@ -486,20 +299,12 @@
 				select3: 0,
 				options_data: [], //选择最终确定的值
 				show_value: '', //显示出来的值
-				active: 1,
+				active: 0,
 				//第二层添加图片
 				postData: {}, //上传图片时携带的其他的数据
-				imageUrl_1: [], // 图片上传完成后显示出来的照片
+				UploadImgNumber:'',//上传图片时候 的控制
+				imageUrl_1: [{showImg:''},{showImg:''},{showImg:''},{showImg:''},{showImg:''}], // 图片上传完成后显示出来的照片
 				//添加商品信息
-				good_info: {
-					good_class: '', //商品分类
-					good_name: '', //商品名称
-
-					//规格选择
-					commodity_stocks: '', //商品库存
-					goods_images: [], //商品图片
-				},
-
 				rowList: [],
 				spanArr: [],
 				position: 0,
@@ -507,60 +312,64 @@
 			}
 		},
 		created() {
-			this.getListOne();//首次进来 获取列表第一级列表
-			this.get_qiniu_token();//获取七牛上传信息
-			this.goodsGetColor();//获取颜色属性
-			this.goodsGetSize();//获取尺码属性
+			this.getListOne(); //首次进来 获取列表第一级列表
+			this.get_qiniu_token(); //获取七牛上传信息
+			
 		},
 		//计算属性
 		methods: {
 			//首次进入获取的第一级的分类
-			getListOne(){
+			getListOne() {
 				let postData = {
-					pid:0,
+					pid: 0,
 				};
-				this.$post(this.$goodsclassGetlist,postData).then((res) =>{
-					if(res.status_code == 0){
+				this.$post(this.$goodsclassGetlist, postData).then((res) => {
+					if(res.status_code == 0) {
 						this.list_1_options = res.data;
-					}else{
+					} else {
 						this.$message({
-							type:'error',
-							message:res.message,
+							type: 'error',
+							message: res.message,
 						})
 					}
 				})
 			},
-			//获取颜色属性
-			goodsGetColor(){
+			//获取销售属性
+			goodsGetColor() {
 				let postData = {
-					type:1,
-					class_id:this.fromItem.category_id,
+					type: 1,
+					class_id: this.fromItem.category_id,
 				};
-				this.$post(this.$goodsGetattribute,postData).then((res) =>{
-					if(res.status_code == 0){
-						console.log(res);
+				this.$post(this.$goodsGetattribute, postData).then((res) => {
+					if(res.status_code == 0) {
+						this.salesProperty = res.data;
 						this.colorArrs = res.data[0].child;
-					}else{
+						this.sizeArr = res.data[1].child;
+					} else {
 						this.$message({
-							type:'error',
-							message:res.message,
+							type: 'error',
+							message: res.message,
 						})
 					}
 				})
 			},
-			//获取尺码属性
-			goodsGetSize(){
+			//获取类目属性
+			goodsGetSize() {
 				let postData = {
-					type:1,
-					class_id:this.fromItem.category_id,
+					type: 2,
+					class_id: this.fromItem.category_id,
 				};
-				this.$post(this.$goodsGetattribute,postData).then((res) =>{
-					if(res.status_code == 0){
-//						this.list_1_options = res.data;
-					}else{
+				this.$post(this.$goodsGetattribute, postData).then((res) => {
+					if(res.status_code == 0) {
+						let centerArr = res.data;
+					    for(let i = 0;i<centerArr.length;i++){
+					    	centerArr[i].modelName = '';
+					    }
+						this.categoryAttributes = centerArr;
+					} else {
 						this.$message({
-							type:'error',
-							message:res.message,
+							type: 'error',
+							message: res.message,
 						})
 					}
 				})
@@ -576,30 +385,30 @@
 				this.fromItem.category_id = '';
 				this.fromItem.brand_id = '';
 				let postData = {
-					pid:i.id,
+					pid: i.id,
 				};
 				//获取二级分类列表
-				this.$post(this.$goodsclassGetlist,postData).then((res) =>{
-					if(res.status_code == 0){
+				this.$post(this.$goodsclassGetlist, postData).then((res) => {
+					if(res.status_code == 0) {
 						this.list_2_options = res.data;
-					}else{
+					} else {
 						this.$message({
-							type:'error',
-							message:res.message,
+							type: 'error',
+							message: res.message,
 						})
 					}
 				})
 				//获取品牌列表
 				let postDatas = {
-					class_id:i.id,
+					class_id: i.id,
 				};
-				this.$post(this.$goodsbrandGetlist,postDatas).then((res) =>{
-					if(res.status_code == 0){
+				this.$post(this.$goodsbrandGetlist, postDatas).then((res) => {
+					if(res.status_code == 0) {
 						this.brandlist = res.data;
-					}else{
+					} else {
 						this.$message({
-							type:'error',
-							message:res.message,
+							type: 'error',
+							message: res.message,
 						})
 					}
 				});
@@ -624,10 +433,10 @@
 			},
 			//获取最终的想要获取的值,方法被调用
 			GetTheValue() {
-				let showArr = [this.name1,this.name2,this.name3];
+				let showArr = [this.name1, this.name2, this.name3];
 				this.show_value = showArr.join('->');
 			},
-			upLoadListImg(e,index){
+			upLoadListImg(e, index) {
 				this.UploadImgIndex = index;
 			},
 			//上传图片之前
@@ -638,35 +447,40 @@
 			},
 			//上传图片成功  身份证与人合照
 			handleAvatarSuccess(res, file) {
-				this.centerColor[this.UploadImgIndex].showImg = URL.createObjectURL(file.raw)
-				this.centerColor[this.UploadImgIndex].imgUrl = res.key
-				console.log(this.centerColor);
+				this.centerColor[this.UploadImgIndex].showImg = URL.createObjectURL(file.raw);
+				this.centerColor[this.UploadImgIndex].imgUrl = res.key;
+
 			},
 			//自定义添加尺码
-			customAdd(){
+			customAdd() {
 				let index = '';
 				let isAdd = true;
-				for(var i=0;i<this.sizeArr.length;i++){
-					if(this.sizeArr[i].value == this.size){
-					 	index = i;
+				//查出来想要向那一个数组中添加
+				for(var i = 0; i < this.sizeArr.length; i++) {
+					if(this.sizeArr[i].id == this.size) {
+						index = i;
 					}
 				}
-				let obj={
+				let obj = {
 					checked: false,
-					value: this.customSize
+					name: this.customSize
 				};
-				let objs = objDeepCopy(obj);
-				for(var i=0;i<this.sizeArr[index].size.length;i++){
-					if(this.sizeArr[index].size[i].value == objs.value){
+				let objs = this.$objDeepCopy(obj);
+				for(var i = 0; i < this.sizeArr[index].child.length; i++) {
+					if(this.sizeArr[index].child[i].name == objs.name) {
 						isAdd = false;
 					}
 				}
-				if(isAdd){
-					this.sizeArr[index].size.push(objs);
-				}else{
-					alert("您添加的元素已存在!")
+				if(isAdd) {
+					this.sizeArr[index].child.push(objs);
+				} else {
+					//这里的提示
+					this.$message({
+						type: 'error',
+						message: '您添加的元素已存在',
+					})
 				}
-				
+
 			},
 			//获取焦点打开颜色的熟悉选择
 			showColor(item, index) {
@@ -706,18 +520,38 @@
 					}    
 				}
 			},
+			//高亮显示的内容
 			sidebarHover(item) {
 				this.showGroupId = item.id;
 			},
 			//点击色块选择颜色
 			sureColor(i) {
-				let obj = {
-					color: "#e4e4e4",
-					colorName: i.name,
-					colorRemark: i.value,
-					imgUrl:'',
-					showImg:'',
+				//判断
+				let obj = {};
+				if(this.UploadImgIndex == '') {
+					obj = {
+						color: "#e4e4e4",
+						colorName: i.name,
+						colorRemark: i.value,
+						color_attr_name:i.attr_name,
+						color_attr_id:i.attr_id,
+						id:i.id,
+						imgUrl: '',
+						showImg: '',
+					}
+				} else {
+					obj = {
+						color: "#e4e4e4",
+						colorName: i.name,
+						colorRemark: i.value,
+						color_attr_name:i.attr_name,
+						color_attr_id:i.attr_id,
+						id:i.id,
+						imgUrl: this.centerColor[this.UploadImgIndex].imgUrl,
+						showImg: this.centerColor[this.UploadImgIndex].showImg,
+					}
 				}
+
 				this.amendItem = obj
 				//点击添加同样需要判断
 				this.showColorModel = -1;
@@ -729,12 +563,16 @@
 							color: "",
 							colorName: '',
 							colorRemark: '',
-							imgUrl:'',
-							showImg:'',
+							color_attr_name:'',
+							color_attr_id:'',
+							id:'',
+							imgUrl: '',
+							showImg: '',
 						};
 						this.centerColor.push(obj);
 					}
-					this.combination(this.centerColor, this.checkedSize);
+					//组合
+					this.combination(this.centerColor, this.centerSizeArr);
 				}
 			},
 			//失去焦点时触发
@@ -750,13 +588,14 @@
 								color: "",
 								colorName: '',
 								colorRemark: '',
-								imgUrl:'',
-								showImg:'',
+								id:'',
+								imgUrl: '',
+								showImg: '',
 							};
 							this.centerColor.push(obj);
 						}
 						//这里去计算
-						this.combination(this.centerColor, this.checkedSize);
+						this.combination(this.centerColor, this.centerSizeArr);
 					}
 				} else {
 					return;
@@ -764,7 +603,7 @@
 			},
 			//判断是否存在
 			checking(item, index) {
-				let newArr = coppyArray(this.centerColor);
+				let newArr = this.$coppyArray(this.centerColor);
 				newArr.splice(index);
 				if(newArr.length == 0) {
 					return true;
@@ -781,10 +620,32 @@
 				}
 
 			},
-			uniterming(val) {
+			//选中尺码
+			uniterming(val,item) {
+				console.log(item);
 				//点击是显示还是隐藏输入框
 				val.checked = !val.checked;
-				this.combination(this.centerColor, this.checkedSize);
+				let obj = {
+					id:val.id,
+					name:val.name,
+					size_attr_id:val.attr_id,
+					size_attr_name:val.attr_name,
+					size_center_id:item.id,
+					size_center_name:item.name,
+				}
+				if(val.checked){
+					this.centerSizeArr.push(obj);
+				}else{
+					let index = '';
+					for(let i =0;i<this.centerSizeArr;i++){
+						if(obj.id == this.centerSizeArr[i].id){
+							index = i;
+							return;
+						}
+					}
+					this.centerSizeArr.splice(index,1);
+				};
+				this.combination(this.centerColor, this.centerSizeArr);
 			},
 			//组合尺码组
 			combination(colorArr, sizeArr) {
@@ -795,32 +656,30 @@
 					for(var i = 0; i < colorArr.length - 1; i++) {
 						let Xindex = {};
 						for(var j = 0; j < sizeArr.length; j++) {
-							console.log(j, sizeArr[j])
-							//赋值出错
-							colorArr[i].size = sizeArr[j];
-							colorArr[i].price = '';
-							colorArr[i].number = '';
-							colorArr[i].code = '';
-							colorArr[i].barCode = '';
+							colorArr[i].sku_price = '';//价格
+							colorArr[i].stock = '';//库存
+							colorArr[i].shop_code = '';//条形码
+							colorArr[i].size = sizeArr[j].name;
+							colorArr[i].sizeId = sizeArr[j].id;
+							colorArr[i].size_attr_id = sizeArr[j].size_attr_id;
+							colorArr[i].size_attr_name = sizeArr[j].size_attr_name;
 							Xindex = colorArr[i];
 							//对象的深copy
-							let centerXindex = objDeepCopy(Xindex);
+							let centerXindex = this.$objDeepCopy(Xindex);
 							allcenterArr.push(centerXindex);
 						}
 					}
 					//数组的深从copy
-					this.fromTable = coppyArray(allcenterArr);
-					this.rowspan();
+					this.fromTable = this.$coppyArray(allcenterArr);
+					//this.rowspan();
 				}
 			},
 			//vue使用的是hash值使用的锚点定位出现问题,模拟实现锚点定位
 			goAnchor(e) {
 				var elements = document.getElementById(e);
 				this.titleActive = e;
-				document.documentElement.scrollTop   = elements.offsetTop  ;
-				  
+				document.documentElement.scrollTop = elements.offsetTop;  
 			},
-
 			//全选
 			toggleSelection(rows) {
 				if(rows) {
@@ -833,18 +692,19 @@
 			},
 			//点击下一步
 			next(e) {
-				if(!this.fromItem.category_id){
+				if(!this.fromItem.category_id) {
 					this.$message({
-						type:'error',
-						message:'请先选择商品分类',
+						type: 'error',
+						message: '请先选择商品分类',
 					})
-				}else if(!this.fromItem.brand_id){
+				} else if(!this.fromItem.brand_id) {
 					this.$message({
-						type:'error',
-						message:'请选择品牌分类',
+						type: 'error',
+						message: '请选择品牌分类',
 					})
-				}else{
-					console.log(this.fromItem);
+				} else {
+					this.goodsGetColor(); //获取颜色属性
+					this.goodsGetSize(); //获取尺码属性
 					this.active++;
 				}
 				if(e >= 3) {
@@ -857,7 +717,6 @@
 				this.$refs[FormName].resetFields();
 			},
 
-			
 			//上传图片
 			get_qiniu_token() {
 				this.$post(this.$qiniu).then((res) => {
@@ -870,20 +729,141 @@
 					}
 				});
 			},
+
 			//上传图片之前
 			beforeAvatarUpload(file) {
 				const isJPG = file.type === 'image/jpeg';
 				const isLt2M = file.size / 1024 / 1024 < 2;
 				this.postData.key = file.name; //上传时控制文件名
 			},
+			upList(index){
+				this.UploadImgNumber = index;
+				console.log(this.UploadImgNumber);
+			},
 			//上传图片成功  身份证与人合照
 			handleAvatarSuccess_1(res, file) {
-				this.imageUrl_1.push(URL.createObjectURL(file.raw)) //暂时展示 的还是本地添加图片
-				let arr = [];
-				arr.push(res.key);
-				this.good_info.goods_images = arr //本地地址上传展示
-
+				this.imageUrl_1[this.UploadImgNumber].showImg = URL.createObjectURL(file.raw);
+				this.fromItem.imgData[this.UploadImgNumber] = res.key;
+				this.UploadImgNumber = -1;
+				console.log(this.UploadImgNumber,'imageUrl_1',this.imageUrl_1,'this.fromItem.imgData',this.fromItem.imgData);
 			},
+			//提交
+			submit() {
+				let postData = this.$objDeepCopy(this.fromItem);
+				//类目属性
+				let centerArr = this.$coppyArray(this.categoryAttributes);
+				let Arr1 = [];
+				for(let i=0;i<centerArr.length;i++){
+					
+					let obj = {};
+					obj.id = centerArr[i].id;
+					obj.name = centerArr[i].name;
+					obj.data = [];
+					for(let j = 0;j<centerArr[i].child.length;j++){
+						if(centerArr[i].modelName == centerArr[i].child[j].id){
+							let objs = {
+								id:centerArr[i].child[j].id,
+								name:centerArr[i].child[j].name,
+							};
+							obj.data.push(objs);
+						}else{
+						}
+					}
+					Arr1.push(obj)
+				}
+				//类目属性
+				postData.basic_attr_value = JSON.stringify(Arr1);
+				//销售信息颜色
+				let salesProperty = this.salesProperty;
+				let Arr2 = [];
+				let obj1 = {
+					id:salesProperty[0].id,
+					name:salesProperty[0].name,
+					data:[],
+				};
+				for(let i=0;i<this.centerColor.length-1;i++){
+					let obj = {
+						id:this.centerColor[i].id,
+						name:this.centerColor[i].colorName,
+					}
+					obj1.data.push(obj);
+				};
+				Arr2.push(obj1);
+				let sizeArr = {
+					id:salesProperty[1].id,
+					name:salesProperty[1].name,
+					data:[],
+				};
+//				sizeArr.data = this.centerSizeArr;
+				for(let i=0;i<this.centerSizeArr.length;i++){
+					let obj = {
+						id:this.centerSizeArr.size_center_id,
+						name:this.centerSizeArr.size_center_name,
+						data:[{
+							id:this.centerSizeArr.id,
+							name:this.centerSizeArr.name,
+						}]
+					}
+					sizeArr.data.push(obj);
+				}
+				Arr2.push(sizeArr);
+				
+				postData.sale_attr_value = JSON.stringify(Arr2);
+				//sku组合
+				let fromTable = this.$coppyArray(this.fromTable);
+				for(let i=0;i<fromTable.length;i++){
+					delete fromTable[i].showImg;
+					delete fromTable[i].colorRemark;
+					delete fromTable[i].color;
+					fromTable[i].specnamestr = fromTable[i].colorName+'|'+fromTable[i].size;
+					fromTable[i].sale_attrs = [
+						{
+							attr_id:fromTable[i].color_attr_id,
+							attr_name:fromTable[i].color_attr_name,
+							data:{
+								id:fromTable[i].id,
+								name:fromTable[i].colorName,
+							}
+						},
+						{
+							attr_id:fromTable[i].size_attr_id,
+							attr_name:fromTable[i].size_attr_name,
+							data:{
+								id:fromTable[i].sizeId,
+								name:fromTable[i].size,
+							}
+						},
+					];
+					fromTable[i].img_url = fromTable[i].imgUrl;
+					fromTable[i].sku_price = fromTable[i].sku_price*100;
+					delete fromTable[i].colorName;
+					delete fromTable[i].color_attr_id;
+					delete fromTable[i].color_attr_name;
+					delete fromTable[i].size_attr_name;
+					delete fromTable[i].id;
+					delete fromTable[i].size;
+					delete fromTable[i].sizeId;
+					delete fromTable[i].size_attr_id;
+					delete fromTable[i].imgUrl;
+				}
+				postData.skuData = JSON.stringify(fromTable);
+				let imgdata = postData.imgData;
+				let obj3 = {default:'',list:[]};
+				obj3.default = imgdata[0];
+				obj3.data = postData.imgData;
+				postData.imgData = JSON.stringify(obj3);
+				this.$post(this.$goodsAdd, postData).then((res) => {
+					console.log(res);
+					if(res.status_code == 0) {
+						console.log(res)
+					} else {
+						this.$message({
+							type: 'error',
+							message: res.message,
+						})
+					}
+				});
+			}
 		}
 	}
 </script>
@@ -1087,6 +1067,7 @@
 		cursor: pointer;
 	}
 	/*步骤一 选择时候 的添加高亮样式*/
+	
 	.active {
 		background-color: #18ccba;
 		color: #fff;
@@ -1143,15 +1124,12 @@
 	.avatar {
 		width: 178px;
 		height: 178px;
-		float: left;
-		margin-right: 15px;
 	}
 	
 	.upload_img {
 		width: 178px;
 		height: 178px;
 		line-height: 178px;
-		/*background-color: #D6D6D6;*/
 		border: 1px dashed #d9d9d9;
 	}
 	

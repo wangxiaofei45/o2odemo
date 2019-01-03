@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="tab-container" v-show="isShow">
+		<div class="tab-container" v-show="isShow == 1">
 			<div class="title">
 				<el-row>
 					<el-col>
@@ -29,10 +29,9 @@
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="供应商">
-								<el-select v-model="formInline.shop" placeholder="亿链旗舰店">
-									<el-option label="区域一" value="1"></el-option>
-									<el-option label="区域二" value="2"></el-option>
-								</el-select>
+								<!--<el-select v-model="formInline.shop" placeholder="亿链旗舰店">
+									<el-option v-for="(item,index) in supplierCommonSupplierList" :label="item.name" :value="item.id" :key="item.id"></el-option>
+								</el-select>-->
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
@@ -70,28 +69,28 @@
 				<el-table :data="data" stripe border style="width: 100%;" show-summary :summary-method="getSummaries" size="mini">
 					<el-table-column type="index" label="序号" fixed width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="documentNumber" label="单据号" fixed width="150" align="center">
+					<el-table-column prop="document_num" label="单据号" fixed width="150" align="center">
 					</el-table-column>
-					<el-table-column prop="documentDate" label="单据日期" width="150" align="center">
+					<el-table-column prop="created_at" label="单据日期" width="150" align="center">
 					</el-table-column>
-					<el-table-column prop="supplier" label="供应商" width="100" align="center">
+					<el-table-column prop="cb_name" label="供应商" width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="totalQuantity" label="总数量" width="100" align="center">
+					<el-table-column prop="stock" label="总数量" width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="totalMoney" label="总金额" width="100" align="center">
+					<el-table-column prop="price" label="总金额" width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="auditStatus" label="审核状态" width="100" align="center">
+					<el-table-column prop="audit_status" label="审核状态" width="100" align="center">
 						<template slot-scope="scope">
-							<el-button v-if="scope.row.auditStatus == 1" type="text">已审核</el-button>
-							<el-button v-if="scope.row.auditStatus == 2" type="text" style="color: #666;">未审核</el-button>
+							<el-button v-if="scope.row.audit_status == 0" type="text">未审核</el-button>
+							<el-button v-if="scope.row.audit_status == 1" type="text">审核通过</el-button>
 						</template>
 					</el-table-column>
-					<el-table-column prop="preparedBy" label="制单人">
+					<el-table-column prop="user_name" label="制单人">
 					</el-table-column>
-					<el-table-column label="操作" width="200" fixed="right" align="center">
-						<template slot-scope="scope">
-							<el-button size="mini" type="primary" icon="el-icon-edit" @click="check(scope.row.role_id)">修改</el-button>
-							<el-button size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+					<el-table-column prop="audit_status" label="操作" width="200" fixed="right" align="center">
+						<template slot-scope="scope" v-if="scope.row.audit_status == 0">
+							<el-button size="mini" type="primary" icon="el-icon-edit" @click="openAudit(scope.row.id)">审核</el-button>
+							<el-button size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.$index,scope.row)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -99,7 +98,7 @@
 
 		</div>
 		<!-- 新增采购单 -->
-		<div class="tab-container" v-show="addPuechseMan">
+		<div class="tab-container" v-show="isShow ==2">
 			<!--title-->
 			<el-row class="model_title">
 				<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
@@ -117,11 +116,6 @@
 						<el-button type="primary">保存</el-button>
 						<el-button type="primary" @click="openSave">提交并审核</el-button>
 					</el-col>
-					<el-col :span="12" style="text-align: right;">
-						<el-button type="primary">
-							导入
-						</el-button>
-					</el-col>
 				</el-row>
 			</div>
 			<div class="search1">
@@ -129,20 +123,19 @@
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="单据号">
-								<el-input v-model="forMation.documentnumber" placeholder="" style="width:220px;"></el-input>
+								<el-input v-model="forMation.document_num" placeholder="" style="width:220px;" disabled></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="日期">
-								<el-date-picker v-model="forMation.date" type="date" placeholder="选择日期">
+								<el-date-picker v-model="forMation.created_at" type="date" placeholder="选择日期">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="供应商">
-								<el-select v-model="forMation.shop" placeholder="亿链旗舰店">
-									<el-option label="区域一" value="1"></el-option>
-									<el-option label="区域二" value="2"></el-option>
+								<el-select v-model="forMation.cbid" placeholder="请选择供应商" @change="selectSupplier" style="width: 200px;">
+									<el-option v-for="(item,index) in supplierCommonSupplierList" :label="item.name" :value="item.id" :key="item.id"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
@@ -155,34 +148,35 @@
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="制单人">
-								<el-select v-model="forMation.user" placeholder="邢建辉">
-									<el-option label="区域一" value="1"></el-option>
-									<el-option label="区域二" value="2"></el-option>
-								</el-select>
+								<el-input v-model="forMation.user_name" placeholder="" style="width:220px;" disabled></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 				</el-form>
 			</div>
-			<el-row style="margin-top:20px;margin-bottom:10px;">
+			<el-row class="search2" style="margin-top:20px;margin-bottom:10px;">
 				<el-col :span="12">
 					<el-button type="text">录入排序</el-button>
 				</el-col>
 				<el-col :span="12" style="text-align: right;">
-					<el-input placeholder="输入条形码" style="width: 200px;"></el-input>
-					<el-button type="primary" @click="open_newInfo">添加商品</el-button>
+					<el-input placeholder="请输入内容" v-model="typeAndBarCode.bar_code" class="input-with-select"style="width: 400px;" @keyup.enter.native="addgoods">
+						<el-select v-model="typeAndBarCode.type" slot="prepend" placeholder="请选择">
+							<el-option label="条码" value="1"></el-option>
+							<el-option label="货号" value="2"></el-option>
+						</el-select>
+					</el-input>
 				</el-col>
 			</el-row>
 			<!--添加添加后的表格-->
 			<div class="tTable">
-				<el-table :data="newTableData" stripe border  style="width: 100%;" size="mini">
+				<el-table :data="newTableData" stripe border style="width: 100%;" size="mini">
 					<el-table-column type="index" label="序号" fixed width="50" align="center">
 					</el-table-column>
-					<el-table-column prop="number1" label="货号" fixed width="100" align="center">
+					<el-table-column prop="barcode" label="条形码" fixed width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="number1" label="商品名称" width="100" align="center">
+					<el-table-column prop="specnamestr" label="商品规格名称" width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="number1" label="单位" width="100" align="center">
+					<el-table-column prop="stock" label="数量" width="100" align="center">
 					</el-table-column>
 					<el-table-column prop="number1" label="颜色" width="100" align="center">
 					</el-table-column>
@@ -205,51 +199,7 @@
 					</el-table-column>
 				</el-table>
 			</div>
-			<!--添加采购订单-->
-			<div class="model" v-show="new_info_model">
-				<div class="model_con">
-					<el-row class="model_title">
-						<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
-							添加商品
-						</el-col>
-						<el-col :span="12" style="text-align: right;">
-							<el-button type="text" @click="cancel_newInfo">
-								<svg-icon icon-class="cancel" />
-							</el-button>
-						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="24">
-							<el-input placeholder="搜索货号" style="width:240px"></el-input>
-							<el-button type="primary">搜索</el-button>
-							<el-button type="primary">添加</el-button>
-						</el-col>
-					</el-row>
-					<div class="oTable" style="margin-top:20px">
-						<el-table :data="addTable" stripe border style="width: 100%;" size="mini" height="420px" highlight-current-row @current-change="addchange">
-							<el-table-column type="index" width="50" align="center">
-							</el-table-column>
-							<el-table-column prop="img" label="图片" width="100" align="center">
-								<template slot-scope="scope">
-									<img src="" />
-								</template>
-							</el-table-column>
-							<el-table-column prop="numbers" label="货号" width="100" align="center">
-							</el-table-column>
-							<el-table-column prop="name" label="商品名称" width="100" align="center">
-							</el-table-column>
-							<el-table-column prop="brand" label="品牌" width="100" align="center">
-							</el-table-column>
-							<el-table-column prop="craneQuotation" label="吊牌价" align="right">
-							</el-table-column>
-						</el-table>
-						<el-row style="text-align: right;margin-top: 10px;">
-							<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
-							</el-pagination>
-						</el-row>
-					</div>
-				</div>
-			</div>
+
 			<!--选择规格-->
 			<div class="model" v-show="open_new_rult">
 				<div class="model_con">
@@ -301,7 +251,7 @@
 							</el-table-column>
 						</el-table>
 					</div>
-					
+
 					<el-row>
 						<el-col :span="24" style="margin-top:20px; text-align: right;">
 							<el-button type="primary" style="float:right;margin-right:30px">确定</el-button>
@@ -317,7 +267,7 @@
 							提交并审核
 						</el-col>
 						<el-col :span="12" style="text-align: right;">
-							<el-button type="text"  @click="cancelSave">
+							<el-button type="text" @click="cancelSave">
 								<svg-icon icon-class="cancel" />
 							</el-button>
 						</el-col>
@@ -334,7 +284,30 @@
 				</div>
 			</div>
 		</div>
-
+		<!--公用的审核-->
+		<div class="model" v-show="modelShow ==4">
+			<div class="save_model_con">
+				<el-row class="model_title">
+					<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;font-size: 14px;">
+						审核
+					</el-col>
+					<el-col :span="12" style="text-align: right;">
+						<el-button type="text" @click="cancel">
+							<svg-icon icon-class="cancel" />
+						</el-button>
+					</el-col>
+				</el-row>
+				<el-row>
+					<el-col style="margin-top:10px; text-align: center;font-size: 14px;color: #333333;">
+						确定审核?
+					</el-col>
+					<el-col :span="24" style="margin-top:20px; text-align: center;">
+						<el-button style="width: 120px;" @click="cancel">取消</el-button>
+						<el-button style="width: 120px;" type="primary" @click="sureAudit">确定</el-button>
+					</el-col>
+				</el-row>
+			</div>
+		</div>
 	</div>
 </template>
 <script>
@@ -342,9 +315,9 @@
 		data() {
 			return {
 				search: '', //采购单输入
-				isShow: true, //采购单是否显示
-				addPuechseMan: false, //新增采购单显示隐藏
-				fromAndSave:false,//保存并提交
+				isShow: 2, //采购单是否显示
+				fromAndSave: false, //保存并提交
+				modelShow: -1,
 				currentPage4: 4, //
 				//筛选时候的表单
 				formInline: {
@@ -355,21 +328,17 @@
 					radio: 3,
 					user: ''
 				},
-				forMation: { //表单对象
-					documentnumber: '',
-					shop: '',
-					shop1: '',
-					date: '',
-					supplier: '',
-					cost: '',
-					number: '',
-					abstract: '',
-					user: '',
+				forMation: {}, //新增采购订单表单
+				supplierCommonSupplierList: [], //供应商下拉选择的列表
+				//添加商品时候的搜索
+				typeAndBarCode: {
+					type: '',
+					bar_code: '',
 				},
-				new_info_model: false,//新增订单时候的model
-				open_new_rult: false,//添加商品时候的规格值
+				currentVendor:{},//存储选择的供应商
+				open_new_rult: false, //添加商品时候的规格值
 				editVisible: false,
-				data:[],//展示出来的数据
+				data: [], //展示出来的数据
 				options: [{
 					value: '选项1',
 					label: '黄金糕'
@@ -386,18 +355,7 @@
 					value: '选项5',
 					label: '北京烤鸭'
 				}],
-				newTableData: [{
-					 number1:"01212",	
-					 number2:"短袖",	
-					 number3:"公司",	
-					 number4:"红色",	
-					 number5:"1002",	
-					 number6:"450",	
-					 number7:"545",	
-					 number8:"45",	
-					 number9:"45",	
-				},
-				],
+				newTableData: [],
 				//添加商品时候的表格
 				addTable: [{
 					img: "", //商品图片
@@ -409,16 +367,134 @@
 				specificationOfGoods: [ //商品规格
 					{
 						color: '黑色',
-						demoNumber_1:'',//尺码
-						demoNumber_2:'',//数量
-						demoNumber_3:'',//吊牌价
-						demoNumber_4:'',//折扣
-						demoNumber_5:'',//采购价
+						demoNumber_1: '', //尺码
+						demoNumber_2: '', //数量
+						demoNumber_3: '', //吊牌价
+						demoNumber_4: '', //折扣
+						demoNumber_5: '', //采购价
 					},
 				],
 			}
 		},
+		created() {
+			this.ajaxjson(); //获取到的数据
+			this.addPurseMan();
+		},
 		methods: {
+			ajaxjson() {
+				let postData = {
+					page: 1,
+				}
+				this.$post(this.$purchaseList, postData).then((res) => {
+					if(res.status_code == 0) {
+						this.data = res.data;
+					} else {
+						this.$message({
+							type: 'error',
+							message: res.message,
+						})
+					}
+				})
+			},
+			//打开审核的弹窗
+			openAudit(e) {
+				this.id = e;
+				this.modelShow = 4;
+			},
+			cancel() {
+				this.modelShow = -1;
+			},
+			//确定审核
+			sureAudit() {
+				this.Audit(this.id);
+			},
+			//审核
+			Audit(e) {
+				let postData = {
+					id: e,
+				};
+				this.$post(this.$purchaseAudit, postData).then((res) => {
+					if(res.status_code == 0) {
+						this.$message({
+							type: 'success',
+							message: res.message,
+						})
+						this.ajaxjson();
+						this.modelShow = -1;
+					} else {
+						this.$message({
+							type: 'error',
+							message: res.message,
+						})
+						this.modelShow = -1;
+					}
+				})
+			},
+			// 新增采购单页面
+			addPurseMan() {
+				this.$post(this.$purchaseAdd).then((res) => {
+					if(res.status_code == 0) {
+						let postData = {
+							id: res.data.purchase_id,
+						}
+						this.$post(this.$purchaseInfo, postData).then((res) => {
+							if(res.status_code == 0) {
+								this.forMation = res.data;
+								this.isShow = 2;
+							}
+						})
+					}
+				})
+				this.$post(this.$supplierCommonSupplierList).then((res) => {
+					if(res.status_code == 0) {
+						this.supplierCommonSupplierList = res.data;
+					}
+				})
+
+			},
+			selectSupplier(e){
+				for(var i=0;i<this.supplierCommonSupplierList.length;i++){
+					if(e == this.supplierCommonSupplierList[i].id){
+						this.currentVendor = this.supplierCommonSupplierList[i];
+					}
+				}
+			},
+			//添加商品 判断是条码 还是货号添加
+			addgoods(){
+				if(this.currentVendor.id){
+					let postData = this.typeAndBarCode;
+					this.$post(this.$staticGetCodeGoods,postData).then((res)=>{
+						if(res.status_code == 0){
+							let datas = res.data;
+							datas.stock = '';
+							let canAdd = true;
+							for(let i=0;i<this.newTableData.length;i++){
+								if(datas.id == this.newTableData[i].id){
+									canAdd = false;
+								}
+							};
+							if(canAdd){
+								this.newTableData.push(datas);
+							}else{
+								this.$message({
+									type:'error',
+									message:"您已经添加过该商品了",
+								})
+							}
+						}else{
+							this.$message({
+								type:'error',
+								message:res.message,
+							})
+						}
+					})
+				}else{
+					this.$message({
+						type:'error',
+						message:"请先选择供应商",
+					})
+				}
+			},
 			//添加商品是否的商品分类列表
 			handleSizeChange(val) {
 				console.log(`每页 ${val} 条`);
@@ -427,12 +503,6 @@
 				console.log(`当前页: ${val}`);
 			},
 			//点击新增采购订单时候的显示出来
-			//有问题 只能点击一次
-			addchange(val) {
-				console.log("选中当前行")
-				this.new_info_model = false;//隐藏新增的按钮
-				this.open_new_rult = true;//显示出来规格选择
-		   },
 			//表尾自定义合计行
 			getSummaries(param) {
 				const {
@@ -490,36 +560,10 @@
 					this.$refs.formData.resetFields();
 				}
 			},
-			// 新增采购单页面
-			addPurseMan() {
-				this.isShow = false
-				this.addPuechseMan = true
-			},
+
 			// 返回采购单页面
 			back_PurchseMan() {
-				this.isShow = true
-				this.addPuechseMan = false
-			},			
-			//打开新增添加 用户
-			open_newInfo() {
-				//获取添加商品分类的信息
-				this.new_info_model = true;
-				// this.$post("/goodsclass/addlist", ).then((res) => {
-				// 	let data = res;
-				// 	if(data.status_code == 0) {
-				// 		this.options = data.data;
-
-				// 	} else {
-				// 		this.$message({
-				// 			type: 'error',
-				// 			message: data.message,
-				// 			});
-				// 		}
-				// 	});
-			},
-			//取消添加新的用户
-			cancel_newInfo() {
-				this.new_info_model = false;
+				this.isShow = 1
 			},
 			// 关闭添加商品规格弹窗
 			cancel_new_rult() {
@@ -536,69 +580,26 @@
 				}
 				this.specificationOfGoods.push(obj);
 			},
-			
-			deleteAdd(){
-				
+
+			deleteAdd() {
+
 			},
 			reduceRow(index) {
 				this.specificationOfGoods.pop()
-			},
-			//打开新增添加 用户
-			open_newInfo() {
-				//获取添加商品分类的信息
-				this.new_info_model = true;
-				// this.$post("/goodsclass/addlist", ).then((res) => {
-				// 	let data = res;
-				// 	if(data.status_code == 0) {
-				// 		this.options = data.data;
-
-				// 	} else {
-				// 		this.$message({
-				// 			type: 'error',
-				// 			message: data.message,
-				// 			});
-				// 		}
-				// 	});
-			},
-			// openPurchase(){
-			// 	this.isOpen=true;
-			// },
-			// 导入弹窗
-			importData() {
-				this.isImport = true;
-			},
-			// 导出弹窗
-			exportData() {
-				this.isExport = true;
-			},
-			//取消添加新的用户
-			cancel_newInfo() {
-				this.new_info_model = false;
-			},
-			// isclose(){
-			// 	this.isOpen=false;
-			// },
-			// 关闭导入页面
-			close_import() {
-				this.isImport = false;
-			},
-			// 关闭导出页面
-			close_export() {
-				this.isExport = false;
 			},
 			// 打开删除单据
 			Delete() {
 				this.isDelete = true;
 			},
 			//保存并提交
-			openSave(){
+			openSave() {
 				this.fromAndSave = true;
 			},
-			sureSave(){
+			sureSave() {
 				console.log("保存");
 				this.fromAndSave = false;
 			},
-			cancelSave(){
+			cancelSave() {
 				this.fromAndSave = false;
 			}
 		}
@@ -695,7 +696,8 @@
 		box-sizing: border-box;
 		border-radius: 15px;
 	}
-	.save_model_con{
+	
+	.save_model_con {
 		width: 400px;
 		height: 200px;
 		position: absolute;
@@ -708,6 +710,7 @@
 		box-sizing: border-box;
 		border-radius: 15px;
 	}
+	
 	.delete {
 		text-align: center;
 		margin-top: 50px;
@@ -721,30 +724,10 @@
 
 <!--添加店铺照片时候 的样式-->
 <style>
-	.avatar-uploader .el-upload {
-		border: 1px dashed #d9d9d9;
-		border-radius: 6px;
-		cursor: pointer;
-		position: relative;
-		overflow: hidden;
+	.search2 .el-select .el-input {
+		width: 100px;
 	}
-	
-	.avatar-uploader .el-upload:hover {
-		border-color: #409EFF;
-	}
-	
-	.avatar-uploader-icon {
-		font-size: 28px;
-		color: #8c939d;
-		width: 178px;
-		height: 178px;
-		line-height: 178px;
-		text-align: center;
-	}
-	
-	.avatar {
-		width: 178px;
-		height: 178px;
-		display: block;
+	.search2 .input-with-select .el-input-group__prepend {
+		background-color: #fff;
 	}
 </style>

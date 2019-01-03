@@ -8,6 +8,8 @@ import Util from './util.js'
 // 基础的公用的接口
 Vue.prototype.$staticGetAddress = Util.apiUrl+"static/getAddress";//三级联动菜单
 Vue.prototype.$qiniu = Util.apiUrl+"config/qiniu";//获取七牛云
+Vue.prototype.$supplierCommonSupplierList = Util.apiUrl+"supplier/commonSupplierList";//获取供应商列表
+Vue.prototype.$staticGetCodeGoods = Util.apiUrl+"static/getCodeGoods";//根据条形码或者货号添加商品
 
 //店铺登录信息完善
 Vue.prototype.$userPerfectinfo = Util.apiUrl+"user/perfectinfo";//登录完善信息
@@ -110,6 +112,13 @@ Vue.prototype.$supplierEditSupplier = Util.apiUrl+"supplier/editSupplier";//删�
 Vue.prototype.$goodsclassGetlist = Util.apiUrl+"goodsclass/getlist";// 商品注册 获取分类
 Vue.prototype.$goodsbrandGetlist = Util.apiUrl+"goodsbrand/getlist";// 商品注册 品牌列表
 Vue.prototype.$goodsGetattribute = Util.apiUrl+"goods/getattribute";// 商品注册 品牌列表
+Vue.prototype.$goodsAdd = Util.apiUrl+"goods/add";// 商品注册 提交
+
+//采购管理
+Vue.prototype.$purchaseList = Util.apiUrl+"purchase/list";// 采购管理 采购单
+Vue.prototype.$purchaseAudit = Util.apiUrl+"purchase/audit";// 采购管理 采购单审核
+Vue.prototype.$purchaseAdd = Util.apiUrl+"purchase/add";// 采购管理 新增获取id
+Vue.prototype.$purchaseInfo = Util.apiUrl+"purchase/info";// 采购管理 新增获取id
 
 // 深copy
 Vue.prototype.$coppyArray = coppyArray;
