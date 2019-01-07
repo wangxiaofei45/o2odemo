@@ -114,11 +114,39 @@ Vue.prototype.$goodsbrandGetlist = Util.apiUrl+"goodsbrand/getlist";// 商品注
 Vue.prototype.$goodsGetattribute = Util.apiUrl+"goods/getattribute";// 商品注册 品牌列表
 Vue.prototype.$goodsAdd = Util.apiUrl+"goods/add";// 商品注册 提交
 
-//采购管理
+//采购管理 采购单
 Vue.prototype.$purchaseList = Util.apiUrl+"purchase/list";// 采购管理 采购单
 Vue.prototype.$purchaseAudit = Util.apiUrl+"purchase/audit";// 采购管理 采购单审核
 Vue.prototype.$purchaseAdd = Util.apiUrl+"purchase/add";// 采购管理 新增获取id
 Vue.prototype.$purchaseInfo = Util.apiUrl+"purchase/info";// 采购管理 新增获取id
+Vue.prototype.$purchaseUpdate = Util.apiUrl+"purchase/update";// 采购管理 保存
+Vue.prototype.$purchaseDelete = Util.apiUrl+"purchase/delete";// 采购管理 采购单删除
+//采购管理 商品成本
+Vue.prototype.$purchaseCost = Util.apiUrl+"purchase/cost";// 采购管理 商品成本
+
+//采购退货列表
+Vue.prototype.$purchasereturnList = Util.apiUrl+"purchasereturn/list";// 采购管理 采购退货列表
+Vue.prototype.$purchasereturnAdd = Util.apiUrl+"purchasereturn/add";// 采购管理 新增 获取id
+Vue.prototype.$purchasereturnDelete = Util.apiUrl+"purchasereturn/delete";// 采购管理 新增 获取id
+Vue.prototype.$purchasereturnInfo = Util.apiUrl+"purchasereturn/info";// 采购管理 新增 获取id
+Vue.prototype.$purchasereturnModify = Util.apiUrl+"purchasereturn/modify";// 采购管理 新增 获取id
+Vue.prototype.$purchasereturnAudit = Util.apiUrl+"purchasereturn/audit";// 采购管理  退货
+Vue.prototype.$purchasereturnLoad = Util.apiUrl+"purchasereturn/load";// 采购管理  退货
+
+//仓库管理
+Vue.prototype.$storageList = Util.apiUrl+"storage/list";// 列表
+Vue.prototype.$storageGetBarCode = Util.apiUrl+"storage/getBarCode";// 仓库管理  获取采购入库单号
+Vue.prototype.$storageAddOrder = Util.apiUrl+"storage/addOrder";// 仓库管理  新增
+Vue.prototype.$storageConfirmStorage = Util.apiUrl+"storage/confirmStorage";// 仓库管理 确定入库
+Vue.prototype.$storageDelPurchase = Util.apiUrl+"storage/delPurchase";// 仓库管理 入库删除
+Vue.prototype.$storageLoadPurchaseList = Util.apiUrl+"storage/loadPurchaseList";// 仓库管理 入库删除
+Vue.prototype.$storageOrderDetail = Util.apiUrl+"storage/orderDetail";// 仓库管理 入库删除
+Vue.prototype.$storageImportPurchase = Util.apiUrl+"storage/importPurchase";// 仓库管理 上传文件
+
+//调拨入库
+Vue.prototype.$transferOutList = Util.apiUrl+"transfer/outList";// 仓库管理 调拨入库
+Vue.prototype.$transferOrderDetail = Util.apiUrl+"transfer/orderDetail";// 仓库管理 查看订单的详情
+Vue.prototype.$transferStorageOrder = Util.apiUrl+"transfer/storageOrder";// 仓库管理 确定入库
 
 // 深copy
 Vue.prototype.$coppyArray = coppyArray;

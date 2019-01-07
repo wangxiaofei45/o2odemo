@@ -309,8 +309,12 @@
 				}],
 			}
 		},
+		
+		created() {
+			this.ajaxjson();
+			
+		},
 		methods: {
-
 			//表尾自定义合计行
 			getSummaries(param) {
 				const {

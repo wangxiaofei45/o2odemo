@@ -1,35 +1,34 @@
 <template>
-	<div>
 		<!--采购单-->
 		<div class="tab-container">
 			<div class="title">
 				<el-row>
 					<el-col>
-						<el-input placeholder="搜索单据号、供应商、摘要" style="width:240px" v-model="search"></el-input>
-						<el-button type="primary">搜索</el-button>
-						<el-button type="primary">筛选订单</el-button>
+						<el-input placeholder="输入条码搜索" style="width:240px" v-model="formInline.barcode"></el-input>
+						<el-button type="primary" @click="searchVal">搜索</el-button>
+						<el-button type="primary" @click="modelSearch = !modelSearch">筛选订单</el-button>
 					</el-col>
 				</el-row>
 			</div>
 			<!--搜索-->
-			<div class="search">
+			<div class="search" v-if="modelSearch">
 				<el-form label-width="80px" :inline="true" v-model="formInline" class="demo-form-inline">
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="开始时间">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.dateStart">
+								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.startDate">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="结束时间">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.dateEnd">
+								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.endDate">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="供应商">
-								<el-select v-model="formInline.shop" placeholder="亿链旗舰店">
+								<el-select v-model="formInline.cbid" placeholder="亿链旗舰店">
 									<el-option label="区域一" value="1"></el-option>
 									<el-option label="区域二" value="2"></el-option>
 								</el-select>
@@ -38,9 +37,9 @@
 					</el-row>
 					<el-row>
 						<el-col align="center">
-							<el-form-item label=" " align="center">
-								<el-button @click="submitForm('dynamicValidateForm')">清空</el-button>
-								<el-button type="primary" @click="resetForm('dynamicValidateForm')">确定</el-button>
+							<el-form-item label="" align="center">
+								<el-button  @click="resetForm('formInline')">清空</el-button>
+								<el-button type="primary" @click="searchVal">确定</el-button>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -51,37 +50,52 @@
 				<el-table :data="data" stripe border style="width: 100%;" size="mini">
 					<el-table-column type="index" label="序号" fixed width="50" align="center">
 					</el-table-column>
-					<el-table-column prop="img" label="照片" fixed width="80" align="center">
+					<el-table-column prop="sku_img" label="照片" fixed width="80" align="center">
 						<template slot-scope="scope">
-					      <img  :src="scope.row.img" alt="" style="width: 50px;">
+					      <img  :src="scope.row.sku_img" alt="" style="width: 50px;">
 					    </template>
 					</el-table-column>
-					<el-table-column prop="barCode" label="条形码" fixed width="120" align="center">
+					<el-table-column prop="barcode" label="条形码" fixed width="120" align="center">
 					</el-table-column>
-					<el-table-column prop="goodName" label="商品名称规格" width="120" align="center">
+					<el-table-column prop="goods_name" label="商品名称规格" width="120" align="center">
 					</el-table-column>
-					<el-table-column prop="supplier" label="供应商" width="100" align="center">
+					<el-table-column prop="cb_name" label="供应商" width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="LastPurchasePrice" label="上次采购价" width="100" align="center">
+					<el-table-column prop="price" label="上次采购价" width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="LastPurchaseTime" label="上次采购时间">
+					<el-table-column prop="updated_at" label="上次采购时间">
 					</el-table-column>
 				</el-table>
 			</div>
+			<div class="block" style="margin-top: 15px;">
+			    <el-pagination
+			      @size-change="handleSizeChange"
+			      @current-change="handleCurrentChange"
+			      :current-page="page"
+			      :page-sizes="[10, 20, 30, 40]"
+			      :page-size="100"
+			      layout="total, sizes, prev, pager, next, jumper"
+			      :total="total">
+			    </el-pagination>
+  			</div>			
 		</div>
-	</div>
+
 </template>
 <script>
 	export default {
 		data() {
 			return {
+				page:1,//分页
+				total:0,
+				per_page:10,
 				search: '', //采购单输入
+				modelSearch:false,
 				//表单
 				formInline: {
-					dateStart: '1',
-					dateEnd: '',
-					shop: '',
-					Freightnumber: '',
+					barcode:'',//条形码
+					startDate: '',//开始时间
+					endDate: '',//结束时间
+					cbid: '',//供应商id
 				},
 				data:[
 					{
@@ -95,12 +109,42 @@
 				],//展示出来的数据
 			}
 		},
+		created(){
+			this.ajaxjson();
+		},
 		methods: {
 			//有问题 只能点击一次
 			addchange(val) {
 				console.log("选中当前行")
-		  },
-			//
+		  	},
+			//首次加载
+			ajaxjson() {
+				let postData = Object.assign(this.formInline,{page: this.page,per_page:this.per_page,});
+				this.$post(this.$purchaseCost, postData).then((res) => {
+					if(res.status_code == 0) {
+						this.data = res.data.data;
+						this.total = res.data.total;//多少条
+						this.per_page = res.data.per_page;//当前一页多少条
+					} else {
+						this.$message({
+							type: 'error',
+							message: res.message,
+						})
+					}
+				})
+			},
+			//分页
+			handleSizeChange(val) {
+		    	this.per_page = val;
+				this.ajaxjson();
+		    },
+			handleCurrentChange(val) {
+			   	this.page = val;
+			   	this.ajaxjson();
+			},
+			searchVal(){
+				this.ajaxjson();
+			},
 			// 提交表单
 			submitForm(formName) {
 				// this.$refs[formName].validate((valid) => {
@@ -114,9 +158,9 @@
 			},
 			// 重置表单
 			resetForm(formData) {
-				// 	this.$nextTick(function() {
-				//   	this.$refs[formData].resetFields();
-				//  })
+//			 	this.$nextTick(function() {
+//				   	this.$refs[formData].resetFields();
+//				  })
 				if(this.$refs.formData !== undefined) {
 					this.$refs.formData.resetFields();
 				}

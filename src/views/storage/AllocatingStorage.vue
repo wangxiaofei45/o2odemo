@@ -1,35 +1,35 @@
 <template>
 	<div>
 		<!--采购单-->
-		<div class="tab-container" v-show="isShow">
-			<div class="title">
-				<el-row>
-					<el-col>
-						<el-input placeholder="搜索单据号、供应商、摘要" style="width:240px" v-model="search"></el-input>
-						<el-button type="primary">搜索</el-button>
-						<el-button type="primary">筛选订单</el-button>
-					</el-col>
-				</el-row>
-			</div>
-			<!--搜索-->
-			<div class="search">
-				<el-form label-width="80px" :inline="true" v-model="formInline" class="demo-form-inline">
+		<div class="tab-container" v-show="isShow == 1">
+			<el-form label-width="80px" :inline="true" v-model="formInline" class="demo-form-inline">
+				<div class="title">
+					<el-row>
+						<el-col>
+							<el-input placeholder="搜索单据号、供应商、摘要" style="width:240px" v-model="formInline.document_num"></el-input>
+							<el-button type="primary">搜索</el-button>
+							<el-button type="primary" @click="showSearch = !showSearch">筛选订单</el-button>
+						</el-col>
+					</el-row>
+				</div>
+				<!--搜索-->
+				<div class="search" v-show="showSearch">
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="开始时间">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.dateStart">
+								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.startTime">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="结束时间">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.dateEnd">
+								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.endTime">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="调入店铺">
-								<el-select v-model="formInline.shop" placeholder="亿链旗舰店">
+								<el-select v-model="formInline.shop_id" placeholder="亿链旗舰店">
 									<el-option label="区域一" value="1"></el-option>
 									<el-option label="区域二" value="2"></el-option>
 								</el-select>
@@ -37,7 +37,7 @@
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="制单人">
-								<el-select v-model="formInline.user" placeholder="亿链旗舰店">
+								<el-select v-model="formInline.user_id" placeholder="亿链旗舰店">
 									<el-option label="区域一" value="1"></el-option>
 									<el-option label="区域二" value="2"></el-option>
 								</el-select>
@@ -47,10 +47,10 @@
 					<el-row>
 						<el-col :span="24">
 							<el-form-item label="单据状态">
-								<el-radio-group v-model="formInline.radio">
-									<el-radio :label="3">所有</el-radio>
-									<el-radio :label="6">未入库</el-radio>
-									<el-radio :label="9">已入库</el-radio>
+								<el-radio-group v-model="formInline.status">
+									<el-radio :label="2">所有</el-radio>
+									<el-radio :label="0">未入库</el-radio>
+									<el-radio :label="1">已入库</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
@@ -63,43 +63,48 @@
 							</el-form-item>
 						</el-col>
 					</el-row>
-				</el-form>
-			</div>
+				</div>
+			</el-form>
 			<!--展示出来的表格-->
-			<div class="tTable"  id="printMe">
+			<div class="tTable" id="printMe">
 				<el-table :data="data" stripe border style="width: 100%;" show-summary :summary-method="getSummaries" size="mini">
 					<el-table-column type="index" label="序号" fixed width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="documentNumber" label="单据号" fixed width="150" align="center">
+					<el-table-column prop="document_num" label="单据号" fixed width="150" align="center">
 						<template slot-scope="scope">
 							<!--点击单据号跳转显示单据详情-->
-							<p @click="addPurseMan" style="cursor:pointer">{{scope.row.documentNumber}}</p>
+							<p @click="addPurseMan(scope.row.id)" style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</p>
 						</template>
 					</el-table-column>
-					<el-table-column prop="documentDate" label="单据日期" width="150" align="center">
+					<el-table-column prop="updated_at" label="单据日期" width="150" align="center">
 					</el-table-column>
-					<el-table-column prop="supplier" label="供应商" width="100" align="center">
+					<el-table-column prop="shop_name" label="调出店铺" width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="totalQuantity" label="总数量" width="100" align="center">
+					<el-table-column prop="total_number" label="总数量" width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="totalMoney" label="总金额" width="100" align="center">
+					<el-table-column prop="total_money" label="总金额" width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="auditStatus" label="审核状态" width="100" align="center">
+					
+					<el-table-column prop="status" label="审核状态" width="100" align="center">
 						<template slot-scope="scope">
-							<el-button v-if="scope.row.auditStatus == 1" type="text">已审核</el-button>
-							<el-button v-if="scope.row.auditStatus == 2" type="text" style="color: #666;">未审核</el-button>
+							<el-button v-if="scope.row.status == 0" type="text">未入库</el-button>
+							<el-button v-if="scope.row.status == 1" type="text" style="color: #666;">已出库</el-button>
+							<el-button v-if="scope.row.status == 2" type="text" style="color: #666;">全部</el-button>
 						</template>
 					</el-table-column>
-					<el-table-column prop="preparedBy" label="制单人">
+					<el-table-column prop="user_name" label="制单人">
 					</el-table-column>
 					<el-table-column label="操作" width="200" fixed="right" align="center">
-						<template slot-scope="scope">
-							<el-button size="mini" type="primary" @click="bePutInStorage(scope.row.role_id)">入库</el-button>
+						<template slot-scope="scope" v-if="scope.row.status == 0">
+							<el-button size="mini" type="warning" @click="bePutInStorage(scope.row.role_id)">入库</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
 			</div>
-
+			<div class="block" style="margin-top: 15px;">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total">
+				</el-pagination>
+			</div>
 		</div>
 		<!--确定入库的弹窗-->
 		<div class="model" v-show="PutInStorageModel">
@@ -124,18 +129,15 @@
 						<el-button @click="cancelPutInStorage">
 							取消
 						</el-button>
-						<el-button type="primary">
+						<el-button type="primary" @click="sure">
 							确定
-						</el-button>
-						<el-button v-print="'#printMe'" type='primary'>
-							确定并打印
 						</el-button>
 					</el-col>
 				</el-row>
 			</div>
 		</div>
 		<!-- 调拨入库订单 -->
-		<div class="tab-container" v-show="addPuechseMan">
+		<div class="tab-container" v-show="isShow == 2">
 			<!--title-->
 			<el-row class="model_title">
 				<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
@@ -150,8 +152,7 @@
 			<div class="title">
 				<el-row>
 					<el-col :span="24">
-						<el-button type="primary">保存</el-button>
-						<el-button type="primary" @click="bePutInStorage">确认入库</el-button>
+						<el-button type="primary" @click="sureBePutInStorage">确认入库</el-button>
 						<el-button type="primary">打印</el-button>
 					</el-col>
 				</el-row>
@@ -162,26 +163,18 @@
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="单据号">
-								<el-input v-model="forMation.documentnumber" placeholder="" style="width:220px;"></el-input>
+								<el-input v-model="forMation.document_num" placeholder="" style="width:220px;" disabled></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="日期">
-								<el-date-picker v-model="forMation.date" type="date" placeholder="选择日期">
+								<el-date-picker v-model="forMation.created_at" type="date" placeholder="选择日期" disabled>
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item label="供应商">
-								<el-select v-model="forMation.shop" placeholder="亿链旗舰店">
-									<el-option label="区域一" value="1"></el-option>
-									<el-option label="区域二" value="2"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-						<el-col :span="6">
-							<el-form-item label="制单人">
-								<el-select v-model="forMation.user" placeholder="邢建辉">
+							<el-form-item label="调出店铺">
+								<el-select v-model="forMation.shop_id" placeholder="请选择" disabled>
 									<el-option label="区域一" value="1"></el-option>
 									<el-option label="区域二" value="2"></el-option>
 								</el-select>
@@ -189,7 +182,15 @@
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="摘要">
-								<el-input v-model="forMation.abstract" placeholder="" style="width:220px;"></el-input>
+								<el-input v-model="forMation.remark" placeholder="" style="width:220px;" disabled></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="制单人">
+								<el-select v-model="forMation.user_id" placeholder="请选择" disabled>
+									<el-option label="区域一" value="1"></el-option>
+									<el-option label="区域二" value="2"></el-option>
+								</el-select>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -200,30 +201,20 @@
 					<el-button type="text">录入排序</el-button>
 				</el-col>
 			</el-row>
-			<!--添加添加后的表格-->
+			<!--展示的表格-->
 			<div class="tTable">
 				<el-table :data="newTableData" stripe border style="width: 100%;" size="mini">
 					<el-table-column type="index" label="序号" fixed width="50" align="center">
 					</el-table-column>
-					<el-table-column prop="number1" label="货号" fixed width="100" align="center">
+					<el-table-column prop="bar_code" label="条形码" fixed width="150" align="center">
 					</el-table-column>
-					<el-table-column prop="number1" label="商品名称" width="100" align="center">
+					<el-table-column prop="norm" label="商品名称规格" width="200" align="center">
 					</el-table-column>
-					<el-table-column prop="number1" label="单位" width="100" align="center">
+					<el-table-column prop="total_num" label="数量" width="150" align="center">
 					</el-table-column>
-					<el-table-column prop="number1" label="颜色" width="100" align="center">
+					<el-table-column prop="singleton" label="吊牌价" align="center">
 					</el-table-column>
-					<el-table-column prop="number1" label="小计" width="100" align="center">
-					</el-table-column>
-					<el-table-column prop="number1" label="原价" width="100" align="center">
-					</el-table-column>
-					<el-table-column prop="number1" label="折扣" width="100" align="center">
-					</el-table-column>
-					<el-table-column prop="number1" label="单价" align="center">
-					</el-table-column>
-					<el-table-column prop="number1" label="总金额" align="center">
-					</el-table-column>
-					<el-table-column prop="number1" label="备注" align="center">
+					<el-table-column prop="tag_price" label="小计" align="center">
 					</el-table-column>
 				</el-table>
 			</div>
@@ -235,73 +226,86 @@
 	export default {
 		data() {
 			return {
-				search: '', //采购单输入
+				showSearch: false, //采购单输入
 				isShow: true, //采购单是否显示
-				addPuechseMan: false, //新增采购单显示隐藏
 				PutInStorageModel: false, //确定入库
 				//筛选时候的表单
 				formInline: {
-					dateStart: '1',
-					dateEnd: '',
-					shop: '',
-					Freightnumber: '',
-					radio: 3,
-					user: ''
+					type:1,//仓库调入
+					document_num:'',//单据号
+					startTime:'',//开始时间
+					endTime:'',//结束时间
+					shop_id:'',//调出店铺
+					user_id:'',//用户id
+					status:2,//状态
 				},
-				forMation: { //表单对象
-					documentnumber: '',
-					shop: '',
-					shop1: '',
-					date: '',
-					supplier: '',
-					cost: '',
-					number: '',
-					abstract: '',
-					user: '',
-				},
-				editVisible: false,
-				data: [{
-					documentNumber: "123456789456",
-				}], //展示出来的数据
-				options: [{
-					value: '选项1',
-					label: '黄金糕'
-				}, {
-					value: '选项2',
-					label: '双皮奶'
-				}, {
-					value: '选项3',
-					label: '蚵仔煎'
-				}, {
-					value: '选项4',
-					label: '龙须面'
-				}, {
-					value: '选项5',
-					label: '北京烤鸭'
-				}],
-				newTableData: [{
-					number1: "01212",
-					number2: "短袖",
-					number3: "公司",
-					number4: "红色",
-					number5: "1002",
-					number6: "450",
-					number7: "545",
-					number8: "45",
-					number9: "45",
-				}, ],
-				//添加商品时候的表格
-				addTable: [{
-					img: "", //商品图片
-					numbers: "0001", //货号
-					name: "短袖", //商品名称
-					brand: '品牌', //品牌
-					craneQuotation: '1000', //吊牌价
-				}],
+				forMation: {},//订单详情
+				data: [], //展示出来的数据
+				newTableData: [],
+				per_page: 10,
+				page: 1,
+				total:0,
+				PutInStorageId:'',//入库id中间变量
 			}
 		},
+		created() {
+			this.ajaxjson();
+			this.getSupplierCommonSupplierList(); //获取供应商列表
+		},
 		methods: {
-
+			ajaxjson() {
+				let postData = this.formInline;
+				postData.per_page = this.per_page;
+				postData.page = this.page;
+				this.$post(this.$transferOutList, postData).then((res) => {
+					if(res.status_code == 0) {
+						this.data = res.data.data;
+						this.total = res.data.total; //多少条
+						this.per_page = res.data.per_page; //当前一页多少条
+					} else {
+						this.$message({
+							type: 'error',
+							message: res.message,
+						})
+					}
+				})
+			},
+			getSupplierCommonSupplierList() {
+				this.$post(this.$supplierCommonSupplierList).then((res) => {
+					if(res.status_code == 0) {
+						this.supplierCommonSupplierList = res.data;
+					}
+				})
+			},
+			//分页
+			handleSizeChange(val) {
+				this.per_page = val;
+				this.ajaxjson();
+			},
+			handleCurrentChange(val) {
+				this.page = val;
+				this.ajaxjson();
+			},
+			//打开查看详情
+			addPurseMan(e) {
+				let postData = {
+					id:e,
+				};
+				this.PutInStorageId = e;
+				this.$post(this.$transferOrderDetail,postData).then((res) =>{
+					if(res.status_code == 0){
+						this.forMation = res.data.transfer;
+						this.newTableData = res.data.list;
+						this.isShow = 2;
+					}else{
+						this.$message({
+							type:'error',
+							message:res.message,
+						})
+					}
+					console.log(res);
+				})
+			},
 			//表尾自定义合计行
 			getSummaries(param) {
 				const {
@@ -360,21 +364,41 @@
 				}
 			},
 			// 新增采购单页面
-			addPurseMan() {
-				this.isShow = false
-				this.addPuechseMan = true
-			},
+	
 			// 返回采购单页面
 			back_PurchseMan() {
-				this.isShow = true
-				this.addPuechseMan = false
+				this.isShow = 1;
 			},
 			deleteAdd() {
 				console.log("删除!")
 			},
 			//入库点击显示确定入库
 			bePutInStorage(e) {
+				this.PutInStorageId = e;
 				this.PutInStorageModel = true;
+			},
+			sureBePutInStorage(){
+				this.PutInStorageModel = true;
+			},
+			//确定入库
+			sure(){
+				let postData = {
+					id:this.PutInStorageId,
+				}
+				this.$post(this.$transferStorageOrder,postData).then((res) =>{
+					if(res.status_code == 0){
+						this.$message({
+							type:'success',
+							message:res.message,
+						});
+						this.ajaxjson();
+					}else{
+						this.$message({
+							type:'error',
+							message:res.message,
+						})
+					}
+				})
 			},
 			//隐藏入库
 			cancelPutInStorage() {
@@ -527,30 +551,7 @@
 
 <!--添加店铺照片时候 的样式-->
 <style>
-	.avatar-uploader .el-upload {
-		border: 1px dashed #d9d9d9;
-		border-radius: 6px;
-		cursor: pointer;
-		position: relative;
-		overflow: hidden;
-	}
-	
-	.avatar-uploader .el-upload:hover {
-		border-color: #409EFF;
-	}
-	
-	.avatar-uploader-icon {
-		font-size: 28px;
-		color: #8c939d;
-		width: 178px;
-		height: 178px;
-		line-height: 178px;
-		text-align: center;
-	}
-	
-	.avatar {
-		width: 178px;
-		height: 178px;
-		display: block;
+	.el-button--warning {
+		background-color: #f48b25;
 	}
 </style>
