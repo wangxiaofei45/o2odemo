@@ -24,6 +24,9 @@ const user = {
 		SET_TOKEN: (state, token) => {
 			state.token = token
 		},
+		SET_ID:(state, id)=>{
+			state.id = id
+		},
 		//存储shop_id
 		SET_SHOP_ID:(state, shop_id) => {
 			state.shop_id = shop_id
@@ -59,11 +62,16 @@ const user = {
 		}, userInfo) {
 			const username = userInfo.username.trim()
 			return new Promise((resolve, reject) => {
-				loginByUsername(username, userInfo.password).then(response => {					let datas = response.data;
+				loginByUsername(username, userInfo.password).then(response => {					
+					let datas = response.data;
 					if(datas.status_code == 0) {
 						commit('SET_TOKEN', datas.data.tokenArr.token);
 						setToken(datas.data.tokenArr.token);
 						sessionStorage.setItem("token", datas.data.tokenArr.token);
+						commit('SET_ID', datas.data.userInfo.id);
+						setToken(datas.data.userInfo.id);
+						sessionStorage.setItem("id", datas.data.userInfo.id);
+						
 						resolve(datas.data);
 						this.$message({
 							type: 'success',

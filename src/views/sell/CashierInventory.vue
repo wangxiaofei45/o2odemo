@@ -1,135 +1,267 @@
 <!--收银盘点-->
 <template>
 	<div class="tab-container">
-		<div class="title">
-			<el-row>
-				<el-col :span="24">
-					<el-button type="primary" @click="exportExcel"><i class="erp-icon-export"></i>导出</el-button>
-				</el-col>
-			</el-row>
-		</div>
-		<el-table :data="data" stripe border show-summary style="width: 100%;" size="mini" @selection-change="SelectionChange">
-			<el-table-column type="selection" width="40" align="center">
-			</el-table-column>
-			<el-table-column prop="brand_id" label="序号" width="100" align="center">
-			</el-table-column>
-			<el-table-column prop="brand_name" width="100" label="货号" align="center">
-			</el-table-column>
-			<el-table-column prop="brand_class" width="100" label="商品" align="center">
-			</el-table-column>
-			<el-table-column prop="brand_introduction" label="总数量">
-			</el-table-column>
-			<el-table-column prop="brand_sort" width="100" label="总金额">
-			</el-table-column>
-			<el-table-column prop="brand_apply" width="100" label="审核是否通过">
-			</el-table-column>
-			<el-table-column label="操作" width="200" align="center">
-				<template slot-scope="scope">
-					<el-button size="mini" type="primary" icon="el-icon-edit" @click="amend(scope.row.brand_id)">修改</el-button>
-					<el-button size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-		<!--新增品牌分类-->
-		<div class="model" v-show="new_info_model">
-			<div class="model_con">
-				<el-row class="model_title">
-					<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
-						新增品牌
-					</el-col>
-					<el-col :span="12" style="text-align: right;">
-						<el-button type="text" @click="cancel_newInfo">
-							<svg-icon icon-class="cancel" />
-						</el-button>
-					</el-col>
-				</el-row>
-				<el-form :model="new_info" ref="new_info" :rules="new_inforules" label-width="80px">
+		<div v-if="showModel == 1">
+			<div class="title">
+				<el-form label-width="80px" :inline="true" v-model="formInline" class="demo-form-inline">
 					<el-row>
-						<el-col :span="12">
-							<el-form-item label="分类id" prop="class_id">
-								<el-input v-model="new_info.class_id" v-show="false"></el-input>
-								<el-cascader :options="options" change-on-select @change="select_class_id"></el-cascader>
+						<el-col :span="6">
+							<el-form-item label="开始时间">
+								<el-date-picker v-model="formInline.begin_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" @change="selectTime">
+								</el-date-picker>
 							</el-form-item>
 						</el-col>
-						<el-col :span="12">
-							<el-form-item label="品牌名称" prop="brand_name">
-								<el-input v-model="new_info.brand_name"></el-input>
+						<el-col :span="6">
+							<el-form-item label="结束时间">
+								<el-date-picker v-model="formInline.end_date" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" @change="selectTime">
+								</el-date-picker>
 							</el-form-item>
 						</el-col>
-						<el-col :span="12">
-							<el-form-item label="分类名称" prop="brand_class">
-								<el-input v-model="new_info.brand_class"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="描述" prop="brand_introduction">
-								<el-input v-model="new_info.brand_introduction"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="排序数值" prop="brand_sort">
-								<el-input v-model="new_info.brand_sort"></el-input>
-							</el-form-item>
-						</el-col>
-					</el-row>
-					<el-row>
-						<el-form-item>
-							<el-button type="primary" @click="submitForm('new_info')">保存</el-button>
-							<el-button @click="resetForm('new_info')">重置</el-button>
-						</el-form-item>
 					</el-row>
 				</el-form>
 			</div>
+			<el-table :data="data" stripe border show-summary style="width: 100%;" size="mini">
+				<el-table-column type="index" label="序号" width="60" align="center">
+				</el-table-column>
+				<el-table-column prop="document_num" width="200" label="货号" align="center">
+					<template slot-scope="scope">
+						<p @click="detail(scope.row)" style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</p>
+					</template>
+				</el-table-column>
+				<el-table-column prop="created_at" width="200" label="单据日期" align="center">
+				</el-table-column>
+				<el-table-column prop="tb" width="200" label="单据类型_id" align="center">
+				</el-table-column>
+				<el-table-column prop="type_name" width="200" label="单据类型" align="center">
+				</el-table-column>
+				<el-table-column prop="num" width="200" label="总数量" align="center">
+				</el-table-column>
+				<el-table-column prop="amount" width="200" label="总金额" align="center">
+				</el-table-column>
+				<el-table-column prop="user_name" label="制单人">
+				</el-table-column>
+			</el-table>
+			<div class="block" style="margin-top: 15px;">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total">
+				</el-pagination>
+			</div>
 		</div>
-		<!--修改客户信息-->
-		<div class="model" v-show="amend_info_model">
-			<div class="model_con">
+		<!--报溢报损-->
+		<div class="tab-container" v-show="showModel == 4">
+			<el-row class="model_title">
+				<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
+					报溢单
+				</el-col>
+				<el-col :span="12" style="text-align: right;">
+					<el-button type="text" @click="back">
+						<svg-icon icon-class="cancel" />
+					</el-button>
+				</el-col>
+			</el-row>
+			<!--调拨入库搜索框-->
+			<div class="search1">
+				<el-form label-width="80px" :inline="true" :model="forMation4" class="demo-form-inline">
+					<el-row>
+						<el-col :span="6">
+							<el-form-item label="单据号">
+								<el-input v-model="forMation4.document_num" placeholder="" style="width:220px;" disabled></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="日期">
+								<el-date-picker v-model="forMation4.storage_date" type="date" placeholder="选择日期" disabled>
+								</el-date-picker>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="盘点类型">
+								<el-select v-model="forMation4.type" placeholder="请选择" style="width: 200px;" disabled>
+									<el-option label="全盘" value="1"></el-option>
+									<el-option label="抽盘" value="0"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="摘要">
+								<el-input v-model="forMation4.abstract" placeholder="" style="width:220px;" disabled></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="制单人">
+								<el-input v-model="forMation4.user_id" placeholder="" style="width:220px;" disabled></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-form>
+			</div>
+			<!--展示的表格-->
+			<div class="tTable">
+				<el-table :data="newTableData4" stripe border style="width: 100%;" size="mini">
+					<el-table-column type="index" label="序号" fixed width="50" align="center">
+					</el-table-column>
+					<el-table-column prop="bar_code" label="条形码" fixed width="200" align="center">
+					</el-table-column>
+					<el-table-column prop="norm" label="商品规格名称" width="150" align="center">
+					</el-table-column>
+					<el-table-column prop="number" label="数量" width="150" align="center">
+					</el-table-column>
+					<el-table-column prop="price" label="吊牌价" width="200" align="center">
+					</el-table-column>
+					<el-table-column prop="inventory_number" label="盘点数量" width="150" align="center">
+					</el-table-column>
+					<el-table-column prop="contrast_number" label="盘亏数量" width="200" align="center">
+					</el-table-column>
+					<el-table-column prop="contrast_money" label="盘亏金额" align="center">
+					</el-table-column>
+				</el-table>
+			</div>
+		</div>
+		<div class="tab-container" v-show="showModel == 2">
+
 				<el-row class="model_title">
 					<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
-						修改品牌分类
+						入库单
 					</el-col>
 					<el-col :span="12" style="text-align: right;">
-						<el-button type="text" @click="cancel_amendInfo">
-							<svg-icon icon-class="cancel" />
+						<el-button type="text" @click="back">
+							<svg-icon icon-class="cancel"/>
 						</el-button>
 					</el-col>
 				</el-row>
-				<el-form :model="amend_info" ref="amend_info" :rules="new_inforules" label-width="80px">
+				<el-form label-width="80px" :inline="true" :model="forMation2" class="demo-form-inline">
 					<el-row>
-						<el-col :span="12">
-							<el-form-item label="分类id" prop="class_id">
-								<el-input v-model="amend_info.class_id" v-show="false"></el-input>
-								<el-cascader :options="options" v-model="defaultOption" change-on-select @change="select_class_id"></el-cascader>
+						<el-col :span="6">
+							<el-form-item label="单据号">
+								<el-input v-model="forMation2.document_num" placeholder="" style="width:220px;" disabled></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="12">
-							<el-form-item label="品牌名称" prop="brand_name">
-								<el-input v-model="amend_info.brand_name"></el-input>
+						<el-col :span="6">
+							<el-form-item label="日期">
+								<!--<el-date-picker v-model="forMation2.storage_date" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" disabled>
+								</el-date-picker>-->
+								<el-date-picker v-model="forMation2.storage_date" type="date" placeholder="选择日期" disabled>
+								</el-date-picker>
 							</el-form-item>
 						</el-col>
-						<el-col :span="12">
-							<el-form-item label="分类名称" prop="brand_class">
-								<el-input v-model="amend_info.brand_class"></el-input>
+						<el-col :span="6">
+							<el-form-item label="供应商">
+								<el-select v-model="forMation2.cbid" placeholder="请选择供应商" style="width: 200px;" disabled>
+									<el-option v-for="(item,index) in supplierCommonSupplierList" :label="item.name" :value="item.id" :key="item.id"></el-option>
+								</el-select>
 							</el-form-item>
 						</el-col>
-						<el-col :span="12">
-							<el-form-item label="描述" prop="brand_introduction">
-								<el-input v-model="amend_info.brand_introduction"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12">
-							<el-form-item label="排序数值" prop="brand_sort">
-								<el-input v-model="amend_info.brand_sort"></el-input>
+						<el-col :span="6">
+							<el-form-item label="摘要">
+								<el-input v-model="forMation2.abstract" placeholder="" style="width:220px;" disabled></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
 					<el-row>
-						<el-form-item>
-							<el-button type="primary" @click="amendForm('amend_info')">保存</el-button>
-							<el-button @click="resetForm('amend_info')">重置</el-button>
-						</el-form-item>
+						<el-col :span="6">
+							<el-form-item label="制单人">
+								<el-input v-model="forMation2.single_person" placeholder="" style="width:220px;" disabled></el-input>
+							</el-form-item>
+						</el-col>
 					</el-row>
 				</el-form>
+				<div class="tTable">
+				<el-table :data="newTableData2" stripe border style="width: 100%;" size="mini">
+					<el-table-column type="index" label="序号" fixed width="50" align="center">
+					</el-table-column>
+					<el-table-column prop="bar_code" label="条形码" fixed width="100" align="center">
+					</el-table-column>
+					<el-table-column prop="norm" label="商品规格名称" width="100" align="center">
+					</el-table-column>
+					<el-table-column prop="total_num" label="数量" width="100" align="center">
+					</el-table-column>
+					<el-table-column prop="tag_price" label="吊牌价" width="100" align="center">
+						<template slot-scope="scope">
+							<p>{{scope.row.tag_price/100}}</p>
+						</template>
+					</el-table-column>
+					<el-table-column prop="discount" label="折扣" width="100" align="center">
+						<template slot-scope="scope">
+							<p>{{scope.row.discount/100}}</p>
+						</template>
+					</el-table-column>
+					<el-table-column prop="unit_price" label="采购价" width="100" align="center">
+					</el-table-column>
+					<el-table-column prop="count_money" label="小计" align="center">
+					</el-table-column>
+				</el-table>
+			</div>
+		</div>
+		<!--退货-->
+		<div class="tab-container" v-show="showModel == 3">
+			<el-row class="model_title">
+				<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
+					采购退货单
+				</el-col>
+				<el-col :span="12" style="text-align: right;">
+					<el-button type="text" @click="back">
+						<svg-icon icon-class="cancel" />
+					</el-button>
+				</el-col>
+			</el-row>
+			<div class="search1">
+				<el-form label-width="80px" :inline="true" :model="forMation3" class="demo-form-inline">
+					<el-row>
+						<el-col :span="6">
+							<el-form-item label="单据号">
+								<el-input v-model="forMation3.document_num" placeholder="" disabled style="width:220px;"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="日期">
+								<el-date-picker v-model="forMation3.created_at" type="date" placeholder="选择日期" disabled>
+								</el-date-picker>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="入库单号">
+								<el-input v-model="forMation3.join_order_sn" placeholder="" disabled style="width:220px;"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="供应商">
+								<el-select v-model="forMation3.cbid" placeholder="请选择供应商" style="width: 200px;" disabled>
+									<el-option v-for="(item,index) in supplierCommonSupplierList" :label="item.name" :value="item.id" :key="item.id"></el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="摘要">
+								<el-input v-model="forMation3.abstract" placeholder="" style="width:220px;" disabled></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item label="制单人" disabled>
+								<el-input v-model="forMation3.user_name" placeholder="" style="width:220px;" disabled></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-form>
+			</div>
+			<!--添加添加后的表格-->
+			<div class="tTable">
+				<el-table :data="newTableData3" stripe border style="width: 100%;" size="mini">
+					<el-table-column type="index" label="序号" fixed width="80" align="center">
+					</el-table-column>
+					<el-table-column prop="barcode" label="条形码" fixed width="150" align="center">
+					</el-table-column>
+					<el-table-column prop="goods_name" label="商品规格名称" width="150" align="center">
+					</el-table-column>
+					<el-table-column prop="stock" label="数量" width="150" align="center">
+					</el-table-column>
+					<el-table-column prop="price" label="吊牌价" width="150" align="center">
+					</el-table-column>
+					<el-table-column prop="discount" label="折扣" width="150" align="center">
+					</el-table-column>
+					<el-table-column prop="unit_price" label="采购价" width="150" align="center">
+					</el-table-column>
+					<el-table-column prop="total_price" label="小计" align="center">
+					</el-table-column>
+				</el-table>
 			</div>
 		</div>
 	</div>
@@ -138,38 +270,29 @@
 	export default {
 		data() {
 			return {
+				formInline: {
+					begin_date: '', //开始时间
+					end_date: '', //结束时间
+				},
+				value: '', //时间
 				data: [], //表格数据
-				new_info_model: false,
-				amend_info_model: false,
-				editVisible: false,
-				delVisible: false,
-				idx: -1,
-				customer_id: '',
-				//新添加表格数据
-				new_info: {
-					class_id: '', //分类id
-					brand_name: '123', //[品牌名称]
-					brand_class: '', //分类名称
-					brand_introduction: '', //描述
-					brand_sort: '', //排序数值
-				},
-				amend_info: {}, //修改顾客信息
-				//绑定新增表单验证规则
-				new_inforules: {
-					role_name: [{
-						required: true,
-						message: '名字不能为空',
-						trigger: 'blur'
-					}],
-				},
-				options: [], //请求到并替换掉
-				options_data: [], //获取最终的选择的值
-				defaultOption: [], //修改信息时候的显示出来的默认值
+				supplierCommonSupplierList: [], //供应商列表
+				per_page: 10,
+				page: 1,
+				total: 0,
+				showModel: 1,
+				forMation2:{},//入库
+				newTableData2:[],//入库
+				forMation3: {}, //退货
+				newTableData3: [], //退货
+				forMation4: {}, //报溢报损
+				newTableData4: [], //报溢报损
 			}
 		},
 		//页面加载之前
 		created() {
-			this.ajaxjson(); //请求顾客数据
+			this.getData();
+			this.getSupplierCommonSupplierList(); //获取供应商列表
 		},
 		//计算属性
 		computed: {},
@@ -177,200 +300,114 @@
 		methods: {
 			//请求数据
 			ajaxjson() {
-				let postData = {
-					page: 1,
-				};
+				let postData = this.formInline;
+				postData.page = this.page;
+				postData.per_page = this.per_page;
 				//调用post请求方法
-				this.$post("/brand/list", postData).then((res) => {
-					console.log(res)
-					let data = res;
-					if(data.status_code == 0) {
-						this.data = data.data;
-					} else {}
-				});
-			},
-			//打开新增添加 用户
-			open_newInfo() {
-				//获取添加品牌分类的信息
-				this.get_options();
-				this.new_info_model = true;
-			},
-			//获取商品分类列表
-			get_options() {
-				this.$post("/goodsclass/addlist", ).then((res) => {
-					let data = res;
-					if(data.status_code == 0) {
-						this.options = data.data;
+				this.$post(this.$retailopenbillToday, postData).then((res) => {
+					if(res.status_code == 0) {
+						this.data = res.data.data;
+						this.total = res.data.total;
 					} else {
 						this.$message({
 							type: 'error',
-							message: data.message,
-						});
+							message: res.message,
+						})
 					}
 				});
 			},
-			//添加数据
-			submitForm(e) {
-				// this.$refs[e].validate((valid) => {
-				// 	if(valid) {
-				// 		let postData = this.new_info;
-				// 		if(postData.class_id == '') {
-				// 			postData.class_id = "0";
-				// 		};
-				// 		this.$post("/brand/add", postData).then((res) => {
-				// 			let data = res;
-				// 			if(data.status_code == 0) {
-				// 				this.$message({
-				// 					type: 'success',
-				// 					message: data.message,
-				// 				});
-				// 				this.ajaxjson();
-				// 				this.new_info_model = false;
-				// 			} else {
-				// 				this.$message({
-				// 					type: 'error',
-				// 					message: data.message,
-				// 				});
-				// 			}
-				// 		});
-				// 	} else {
-				// 		console.log('error submit!!');
-				// 		return false;
-				// 	}
-				// });
+			getData() {
+				let date = new Date();
+				let Y = date.getFullYear() + '-';
+				let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+				let D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate());
+				let dataStr = Y + M + D;
+				this.formInline.begin_date = dataStr;
+				this.formInline.end_date = dataStr;
+				this.ajaxjson();
 			},
-			//修改顾客信息
-			amendForm(e) {
-				this.$refs[e].validate((valid) => {
-					if(valid) {
-						let postData = this.amend_info;
-						postData.role_id = postData.id;
-						postData.name = postData.role_name;
-						delete postData.role_name;
-						this.$post("/goodsclass/modify", postData).then((res) => {
-							let data = res;
-							if(data.status_code == 0) {
-								this.$message({
-									type: 'success',
-									message: data.message,
-								});
-								this.amend_info_model = false;
-								this.ajaxjson();
+			selectTime(e) {
+				this.ajaxjson();
+			},
+			//获取供应商列表
+			getSupplierCommonSupplierList() {
+				this.$post(this.$supplierCommonSupplierList).then((res) => {
+					if(res.status_code == 0) {
+						this.supplierCommonSupplierList = res.data;
+					}
+				})
+			},
+			detail(e) {
+				let id = e.id;
+				let type = e.tb;
+				let postData = {
+					id: id,
+				}
+				//				2采购退货 3报溢报损 4零售开单零售退货
+				switch(type) {
+					case 1:
+						//仓库入库单
+						this.$post(this.$storageOrderDetail, postData).then((res) => {
+							if(res.status_code == 0) {
+								this.showModel = 2;
+								this.forMation2 = res.data.purInfo; //
+								this.newTableData2 = res.data.shop_list; //
 							} else {
 								this.$message({
 									type: 'error',
-									message: data.message,
-								});
+									message: res.message,
+								})
 							}
-						});
-					} else {
-						console.log('error submit!!');
-						return false;
-					}
-				});
+						})
+						break;
+					case 2:
+						//采购退货
+						this.$post(this.$purchasereturnInfo, postData).then((res) => {
+							if(res.status_code == 0) {
+								this.showModel = 3;
+								this.forMation3 = res.data; //
+								this.newTableData3 = res.data.goodsData; //
+							} else {
+								this.$message({
+									type: 'error',
+									message: res.message,
+								})
+							}
+						})
+						break;
+						//报溢报损单
+					case 3:
+						this.$post(this.$inventoryContrastDetail, postData).then((res) => {
+							if(res.status_code == 0) {
+								this.showModel = 4;
+								this.forMation4 = res.data.reserveContrast; //
+								this.newTableData4 = res.data.list; //
+							} else {
+								this.$message({
+									type: 'error',
+									message: res.message,
+								})
+							}
+						})
+						break;
+						//					case 4:
+						//					this.$post(,postData).then((res)=>{
+						//						
+						//					})
+						//					break;
+				}
 			},
-			//选择改变时就触发改变
-			select_class_id(e) {
-				this.options_data = e;
-				//pop()方法出现问题,采用获取数组最后一位的方法
-				this.new_info.class_id = e[e.length - 1];
+			handleSizeChange(val) {
+				this.per_page = val;
+				this.ajaxjson();
 			},
-			//取消添加新的用户
-			cancel_newInfo() {
-				this.new_info_model = false;
+			handleCurrentChange(val) {
+				this.page = val;
+				this.ajaxjson();
 			},
-			cancel_amendInfo() {
-				this.amend_info_model = false;
-			},
-			// 导出Excel
-			exportExcel () {
-				/* generate workbook object from table */
-				var wb = XLSX.utils.table_to_book(document.querySelector('#out-table'))
-				/* get binary string as output */
-				var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: true, type: 'array' })
-				try {
-					FileSaver.saveAs(new Blob([wbout], { type: 'application/octet-stream' }), 'sheetjs.xlsx')
-				} catch (e) { if (typeof console !== 'undefined') console.log(e, wbout) }
-				return wbout
-			},
-			//重置表单
-				resetForm(formData) {
-        // 	this.$nextTick(function() {
-        //   	this.$refs[formData].resetFields();
-		//  })
-			if (this.$refs.formData!==undefined) {
-				this.$refs.formData.resetFields();
+			back() {
+				this.showModel = 1;
 			}
-		  },
-		  // 删除一行
-			 handleDelete(index, row) {
-                this.idx = index;
-                this.delVisible = true;
-		},
-			 // 确定删除
-        deleteRow(){
-                this.data.splice(this.idx, 1);
-                this.$message.success('删除成功');
-                this.delVisible = false;
-		},
-		 handleEdit(index, row) {
-                this.idx = index;
-                const item = this.data[index];
-                this.form = {
-                    name: item.name,
-                    date: item.date,
-                    address: item.address
-                }
-                this.editVisible = true;
-        },
-			//修改名称
-			amend(e) {
-				//重新获取商品的信息
-				this.get_options();
-				let postData = {
-					brand_id: e,
-				};
-				this.$post("/brand/info", postData).then((res) => {
-					let data = res;
-					if(data.status_code == 0) {
-						this.amend_info = data.data;
-						let str = data.data.gc_parent_str;
-						let arr = str.split('->');
-						let new_arr = [];
-						//选择默认的选择的一定要和options对应的类型保持一致
-						for(let i = 0; i < arr.length; i++) {
-							new_arr.push(Number(arr[i]));
-						}
-						this.defaultOption = new_arr;
-						this.amend_info_model = true; //选择级显示
-					} else {
-						this.$message({
-							type: 'error',
-							message: data.message,
-						});
-					}
-				});
-			},
-			//多选操作取值id
-			SelectionChange(val) {
-				let arrays = [];
-				for(let i = 0; i < val.length; i++) {
-					arrays.push(val[i].brand_id);
-				};
-				this.multipleSelection = arrays;
-			},
-			//多选删除
-			muchDelete() {
-				this.$delete("/brand/delete", {
-					brand_id: this.multipleSelection.join(',')
-				});
-			},
-			//单个删除
-			deletes(e) {
-				this.$delete("/brand/delete", {
-					brand_id: e + '',
-				});
-			},
 		}
 	}
 </script>

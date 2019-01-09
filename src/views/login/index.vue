@@ -64,7 +64,8 @@
 //					username: '13522224444', //平台账号
 //					password: '123456'
 					 username: '15736748889',//店铺账号
-					 password: '123456'
+					 password: '123456',
+					 type:2,
 					// username: '13888888889',//公司账号
 					// password: '123456'
 				},

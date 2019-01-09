@@ -10,6 +10,8 @@ Vue.prototype.$staticGetAddress = Util.apiUrl+"static/getAddress";//三级联动
 Vue.prototype.$qiniu = Util.apiUrl+"config/qiniu";//获取七牛云
 Vue.prototype.$supplierCommonSupplierList = Util.apiUrl+"supplier/commonSupplierList";//获取供应商列表
 Vue.prototype.$staticGetCodeGoods = Util.apiUrl+"static/getCodeGoods";//根据条形码或者货号添加商品
+Vue.prototype.$staticGetCompanyShop = Util.apiUrl+"static/getCompanyShop";//获取公司下面所有的店铺
+Vue.prototype.$storageGetBarCode = Util.apiUrl+"storage/getBarCode";// 仓库管理  获取采购入库单号
 
 //店铺登录信息完善
 Vue.prototype.$userPerfectinfo = Util.apiUrl+"user/perfectinfo";//登录完善信息
@@ -128,25 +130,62 @@ Vue.prototype.$purchaseCost = Util.apiUrl+"purchase/cost";// 采购管理 商品
 Vue.prototype.$purchasereturnList = Util.apiUrl+"purchasereturn/list";// 采购管理 采购退货列表
 Vue.prototype.$purchasereturnAdd = Util.apiUrl+"purchasereturn/add";// 采购管理 新增 获取id
 Vue.prototype.$purchasereturnDelete = Util.apiUrl+"purchasereturn/delete";// 采购管理 新增 获取id
-Vue.prototype.$purchasereturnInfo = Util.apiUrl+"purchasereturn/info";// 采购管理 新增 获取id
+Vue.prototype.$purchasereturnInfo = Util.apiUrl+"purchasereturn/info";// 采购管理 采购退货
 Vue.prototype.$purchasereturnModify = Util.apiUrl+"purchasereturn/modify";// 采购管理 新增 获取id
 Vue.prototype.$purchasereturnAudit = Util.apiUrl+"purchasereturn/audit";// 采购管理  退货
 Vue.prototype.$purchasereturnLoad = Util.apiUrl+"purchasereturn/load";// 采购管理  退货
 
 //仓库管理
 Vue.prototype.$storageList = Util.apiUrl+"storage/list";// 列表
-Vue.prototype.$storageGetBarCode = Util.apiUrl+"storage/getBarCode";// 仓库管理  获取采购入库单号
+
 Vue.prototype.$storageAddOrder = Util.apiUrl+"storage/addOrder";// 仓库管理  新增
 Vue.prototype.$storageConfirmStorage = Util.apiUrl+"storage/confirmStorage";// 仓库管理 确定入库
 Vue.prototype.$storageDelPurchase = Util.apiUrl+"storage/delPurchase";// 仓库管理 入库删除
 Vue.prototype.$storageLoadPurchaseList = Util.apiUrl+"storage/loadPurchaseList";// 仓库管理 入库删除
-Vue.prototype.$storageOrderDetail = Util.apiUrl+"storage/orderDetail";// 仓库管理 入库删除
+Vue.prototype.$storageOrderDetail = Util.apiUrl+"storage/orderDetail";// 仓库管理 详情
 Vue.prototype.$storageImportPurchase = Util.apiUrl+"storage/importPurchase";// 仓库管理 上传文件
 
 //调拨入库
 Vue.prototype.$transferOutList = Util.apiUrl+"transfer/outList";// 仓库管理 调拨入库
 Vue.prototype.$transferOrderDetail = Util.apiUrl+"transfer/orderDetail";// 仓库管理 查看订单的详情
 Vue.prototype.$transferStorageOrder = Util.apiUrl+"transfer/storageOrder";// 仓库管理 确定入库
+
+//调拨出库
+Vue.prototype.$transferStorageOrder = Util.apiUrl+"transfer/addOutOrder";// 仓库管理 调拨添加
+Vue.prototype.$transferEditOutOrder = Util.apiUrl+"transfer/editOutOrder";// 仓库管理 调拨出库
+Vue.prototype.$transferDelOutOrder = Util.apiUrl+"transfer/delOutOrder";// 仓库管理 调拨出库 删除出库单
+Vue.prototype.$transferOperateOutOrder = Util.apiUrl+"transfer/operateOutOrder";// 仓库管理 出库单出库
+
+//在途商品
+Vue.prototype.$transferProcessingShop = Util.apiUrl+"transfer/processingShop";// 仓库管理 出库单出库
+
+//库存盘点
+Vue.prototype.$inventoryList = Util.apiUrl+"inventory/list";//列表
+Vue.prototype.$inventoryAllReserve = Util.apiUrl+"inventory/allReserve";//全盘的时候 获取所有的列表
+Vue.prototype.$inventoryAddInventory = Util.apiUrl+"inventory/addInventory";//全盘的时候 添加
+Vue.prototype.$inventoryBalance = Util.apiUrl+"inventory/balance";// 提交
+Vue.prototype.$inventoryShopDetail = Util.apiUrl+"inventory/shopDetail";// 编辑获取详情
+Vue.prototype.$inventoryEditInventory = Util.apiUrl+"inventory/editInventory";// 编辑 提交
+Vue.prototype.$inventoryInventoryDel = Util.apiUrl+"inventory/inventoryDel";// 删除
+
+//报溢单
+Vue.prototype.$inventoryContrastList = Util.apiUrl+"inventory/contrastList";//报溢报损单列表
+Vue.prototype.$inventoryContrastDetail = Util.apiUrl+"inventory/contrastDetail";//详情
+Vue.prototype.$inventoryAddContrast = Util.apiUrl+"inventory/addContrast";//增加
+Vue.prototype.$inventoryConfirmContrast = Util.apiUrl+"inventory/confirmContrast";//确定报溢报损
+
+//库存列表
+Vue.prototype.$inventoryReserveList= Util.apiUrl+"inventory/reserveList";//确定报溢报损
+Vue.prototype.$inventoryReserveExport= Util.apiUrl+"inventory/reserveExport";//确定报溢报损
+
+//销售管理
+Vue.prototype.$retailopenbillToday = Util.apiUrl+"retailopenbill/today";//收银盘点
+
+//零售开票
+Vue.prototype.$retailopenbillGetSeller = Util.apiUrl+"retailopenbill/getSeller";//获取营业员
+Vue.prototype.$retailopenbillAdd = Util.apiUrl+"retailopenbill/add";//新增
+Vue.prototype.$retailopenbillPayInfo = Util.apiUrl+"retailopenbill/payInfo";//结算接口
+Vue.prototype.$retailopenbillComplete= Util.apiUrl+"retailopenbill/complete";//支付接口
 
 // 深copy
 Vue.prototype.$coppyArray = coppyArray;

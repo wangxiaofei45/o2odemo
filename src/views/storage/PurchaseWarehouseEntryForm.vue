@@ -689,7 +689,10 @@
 		   	},
 			//打开新增入库单 时候先获取单据号
 			addPurseMan() {
-				this.$post(this.$storageGetBarCode).then((res) => {
+				let postData = {
+					code:121,
+				}
+				this.$post(this.$storageGetBarCode,postData).then((res) => {
 					if(res.status_code == 0) {
 						this.forMation.document_num = res.data.document_num;
 						this.isShow = 2;
@@ -812,9 +815,8 @@
 						for(let i = 0; i < this.sku_data.length; i++) {
 							if(this.sku_data[i].specnamestr == str) {
 								item = Object.assign(item, this.sku_data[i]);
-								item.discount = this.currentVendor.discounts / 100;
+								item.stock = 1;
 								item.price = item.sku_price / 100;
-								item.unit_price = item.price * item.discount;
 								item.total_price = item.price * item.stock;
 							}
 						}

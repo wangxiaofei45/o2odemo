@@ -4,7 +4,8 @@ import request from '@/utils/request'
 export function loginByUsername(phone, password) {
   const data = {
     phone,
-    password
+    password,
+    type:'2'
   }
   return request({
 //		url: '/user/platformLogin',平台
