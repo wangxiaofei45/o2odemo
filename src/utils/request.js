@@ -187,6 +187,12 @@ Vue.prototype.$retailopenbillAdd = Util.apiUrl+"retailopenbill/add";//新增
 Vue.prototype.$retailopenbillPayInfo = Util.apiUrl+"retailopenbill/payInfo";//结算接口
 Vue.prototype.$retailopenbillComplete= Util.apiUrl+"retailopenbill/complete";//支付接口
 
+//销售管理 销售订单
+Vue.prototype.$retailopenbillList= Util.apiUrl+"retailopenbill/list";//销售订单列表
+Vue.prototype.$retailopenbillinfo= Util.apiUrl+"retailopenbill/info";//销售订单 详情
+Vue.prototype.$retailopenbillReturn= Util.apiUrl+"retailopenbill/return";//销售订单 详情
+Vue.prototype.$retailopenbillUpdate= Util.apiUrl+"retailopenbill/update";//销售订单 更新接口
+
 // 深copy
 Vue.prototype.$coppyArray = coppyArray;
 export function coppyArray(arr) {

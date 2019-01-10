@@ -17,7 +17,7 @@
 			</el-col>
 		</el-row>
 		<div style="padding:20px;">
-				<el-row style="margin-top:20px;margin-bottom:20px;" :gutter="20">
+			<el-row style="margin-top:20px;margin-bottom:20px;" :gutter="20">
 			<el-col :span="4">
 				<el-card shadow="hover" :body-style="{padding: '0px'}">
 					<div class="grid-content grid-con-1">

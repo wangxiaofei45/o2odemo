@@ -25,7 +25,7 @@
 				</el-table-column>
 				<el-table-column prop="document_num" width="200" label="货号" align="center">
 					<template slot-scope="scope">
-						<p @click="detail(scope.row)" style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</p>
+						<span @click="detail(scope.row)" style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</span>
 					</template>
 				</el-table-column>
 				<el-table-column prop="created_at" width="200" label="单据日期" align="center">
@@ -37,6 +37,9 @@
 				<el-table-column prop="num" width="200" label="总数量" align="center">
 				</el-table-column>
 				<el-table-column prop="amount" width="200" label="总金额" align="center">
+					<template slot-scope="scope">
+						<span>{{(scope.row.scope/100).toFixed(2)}}</span>
+					</template>
 				</el-table-column>
 				<el-table-column prop="user_name" label="制单人">
 				</el-table-column>
@@ -106,12 +109,18 @@
 					<el-table-column prop="number" label="数量" width="150" align="center">
 					</el-table-column>
 					<el-table-column prop="price" label="吊牌价" width="200" align="center">
+						<template slot-scope="scope">
+							<span>{{(scope.row.price/100).toFixed(2)}}</span>
+						</template>
 					</el-table-column>
 					<el-table-column prop="inventory_number" label="盘点数量" width="150" align="center">
 					</el-table-column>
 					<el-table-column prop="contrast_number" label="盘亏数量" width="200" align="center">
 					</el-table-column>
 					<el-table-column prop="contrast_money" label="盘亏金额" align="center">
+						<template slot-scope="scope">
+							<span>{{(scope.row.contrast_money/100).toFixed(2)}}</span>
+						</template>
 					</el-table-column>
 				</el-table>
 			</div>
@@ -176,17 +185,23 @@
 					</el-table-column>
 					<el-table-column prop="tag_price" label="吊牌价" width="100" align="center">
 						<template slot-scope="scope">
-							<p>{{scope.row.tag_price/100}}</p>
+							<span>{{(scope.row.tag_price/100).toFixed(2)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column prop="discount" label="折扣" width="100" align="center">
 						<template slot-scope="scope">
-							<p>{{scope.row.discount/100}}</p>
+							<span>{{scope.row.discount/100}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column prop="unit_price" label="采购价" width="100" align="center">
+						<template slot-scope="scope">
+							<span>{{(scope.row.unit_price/100).toFixed(2)}}</span>
+						</template>
 					</el-table-column>
 					<el-table-column prop="count_money" label="小计" align="center">
+						<template slot-scope="scope">
+							<span>{{(scope.row.count_money/100).toFixed(2)}}</span>
+						</template>
 					</el-table-column>
 				</el-table>
 			</div>
@@ -254,12 +269,21 @@
 					<el-table-column prop="stock" label="数量" width="150" align="center">
 					</el-table-column>
 					<el-table-column prop="price" label="吊牌价" width="150" align="center">
+						<template slot-scope="scope">
+							<span>{{(scope.row.price/100).toFixed(2)}}</span>
+						</template>
 					</el-table-column>
 					<el-table-column prop="discount" label="折扣" width="150" align="center">
 					</el-table-column>
 					<el-table-column prop="unit_price" label="采购价" width="150" align="center">
+						<template slot-scope="scope">
+							<span>{{(scope.row.unit_price/100).toFixed(2)}}</span>
+						</template>
 					</el-table-column>
 					<el-table-column prop="total_price" label="小计" align="center">
+						<template slot-scope="scope">
+							<span>{{(scope.row.total_price/100).toFixed(2)}}</span>
+						</template>
 					</el-table-column>
 				</el-table>
 			</div>

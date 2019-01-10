@@ -74,6 +74,9 @@
 					<el-table-column prop="barcode" label="条形码" fixed width="150" align="center">
 					</el-table-column>
 					<el-table-column prop="norm" label="商品名称规格" width="150" align="center">
+						<template slot-scope="scope">
+							{{scope.row.goods_name}},{{scope.row.specnamestr}}
+						</template>
 					</el-table-column>
 					<el-table-column prop="stock" label="数量" width="150" align="center">
 						<template slot-scope="scope">
@@ -82,7 +85,7 @@
 					</el-table-column>
 					<el-table-column prop="price" label="吊牌价" width="150" align="center">
 						<template slot-scope="scope">
-							<span>{{scope.row.price/100}}</span>
+							<span>{{(scope.row.price/100).toFixed(2)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column prop="discount" width="150" label="折扣" align="center">
@@ -92,12 +95,12 @@
 					</el-table-column>
 					<el-table-column prop="unit_price" width="150" label="折后价" align="center">
 						<template slot-scope="scope">
-							<span>{{scope.row.unit_price/100}}</span>
+							<span>{{(scope.row.unit_price/100).toFixed(2)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column prop="total_price" label="小计">
 						<template slot-scope="scope">
-							<span>{{scope.row.total_price/100}}</span>
+							<span>{{(scope.row.total_price/100).toFixed(2)}}</span>
 						</template>
 					</el-table-column>
 					<!--真实金额  datas.total_really_money = 0;-->
@@ -274,7 +277,7 @@
 				this.$post(this.$staticGetCodeGoods, postData).then((res) => {
 							if(res.status_code == 0) {
 								let datas = res.data;
-								datas.norm = datas.goods_name+','+datas.specnamestr;//商品名称
+								datas.norm = datas.specnamestr;//商品名称
 								datas.stock = 1;//数量
 								datas.price = datas.sku_price;//吊牌价
 								datas.discount = 1.00;
@@ -316,6 +319,9 @@
 			closeAnAbccount() {
 				let postData = this.$objDeepCopy(this.formInline);
 				let arr = this.$coppyArray(this.data);
+				for(let i=0;i<arr.length;i++){
+					arr[i].total_really_money = arr[i].total_really_money/100;
+				}
 				postData.need_pay = this.need_pay;
 				postData.stock = this.stock;
 				postData.phone = '15736789563';
@@ -345,8 +351,13 @@
 					}
 				})
 			},
+			//发起支付
 			pay(){
 				let postData = this.$objDeepCopy(this.accountFrom);
+				let payment_method = postData.payment_method;
+				for(let i=0;i<payment_method.length;i++){
+					payment_method[i].amount = Number(payment_method[i].amount)*100;
+				}
 				postData.payment_method = JSON.stringify(postData.payment_method); 
 				this.$post(this.$retailopenbillComplete,postData).then((res)=>{
 					if(res.status_code == 0){
