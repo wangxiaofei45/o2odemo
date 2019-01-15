@@ -11,7 +11,7 @@ Vue.prototype.$qiniu = Util.apiUrl+"config/qiniu";//获取七牛云
 Vue.prototype.$supplierCommonSupplierList = Util.apiUrl+"supplier/commonSupplierList";//获取供应商列表
 Vue.prototype.$staticGetCodeGoods = Util.apiUrl+"static/getCodeGoods";//根据条形码或者货号添加商品
 Vue.prototype.$staticGetCompanyShop = Util.apiUrl+"static/getCompanyShop";//获取公司下面所有的店铺
-Vue.prototype.$storageGetBarCode = Util.apiUrl+"storage/getBarCode";// 仓库管理  获取采购入库单号
+Vue.prototype.$storageGetBarCode = Util.apiUrl+"storage/getBarCode";// 生成单号
 
 //店铺登录信息完善
 Vue.prototype.$userPerfectinfo = Util.apiUrl+"user/perfectinfo";//登录完善信息
@@ -111,6 +111,10 @@ Vue.prototype.$supplierDelSupplier = Util.apiUrl+"supplier/delSupplier";//删除
 Vue.prototype.$supplierEditSupplier = Util.apiUrl+"supplier/editSupplier";//删除供应商
 
 //商品管理 商品注册
+//商品管理 列表
+Vue.prototype.$goodsList = Util.apiUrl+"goods/list";// 商品注册 商品列表
+Vue.prototype.$goodsEdit = Util.apiUrl+"goods/edit";// 商品注册 商品详情
+//商品管理 添加
 Vue.prototype.$goodsclassGetlist = Util.apiUrl+"goodsclass/getlist";// 商品注册 获取分类
 Vue.prototype.$goodsbrandGetlist = Util.apiUrl+"goodsbrand/getlist";// 商品注册 品牌列表
 Vue.prototype.$goodsGetattribute = Util.apiUrl+"goods/getattribute";// 商品注册 品牌列表
@@ -193,6 +197,64 @@ Vue.prototype.$retailopenbillinfo= Util.apiUrl+"retailopenbill/info";//销售订
 Vue.prototype.$retailopenbillReturn= Util.apiUrl+"retailopenbill/return";//销售订单 详情
 Vue.prototype.$retailopenbillUpdate= Util.apiUrl+"retailopenbill/update";//销售订单 更新接口
 
+//收银交班表
+Vue.prototype.$cashHandoverHandOver = Util.apiUrl+"cashHandover/handOver";// 销售管理  收银接班交班表
+Vue.prototype.$cashHandoverSaleInfo = Util.apiUrl+"cashHandover/saleInfo";// 销售管理  本班进销数量
+Vue.prototype.$cashHandoverDoHandOver = Util.apiUrl+"cashHandover/doHandOver";// 销售管理  交班
+
+Vue.prototype.$cashHandoverTakeOver = Util.apiUrl+"cashHandover/takeOver";// 销售管理 接班列表
+Vue.prototype.$cashHandoverDoTakeOver = Util.apiUrl+"cashHandover/doTakeOver";// 销售管理 接班确认
+
+//财务管理
+Vue.prototype.$otherCostList = Util.apiUrl+"otherCost/list";// 其他支出单
+Vue.prototype.$otherCostAddDisburseCost = Util.apiUrl+"otherCost/addDisburseCost";// 新增其他支出单
+Vue.prototype.$otherCostDelDisburseCost = Util.apiUrl+"otherCost/delDisburseCost";// 删除其他支出单
+Vue.prototype.$otherCostEditDisburse = Util.apiUrl+"otherCost/editDisburse";// 编辑其他支出单
+//其他收入单
+Vue.prototype.$otherCostRevenueList = Util.apiUrl+"otherCost/revenueList";// 其他收入单列表
+Vue.prototype.$otherCostAddRevenueCost = Util.apiUrl+"otherCost/addRevenueCost";// 其他收入单 新增
+Vue.prototype.$otherCostEditRevenue = Util.apiUrl+"otherCost/editRevenue";// 其他收入单 新增
+
+//定金
+Vue.prototype.$earnestList = Util.apiUrl+"earnest/list";// 定金列表
+Vue.prototype.$earnestDelEarnest = Util.apiUrl+"earnest/delEarnest";// 定金删除
+Vue.prototype.$earnestAdd = Util.apiUrl+"earnest/add";// 定金新增
+Vue.prototype.$earnestEditEarnest = Util.apiUrl+"earnest/editEarnest";// 定金新增
+Vue.prototype.$earnestPayMoney = Util.apiUrl+"earnest/payMoney";// 定金结算
+
+//应付款
+Vue.prototype.$payableList = Util.apiUrl+"payable/list";// 应付款列表
+Vue.prototype.$payablePayableDetail = Util.apiUrl+"payable/payableDetail";// 应付款列表 订单详情
+
+Vue.prototype.$payableReconciliationList = Util.apiUrl+"payable/reconciliationList";// 应付款 对账列表
+Vue.prototype.$payableGetLastTime = Util.apiUrl+"payable/getLastTime";// 应付款 获取上次结存时间
+Vue.prototype.$payablePayableBalance = Util.apiUrl+"payable/payableBalance";// 应付款  结存
+Vue.prototype.$payablePayablePayment = Util.apiUrl+"payable/payablePayment";// 应付款  结存
+
+//获取当前时间
+Vue.prototype.$getData = getData;
+export function getData() {
+		let date = new Date();
+		let Y = date.getFullYear() + '-';
+		let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+		let D = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate()) + ' ';
+		let H = date.getHours() + ":";    
+ 		let m = date.getMinutes()+':'; 
+ 		var s = date.getSeconds();   
+		return Y + M + D + H + m + s;
+};
+//格式化时间戳
+Vue.prototype.$formatTimestamp = formatTimestamp;
+export function formatTimestamp(sj){
+       var now = new Date(sj*1000);
+       var   year=now.getFullYear();    
+         var   month=now.getMonth()+1;    
+         var   date=now.getDate();    
+         var   hour=now.getHours();    
+         var   minute=now.getMinutes();    
+         var   second=now.getSeconds();    
+         return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;    
+   }
 // 深copy
 Vue.prototype.$coppyArray = coppyArray;
 export function coppyArray(arr) {

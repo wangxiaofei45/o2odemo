@@ -1,92 +1,84 @@
 <!--商品注册-->
 <template>
 	<div class="step_con">
-		<el-steps :active="active" align-center>
-			<el-step title="步骤1" description="选择商品分类"></el-step>
-			<el-step title="步骤2" description="填写商品详情	"></el-step>
-		</el-steps>
-		<!--商品添加第一步-->
-		<div class="step_1" v-show="active == 0">
-			<el-row class="contnet_1_title">
-				当前选择:{{show_value}}
-			</el-row>
-			<div class="content_1">
-				<!--第一层循环-->
-				<el-row>
-					<el-col :span="8">一级分类</el-col>
-					<el-col :span="8">二级分类</el-col>
-					<el-col :span="8">品牌分类</el-col>
-				</el-row>
-				<el-row class="content_2">
-					<el-col :span="8" class="content_3">
-						<div v-bind:class="[isActive == index ? actives : '', select]" v-for="(i,index) in list_1_options" @click="select_1(i,index)" :key="i.value">
-							{{i.name}}
-						</div>
-					</el-col>
-					<!--第二层循环-->
-					<el-col :span="8" class="content_3">
-						<div v-bind:class="[isActive_2 == index_2 ? actives : '', select]" v-for="(j,index_2) in list_2_options" @click="select_2(j,index_2)" :key="j.value">
-							{{j.name}}
-						</div>
-					</el-col>
-					<!--第三层循环-->
-					<el-col :span="8" class="content_3">
-						<el-row>
-							<div v-bind:class="[isActive_3 == index_3 ? actives : '', select]" class="select" v-for="(z,index_3) in brandlist" @click="select_3(z,index_3)" :key="z.brand_id">
-								{{z.brand_name}}
-							</div>
-						</el-row>
-						<!--<el-button type="primary">申请添加品牌</el-button>-->
-					</el-col>
-
-				</el-row>
-			</div>
-			<el-row>
-				<el-col :span="8" :offset="8">
-					<el-button type="primary" style="width: 100%;" @click="next(1)">
-						下一步
+		<!--列表页-->
+		<div class="tablist" v-show="showModel == 1">
+			<el-row style="margin-bottom: 15px;">
+				<el-col :span="12">
+					<el-button @click="addGoods" type="primary">
+						新增
+					</el-button>
+				</el-col>
+				<el-col :span="12" style="text-align: right;">
+					<el-button type="primary">
+						导入
 					</el-button>
 				</el-col>
 			</el-row>
+			<el-table :data="tableData" border style="width: 100%">
+				<el-table-column type="index" label="序号" width="80" align="center">
+				</el-table-column>
+				<el-table-column type="index" label="商品主图" width="120">
+					<template slot-scope="scope">
+						<img style="height: 40px;" :src="scope.row.image_url" />
+					</template>
+				</el-table-column>
+				<el-table-column prop="freight_number" label="货号" width="150" align='center'>
+					<template slot-scope="scope">
+						<span style="cursor:pointer;color: #18CCBA" @click="edit(scope.row.id)">{{scope.row.freight_number}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column prop="goods_name" label="商品名称" width="200" align='center'>
+				</el-table-column>
+				<el-table-column prop="min_price" label="最小价格" width="90" align='center'>
+				</el-table-column>
+				<el-table-column prop="max_price" label="最大价格" width="90" align='center'>
+				</el-table-column>
+				<el-table-column prop="p_category_name" label="一级分类" width="150" align='center'>
+				</el-table-column>
+				<el-table-column prop="category_name" label="二级分类" width="150" align='center'>
+				</el-table-column>
+				<el-table-column prop="brand_name" label="品牌">
+				</el-table-column>
+			</el-table>
+			<div class="block" style="padding: 15px; background-color: #fff;">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total">
+				</el-pagination>
+			</div>
 		</div>
-		<div class="step_2" v-show="active == 1">
+		<!--编辑-->
+		<div v-show="showModel == 3">
+			<el-row class="model_title">
+				<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
+					修改
+				</el-col>
+				<el-col :span="12" style="text-align: right;">
+					<el-button type="text" @click="back">
+						<svg-icon icon-class="cancel" />
+					</el-button>
+				</el-col>
+			</el-row>
 			<div class="form">
-				<el-form :model="fromItem" ref="fromItem" :rules="rulefromItem" label-width="80px">
-					<!--锚点-->
-					<el-row class="aAnchor">
-						<a href="javascript:void(0)" @click="goAnchor('basicMessage')">
-							<el-col v-bind:class="[titleActive == 'basicMessage' ? activeClass : '',list]" :span="2">
-								基本信息
-							</el-col>
-						</a>
-						<a href="javascript:void(0)" @click="goAnchor('salesMessage')">
-							<el-col v-bind:class="[titleActive == 'salesMessage' ? activeClass : '',list]" :span="2">销售信息</el-col>
-						</a>
-						<a href="javascript:void(0)" @click="goAnchor('imgMessage')">
-							<el-col v-bind:class="[titleActive == 'imgMessage' ? activeClass : '',list]" :span="2">图文描述</el-col>
-						</a>
-					</el-row>
-					<!--锚点-->
+				<el-form :model="amendInfo" ref="amendInfo" :rules="rulefromItem" label-width="80px">
 					<el-row class="step2_info">
 						<el-row class="step2_info_1">
 							<el-row class="content_2_title" id="basicMessage">
 								基本信息
 							</el-row>
 							<el-form-item label="商品分类" prop="good_class">
-								<el-input v-model="show_value" style="width: 200px;" disabled></el-input>
+								<el-input v-model="amendInfo.categoryName" style="width: 200px;" disabled></el-input>
 							</el-form-item>
 							<el-form-item label="商品名称" prop="goods_name">
-								<el-input v-model="fromItem.goods_name" style="width: 200px;" placeholder="请输入"></el-input>
+								<el-input v-model="amendInfo.goods_name" style="width: 200px;" placeholder="请输入" disabled></el-input>
 								<div class="hint">商品标题名称长度至少3个字符,最长50个汉字</div>
 							</el-form-item>
 							<el-form-item label="货号" prop="freight_number">
-								<el-input v-model="fromItem.freight_number" style="width: 200px;" placeholder="请输入" maxlength="8"></el-input>
+								<el-input v-model="amendInfo.freight_number" style="width: 200px;" placeholder="请输入" maxlength="8" disabled></el-input>
 								<div class="hint">货号最长8位</div>
 							</el-form-item>
 							<el-form-item label="类目属性">
 								<div class="hint">商品标题名称长度至少3个字符,最长50个汉字</div>
 							</el-form-item>
-							
 							<el-row class="type">
 								<el-col :span="12" v-for="(item,index) in categoryAttributes" :key="item.id">
 									<el-form-item :label="item.name">
@@ -183,7 +175,7 @@
 										</template>
 									</el-table-column>
 								</el-table>
-								<el-form-item label="商品库存" prop="stock">
+								<el-form-item style="margin-top: 15px;" label="商品库存" prop="stock">
 									<el-input v-model="good_info.stock" style="width: 200px;" disabled></el-input>
 								</el-form-item>
 							</el-row>
@@ -205,12 +197,247 @@
 								</div>
 							</el-form-item>
 						</el-row>
+						<el-row class="submit">
+							<el-col :sapn="24" style="text-align: center;">
+								<el-button type="primary" @click="submit" style='width: 400px;'>
+									提交
+								</el-button>
+							</el-col>
+						</el-row>
+
 					</el-row>
 				</el-form>
 			</div>
-			<el-button type="primary" @click="submit">
-				提交
-			</el-button>
+		</div>
+		<!--商品新增-->
+		<div v-show="showModel == 2">
+			<el-row class="model_title">
+				<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
+					新增商品
+				</el-col>
+				<el-col :span="12" style="text-align: right;">
+					<el-button type="text" @click="back">
+						<svg-icon icon-class="cancel" />
+					</el-button>
+				</el-col>
+			</el-row>
+			<el-steps :active="active" align-center>
+				<el-step title="步骤1" description="选择商品分类"></el-step>
+				<el-step title="步骤2" description="填写商品详情	"></el-step>
+			</el-steps>
+			<!--商品添加第一步-->
+			<div class="step_1" v-show="active == 0">
+				<el-row class="contnet_1_title">
+					当前选择:{{show_value}}
+				</el-row>
+				<div class="content_1">
+					<!--第一层循环-->
+					<el-row>
+						<el-col :span="8">一级分类</el-col>
+						<el-col :span="8">二级分类</el-col>
+						<el-col :span="8">品牌分类</el-col>
+					</el-row>
+					<el-row class="content_2">
+						<el-col :span="8" class="content_3">
+							<div v-bind:class="[isActive == index ? actives : '', select]" v-for="(i,index) in list_1_options" @click="select_1(i,index)" :key="i.value">
+								{{i.name}}
+							</div>
+						</el-col>
+						<!--第二层循环-->
+						<el-col :span="8" class="content_3">
+							<div v-bind:class="[isActive_2 == index_2 ? actives : '', select]" v-for="(j,index_2) in list_2_options" @click="select_2(j,index_2)" :key="j.value">
+								{{j.name}}
+							</div>
+						</el-col>
+						<!--第三层循环-->
+						<el-col :span="8" class="content_3">
+							<el-row>
+								<div v-bind:class="[isActive_3 == index_3 ? actives : '', select]" class="select" v-for="(z,index_3) in brandlist" @click="select_3(z,index_3)" :key="z.brand_id">
+									{{z.brand_name}}
+								</div>
+							</el-row>
+							<!--<el-button type="primary">申请添加品牌</el-button>-->
+						</el-col>
+
+					</el-row>
+				</div>
+				<el-row>
+					<el-col :span="8" :offset="8">
+						<el-button type="primary" style="width: 100%;" @click="next(1)">
+							下一步
+						</el-button>
+					</el-col>
+				</el-row>
+			</div>
+			<div class="step_2" v-show="active == 1">
+				<div class="form">
+					<el-form :model="fromItem" ref="fromItem" :rules="rulefromItem" label-width="80px">
+						<!--锚点-->
+						<el-row class="aAnchor">
+							<a href="javascript:void(0)" @click="goAnchor('basicMessage')">
+								<el-col v-bind:class="[titleActive == 'basicMessage' ? activeClass : '',list]" :span="2">
+									基本信息
+								</el-col>
+							</a>
+							<a href="javascript:void(0)" @click="goAnchor('salesMessage')">
+								<el-col v-bind:class="[titleActive == 'salesMessage' ? activeClass : '',list]" :span="2">销售信息</el-col>
+							</a>
+							<a href="javascript:void(0)" @click="goAnchor('imgMessage')">
+								<el-col v-bind:class="[titleActive == 'imgMessage' ? activeClass : '',list]" :span="2">图文描述</el-col>
+							</a>
+						</el-row>
+						<!--锚点-->
+						<el-row class="step2_info">
+							<el-row class="step2_info_1">
+								<el-row class="content_2_title" id="basicMessage">
+									基本信息
+								</el-row>
+								<el-form-item label="商品分类" prop="good_class">
+									<el-input v-model="show_value" style="width: 200px;" disabled></el-input>
+								</el-form-item>
+								<el-form-item label="商品名称" prop="goods_name">
+									<el-input v-model="fromItem.goods_name" style="width: 200px;" placeholder="请输入"></el-input>
+									<div class="hint">商品标题名称长度至少3个字符,最长50个汉字</div>
+								</el-form-item>
+								<el-form-item label="货号" prop="freight_number">
+									<el-input v-model="fromItem.freight_number" style="width: 200px;" placeholder="请输入" maxlength="8"></el-input>
+									<div class="hint">货号最长8位</div>
+								</el-form-item>
+								<el-form-item label="类目属性">
+									<div class="hint">商品标题名称长度至少3个字符,最长50个汉字</div>
+								</el-form-item>
+
+								<el-row class="type">
+									<el-col :span="12" v-for="(item,index) in categoryAttributes" :key="item.id">
+										<el-form-item :label="item.name">
+											<el-select v-model="item.modelName" placeholder="请选择">
+												<el-option v-for="(j,z) in item.child" :label="j.name" :value="j.id" :key="j.id">
+												</el-option>
+											</el-select>
+										</el-form-item>
+									</el-col>
+								</el-row>
+							</el-row>
+							<!--第二部分-->
+							<el-row class="step2_info_2">
+								<el-row class="content_2_title" id="salesMessage">
+									销售信息
+								</el-row>
+								<el-row>
+									<el-form-item label="颜色分类">
+										<div class="hint">选择标准色可增加搜索/导购机会,标准色还可以填写颜色备注行信息(偏深,偏亮等)</div>
+										<!--修改-->
+										<div class="selectColor" v-for="(item,index) in centerColor">
+											<el-input @focus="showColor(item,index)" @blur="closeColor(item,index)" v-model="item.colorName" style="width: 200px;" placeholder="选择或输入主色"></el-input>
+											<el-input style="width: 200px; height: 36px;" v-model="item.colorRemark" placeholder="备注(如偏深偏浅等)"></el-input>
+											<img v-if="item.showImg" style="width: 36px;height: 36px;position: absolute;top: auto; margin-left: 15px;" :src="item.showImg" />
+											<el-upload v-else style="display: inline-block" :multiple="true" action="http://up.qiniu.com/" accept="image/jpeg,image/gif,image/png,image/bmp" :data="postData" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+												<el-button size="small" type="primary" @click="upLoadListImg(item,index)">上传图片</el-button>
+											</el-upload>
+											<!--定位元素-->
+											<div class="colorArr" v-show="showColorModel == index">
+												<!--<div class="colorArr">-->
+												<!--左边的鼠标移动上去-->
+												<div class="left">
+													<div class="list" v-for="(item,index) in colorArrs" :key="item.id" v-bind:class="[showGroupId == item.id ? actives : '', select]" @mouseenter="sidebarHover(item)">
+														<div class="titleColor" :style="{backgroundColor:item.rgb}"></div>
+														<span class="text">{{item.name}}</span>
+													</div>
+												</div>
+												<!--右边的显示-->
+												<div class="right">
+													<p class="title">常用标准颜色</p>
+													<el-row v-for="(item,index) in colorArrs" :key="item.id" v-show="showGroupId==item.id">
+														<el-col :span="6" v-for="(i,j) in item.child" :key="i.name">
+															<div class="list" @mousedown="sureColor(i)">
+																<div class="titleColor" :style="{backgroundColor:i.rgb}"></div>
+																<span class="text">{{i.name}}</span>
+															</div>
+														</el-col>
+													</el-row>
+												</div>
+											</div>
+										</div>
+									</el-form-item>
+									<el-form-item label="尺码">
+										<div class="hint">选择标准尺码可增加搜索/导购机会,标准尺码还可填写尺码备注信息(偏小,偏大等)</div>
+										<div class="size">
+											<el-radio-group v-model="size">
+												<el-radio v-for="(item,index) in sizeArr" :key="item.id" :label="item.id">{{item.name}}</el-radio>
+											</el-radio-group>
+										</div>
+										<div class="diySize">
+											<el-input placeholder="请输入自定义项" v-model="customSize" style="width: 200px;"></el-input>
+											<el-button @click="customAdd">添加</el-button>
+										</div>
+										<div class="check_group" v-for="(item,index) in sizeArr" :key="item.value">
+											<div v-show="item.id == size">
+												<el-checkbox-group v-model="checkedSize" style="width: 800px;">
+													<el-checkbox style="width: 140px;padding: 0px;margin: 0px;" v-for="j in item.child" :label="j.name" :key="j.id" @change="uniterming(j,item)">{{j.name}}
+														<!--<el-input v-show="j.checked" style="width: 90px;" size="mini" placeholder="请输入备注"></el-input>-->
+													</el-checkbox>
+												</el-checkbox-group>
+											</div>
+										</div>
+									</el-form-item>
+									<!--总数量-->
+									<!--:span-method="objectSpanMethod"-->
+									<el-table :data="fromTable" max-height="600" border style="width: 760px;" v-show="fromTable.length">
+										<el-table-column prop="colorName" label="颜色" width="80">
+										</el-table-column>
+										<el-table-column prop="size" label="尺码" width="80">
+										</el-table-column>
+										<el-table-column prop="sku_price" label="价格" width="200" align="center">
+											<template slot-scope="scope">
+												<el-input v-model="scope.row.sku_price"></el-input>
+											</template>
+										</el-table-column>
+										<el-table-column prop="stock" label="库存" width="200" align="center">
+											<template slot-scope="scope">
+												<el-input v-model="scope.row.stock"></el-input>
+											</template>
+										</el-table-column>
+										<el-table-column prop="shop_code" label="商家编码" width="200" align="center">
+											<template slot-scope="scope">
+												<el-input v-model="scope.row.shop_code"></el-input>
+											</template>
+										</el-table-column>
+									</el-table>
+									<el-form-item style="margin-top: 15px;" label="商品库存" prop="stock">
+										<el-input v-model="good_info.stock" style="width: 200px;" disabled></el-input>
+									</el-form-item>
+								</el-row>
+							</el-row>
+							<!--第三部分-->
+							<el-row class="step2_info_3">
+								<el-row class="content_2_title" id="imgMessage">
+									图文描述
+								</el-row>
+								<el-form-item label="商品图片">
+									<div class="hint">商品主图不能超过1mb,建议尺寸700*700像素</div>
+									<div v-for="(item,index) in imageUrl_1" :key="index" style="float: left;margin-right: 15px;">
+										<el-upload class="avatar-uploader" :multiple="true" action="http://up.qiniu.com/" accept="image/jpeg,image/gif,image/png,image/bmp" :data="postData" :show-file-list="false" :on-success="handleAvatarSuccess_1" :before-upload="beforeAvatarUpload">
+											<img v-if="item.showImg" :src="item.showImg" class="avatar">
+											<div v-else class="upload_img" @click="upList(index)">
+												上传图片
+											</div>
+										</el-upload>
+									</div>
+								</el-form-item>
+							</el-row>
+							<el-row class="submit">
+								<el-col :sapn="24" style="text-align: center;">
+									<el-button type="primary" @click="submit" style='width: 400px;'>
+										提交
+									</el-button>
+								</el-col>
+							</el-row>
+
+						</el-row>
+					</el-form>
+				</div>
+			</div>
+
 		</div>
 	</div>
 </template>
@@ -218,19 +445,25 @@
 	export default {
 		data() {
 			return {
+				tableData: [],
+				total: 0,
+				page: 1, //分页
+				per_page: 20, //每页几条
+				showModel: 3, //显示列表新增 修改 
+				amendInfo: {}, //修改信息
 				//提交的数据
 				fromItem: {
 					category_id: '', //分类Id
 					brand_id: '', //品牌Id
 					goods_name: '', //商品名称
-					freight_number:'',//货号
-					basic_attr_value:'',//类目属性 字符串
-					sale_attr_value:'',//销售属性
-					stock:'1',			
-					skuData:'',//
-					imgData:['','','','',''],//图片信息
-					min_price:'1',//价格最小值
-					max_price:'100',//价格最大值
+					freight_number: '', //货号
+					basic_attr_value: '', //类目属性 字符串
+					sale_attr_value: '', //销售属性
+					stock: '1',
+					skuData: '', //
+					imgData: ['', '', '', '', ''], //图片信息
+					min_price: '1', //价格最小值
+					max_price: '100', //价格最大值
 				},
 				rulefromItem: {
 					goods_name: [{
@@ -238,7 +471,7 @@
 						message: '请输入商品名称',
 						trigger: 'blur'
 					}],
-					freight_number:[{
+					freight_number: [{
 						required: true,
 						message: '请输入货号',
 						trigger: 'blur'
@@ -266,7 +499,7 @@
 				showValue: '', //点击选择颜色的时候
 				amendIndex: '', //点击选择的中间变量
 				amendItem: '', //点击选择的中间Item变量
-				salesProperty:'',//提交时组装销售信息中介项
+				salesProperty: '', //提交时组装销售信息中介项
 				//颜色组
 				colorArrs: [],
 				//选择颜色
@@ -275,9 +508,9 @@
 					color: "",
 					colorName: '',
 					colorRemark: '',
-					color_attr_name:'',
-					color_attr_id:'',
-					id:'',
+					color_attr_name: '',
+					color_attr_id: '',
+					id: '',
 					imgUrl: '',
 					showImg: '',
 				}, ],
@@ -286,7 +519,7 @@
 				size: 1,
 				checkedSize: [], //选择之后的尺码
 				sizeArr: [], //尺码组
-				centerSizeArr:[],//判断的尺码组
+				centerSizeArr: [], //判断的尺码组
 				checkList: [], //选择时候 的选择框
 				fromTable: [], //最终提交的数据
 				select: 'select',
@@ -302,8 +535,18 @@
 				active: 0,
 				//第二层添加图片
 				postData: {}, //上传图片时携带的其他的数据
-				UploadImgNumber:'',//上传图片时候 的控制
-				imageUrl_1: [{showImg:''},{showImg:''},{showImg:''},{showImg:''},{showImg:''}], // 图片上传完成后显示出来的照片
+				UploadImgNumber: '', //上传图片时候 的控制
+				imageUrl_1: [{
+					showImg: ''
+				}, {
+					showImg: ''
+				}, {
+					showImg: ''
+				}, {
+					showImg: ''
+				}, {
+					showImg: ''
+				}], // 图片上传完成后显示出来的照片
 				//添加商品信息
 				rowList: [],
 				spanArr: [],
@@ -314,10 +557,91 @@
 		created() {
 			this.getListOne(); //首次进来 获取列表第一级列表
 			this.get_qiniu_token(); //获取七牛上传信息
-			
+			this.getGoodsList();
+
+			this.edit();
 		},
 		//计算属性
 		methods: {
+			//打开添加
+			addGoods() {
+				this.showModel = 2;
+			},
+			//取消添加
+			back() {
+				this.showModel = 1;
+			},
+			//打开编辑
+			edit(e) {
+				//展示显示
+				let postData = {
+					id: 31,
+				}
+				this.$post(this.$goodsEdit, postData).then((res) => {
+					if(res.status_code == 0) {
+						let basic_attr_value = res.data.basic_attr_value;
+						let arr = JSON.parse(basic_attr_value);
+						//这里去秦秋该类目下面的类目属性
+						let postDatas = {
+							type: 2,
+							class_id: res.data.category_id,
+						};
+						this.$post(this.$goodsGetattribute, postDatas).then((res) => {
+							if(res.status_code == 0) {
+								let centerArr = res.data;
+								for(let i = 0; i < centerArr.length; i++) {
+									for(let j = 0; j < arr.length; j++) {
+										if(arr[j].id == centerArr[i].id) {
+											centerArr[i].modelName = arr[j].data[0].id;
+										} 
+									}
+								}
+								this.categoryAttributes = centerArr;//中间变量获取类目属性时从中获取
+								this.showModel = 3;
+							} else {
+								this.$message({
+									type: 'error',
+									message: res.message,
+								})
+							}
+						})
+						this.amendInfo = res.data;
+						
+
+					} else {
+						this.$message({
+							type: 'error',
+							message: res.message,
+						})
+					}
+				})
+			},
+			//首页获取商品的列表
+			getGoodsList() {
+				let postData = {
+					page: this.page,
+					per_page: this.per_page,
+				}
+				this.$post(this.$goodsList, postData).then((res) => {
+					if(res.status_code == 0) {
+						this.tableData = res.data.data;
+						this.total = res.data.total;
+					} else {
+						this.$message({
+							type: 'error',
+							message: res.message,
+						})
+					}
+				})
+			},
+			handleSizeChange(val) {
+				this.per_page = val;
+				this.getGoodsList();
+			},
+			handleCurrentChange(val) {
+				this.page = val;
+				this.getGoodsList();
+			},
 			//首次进入获取的第一级的分类
 			getListOne() {
 				let postData = {
@@ -362,9 +686,9 @@
 				this.$post(this.$goodsGetattribute, postData).then((res) => {
 					if(res.status_code == 0) {
 						let centerArr = res.data;
-					    for(let i = 0;i<centerArr.length;i++){
-					    	centerArr[i].modelName = '';
-					    }
+						for(let i = 0; i < centerArr.length; i++) {
+							centerArr[i].modelName = '';
+						}
 						this.categoryAttributes = centerArr;
 					} else {
 						this.$message({
@@ -533,9 +857,9 @@
 						color: "#e4e4e4",
 						colorName: i.name,
 						colorRemark: i.value,
-						color_attr_name:i.attr_name,
-						color_attr_id:i.attr_id,
-						id:i.id,
+						color_attr_name: i.attr_name,
+						color_attr_id: i.attr_id,
+						id: i.id,
 						imgUrl: '',
 						showImg: '',
 					}
@@ -544,9 +868,9 @@
 						color: "#e4e4e4",
 						colorName: i.name,
 						colorRemark: i.value,
-						color_attr_name:i.attr_name,
-						color_attr_id:i.attr_id,
-						id:i.id,
+						color_attr_name: i.attr_name,
+						color_attr_id: i.attr_id,
+						id: i.id,
 						imgUrl: this.centerColor[this.UploadImgIndex].imgUrl,
 						showImg: this.centerColor[this.UploadImgIndex].showImg,
 					}
@@ -563,9 +887,9 @@
 							color: "",
 							colorName: '',
 							colorRemark: '',
-							color_attr_name:'',
-							color_attr_id:'',
-							id:'',
+							color_attr_name: '',
+							color_attr_id: '',
+							id: '',
 							imgUrl: '',
 							showImg: '',
 						};
@@ -588,7 +912,7 @@
 								color: "",
 								colorName: '',
 								colorRemark: '',
-								id:'',
+								id: '',
 								imgUrl: '',
 								showImg: '',
 							};
@@ -621,29 +945,29 @@
 
 			},
 			//选中尺码
-			uniterming(val,item) {
+			uniterming(val, item) {
 				console.log(item);
 				//点击是显示还是隐藏输入框
 				val.checked = !val.checked;
 				let obj = {
-					id:val.id,
-					name:val.name,
-					size_attr_id:val.attr_id,
-					size_attr_name:val.attr_name,
-					size_center_id:item.id,
-					size_center_name:item.name,
+					id: val.id,
+					name: val.name,
+					size_attr_id: val.attr_id,
+					size_attr_name: val.attr_name,
+					size_center_id: item.id,
+					size_center_name: item.name,
 				}
-				if(val.checked){
+				if(val.checked) {
 					this.centerSizeArr.push(obj);
-				}else{
+				} else {
 					let index = '';
-					for(let i =0;i<this.centerSizeArr;i++){
-						if(obj.id == this.centerSizeArr[i].id){
+					for(let i = 0; i < this.centerSizeArr; i++) {
+						if(obj.id == this.centerSizeArr[i].id) {
 							index = i;
 							return;
 						}
 					}
-					this.centerSizeArr.splice(index,1);
+					this.centerSizeArr.splice(index, 1);
 				};
 				this.combination(this.centerColor, this.centerSizeArr);
 			},
@@ -656,9 +980,9 @@
 					for(var i = 0; i < colorArr.length - 1; i++) {
 						let Xindex = {};
 						for(var j = 0; j < sizeArr.length; j++) {
-							colorArr[i].sku_price = '';//价格
-							colorArr[i].stock = '';//库存
-							colorArr[i].shop_code = '';//条形码
+							colorArr[i].sku_price = ''; //价格
+							colorArr[i].stock = ''; //库存
+							colorArr[i].shop_code = ''; //条形码
 							colorArr[i].size = sizeArr[j].name;
 							colorArr[i].sizeId = sizeArr[j].id;
 							colorArr[i].size_attr_id = sizeArr[j].size_attr_id;
@@ -736,7 +1060,7 @@
 				const isLt2M = file.size / 1024 / 1024 < 2;
 				this.postData.key = file.name; //上传时控制文件名
 			},
-			upList(index){
+			upList(index) {
 				this.UploadImgNumber = index;
 				console.log(this.UploadImgNumber);
 			},
@@ -745,7 +1069,6 @@
 				this.imageUrl_1[this.UploadImgNumber].showImg = URL.createObjectURL(file.raw);
 				this.fromItem.imgData[this.UploadImgNumber] = res.key;
 				this.UploadImgNumber = -1;
-				console.log(this.UploadImgNumber,'imageUrl_1',this.imageUrl_1,'this.fromItem.imgData',this.fromItem.imgData);
 			},
 			//提交
 			submit() {
@@ -753,21 +1076,20 @@
 				//类目属性
 				let centerArr = this.$coppyArray(this.categoryAttributes);
 				let Arr1 = [];
-				for(let i=0;i<centerArr.length;i++){
-					
+				for(let i = 0; i < centerArr.length; i++) {
+
 					let obj = {};
 					obj.id = centerArr[i].id;
 					obj.name = centerArr[i].name;
 					obj.data = [];
-					for(let j = 0;j<centerArr[i].child.length;j++){
-						if(centerArr[i].modelName == centerArr[i].child[j].id){
+					for(let j = 0; j < centerArr[i].child.length; j++) {
+						if(centerArr[i].modelName == centerArr[i].child[j].id) {
 							let objs = {
-								id:centerArr[i].child[j].id,
-								name:centerArr[i].child[j].name,
+								id: centerArr[i].child[j].id,
+								name: centerArr[i].child[j].name,
 							};
 							obj.data.push(objs);
-						}else{
-						}
+						} else {}
 					}
 					Arr1.push(obj)
 				}
@@ -777,65 +1099,63 @@
 				let salesProperty = this.salesProperty;
 				let Arr2 = [];
 				let obj1 = {
-					id:salesProperty[0].id,
-					name:salesProperty[0].name,
-					data:[],
+					id: salesProperty[0].id,
+					name: salesProperty[0].name,
+					data: [],
 				};
-				for(let i=0;i<this.centerColor.length-1;i++){
+				for(let i = 0; i < this.centerColor.length - 1; i++) {
 					let obj = {
-						id:this.centerColor[i].id,
-						name:this.centerColor[i].colorName,
+						id: this.centerColor[i].id,
+						name: this.centerColor[i].colorName,
 					}
 					obj1.data.push(obj);
 				};
 				Arr2.push(obj1);
 				let sizeArr = {
-					id:salesProperty[1].id,
-					name:salesProperty[1].name,
-					data:[],
+					id: salesProperty[1].id,
+					name: salesProperty[1].name,
+					data: [],
 				};
-//				sizeArr.data = this.centerSizeArr;
-				for(let i=0;i<this.centerSizeArr.length;i++){
+				for(let i = 0; i < this.centerSizeArr.length; i++) {
 					let obj = {
-						id:this.centerSizeArr.size_center_id,
-						name:this.centerSizeArr.size_center_name,
-						data:[{
-							id:this.centerSizeArr.id,
-							name:this.centerSizeArr.name,
+						id: this.centerSizeArr[i].size_center_id,
+						name: this.centerSizeArr[i].size_center_name,
+
+						data: [{
+							id: this.centerSizeArr[i].id,
+							name: this.centerSizeArr[i].name,
 						}]
 					}
 					sizeArr.data.push(obj);
 				}
 				Arr2.push(sizeArr);
-				
 				postData.sale_attr_value = JSON.stringify(Arr2);
 				//sku组合
 				let fromTable = this.$coppyArray(this.fromTable);
-				for(let i=0;i<fromTable.length;i++){
+				for(let i = 0; i < fromTable.length; i++) {
 					delete fromTable[i].showImg;
 					delete fromTable[i].colorRemark;
 					delete fromTable[i].color;
-					fromTable[i].specnamestr = fromTable[i].colorName+'|'+fromTable[i].size;
-					fromTable[i].sale_attrs = [
-						{
-							attr_id:fromTable[i].color_attr_id,
-							attr_name:fromTable[i].color_attr_name,
-							data:{
-								id:fromTable[i].id,
-								name:fromTable[i].colorName,
+					fromTable[i].specnamestr = fromTable[i].colorName + '|' + fromTable[i].size;
+					fromTable[i].sale_attrs = [{
+							attr_id: fromTable[i].color_attr_id,
+							attr_name: fromTable[i].color_attr_name,
+							data: {
+								id: fromTable[i].id,
+								name: fromTable[i].colorName,
 							}
 						},
 						{
-							attr_id:fromTable[i].size_attr_id,
-							attr_name:fromTable[i].size_attr_name,
-							data:{
-								id:fromTable[i].sizeId,
-								name:fromTable[i].size,
+							attr_id: fromTable[i].size_attr_id,
+							attr_name: fromTable[i].size_attr_name,
+							data: {
+								id: fromTable[i].sizeId,
+								name: fromTable[i].size,
 							}
 						},
 					];
 					fromTable[i].img_url = fromTable[i].imgUrl;
-					fromTable[i].sku_price = fromTable[i].sku_price*100;
+					fromTable[i].sku_price = fromTable[i].sku_price * 100;
 					delete fromTable[i].colorName;
 					delete fromTable[i].color_attr_id;
 					delete fromTable[i].color_attr_name;
@@ -848,9 +1168,13 @@
 				}
 				postData.skuData = JSON.stringify(fromTable);
 				let imgdata = postData.imgData;
-				let obj3 = {default:'',list:[]};
+				let obj3 = {
+					default: '',
+					list: []
+				};
 				obj3.default = imgdata[0];
-				obj3.data = postData.imgData;
+				console.log(imgdata);
+				obj3.list = postData.imgData;
 				postData.imgData = JSON.stringify(obj3);
 				this.$post(this.$goodsAdd, postData).then((res) => {
 					console.log(res);
@@ -869,6 +1193,27 @@
 </script>
 
 <style scoped="scoped">
+	.model_title {
+		border-bottom: 1px solid #d6d6d6;
+		margin-bottom: 20px;
+	}
+	
+	.recharge_title {
+		font-size: 16px;
+		color: #999;
+		padding-left: 20px;
+		margin-bottom: 20px;
+	}
+	
+	.title {
+		margin-bottom: 15px;
+	}
+	
+	.submit {
+		background-color: #FFFFFF;
+		padding: 15px;
+	}
+	
 	.selectColor {
 		position: relative;
 		margin-bottom: 10px;
@@ -956,7 +1301,8 @@
 	/*设置当前页面的背景颜色*/
 	
 	.step_con {
-		background-color: #e0e0e0;
+		background-color: #ffffff;
+		padding: 15px;
 	}
 	/*第二部头部的样式*/
 	

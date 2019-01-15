@@ -62,6 +62,18 @@ export const constantRouterMap = [{
 			import('@/views/login/reminder'),
 		hidden: true
 	},
+	//收银接班
+	{
+			path: '/successionTable',
+			component: () =>
+				import('@/views/sell/successionTable'),
+//			name: 'successionTable',
+//			meta: {
+//				title: 'successionTable',
+//				name:'收银接班表'
+//			}
+			hidden: true
+		},
 	{
 		path: '/auth-redirect',
 		component: () =>
@@ -446,16 +458,16 @@ export const asyncRouterMap = [
 				}
 			},
 			//收银接班表
-			{
-				path: 'successionTable',
-				component: () =>
-					import('@/views/sell/successionTable'),
-				name: 'successionTable',
-				meta: {
-					title: 'successionTable',
-					name:'收银接班表'
-				}
-			},
+//			{
+//				path: 'successionTable',
+//				component: () =>
+//					import('@/views/sell/successionTable'),
+//				name: 'successionTable',
+//				meta: {
+//					title: 'successionTable',
+//					name:'收银接班表'
+//				}
+//			},
 		]
 	},
 	//财务管理
@@ -669,47 +681,8 @@ export const asyncRouterMap = [
 	//			}
 	//		]
 	//	},
-	//	componentsRouter, //权限测试页
-	//	chartsRouter,
-		tableRouter,
-	//	错误日志
-//	{
-//		path: '/excel',
-//		component: Layout,
-//		redirect: '/excel/export-excel',
-//		name: 'Excel',
-//		meta: {
-//			title: 'excel',
-//			icon: 'excel'
-//		},
-//		children: [{
-//				path: 'export-excel',
-//				component: () =>
-//					import('@/views/excel/exportExcel'),
-//				name: 'ExportExcel',
-//				meta: {
-//					title: 'exportExcel'
-//				}
-//			},
-//			{
-//				path: 'export-selected-excel',
-//				component: () =>
-//					import('@/views/excel/selectExcel'),
-//				name: 'SelectExcel',
-//				meta: {
-//					title: 'selectExcel'
-//				}
-//			},
-//			{
-//				path: 'upload-excel',
-//				component: () =>
-//					import('@/views/excel/uploadExcel'),
-//				name: 'UploadExcel',
-//				meta: {
-//					title: 'uploadExcel'
-//				}
-//			}
-//		]
-//	},
+//		componentsRouter, //富文本编辑
+//		chartsRouter,
+//		tableRouter,
 
 ]

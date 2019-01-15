@@ -51,8 +51,8 @@
 									</template>
 								</el-table-column>
 							</el-table>
-							<!--   <div class="show-d">{{ $t('table.dragTips1') }} : &nbsp; {{ oldList }}</div>
-	            <div class="show-d">{{ $t('table.dragTips2') }} : {{ newList }}</div> -->
+							   <div class="show-d">{{ $t('table.dragTips1') }} : &nbsp; {{ oldList }}</div>
+	            <div class="show-d">{{ $t('table.dragTips2') }} : {{ newList }}</div> 
 						</el-col>
 					</el-row>
 				</el-col>
@@ -105,8 +105,8 @@
 									</template>
 								</el-table-column>
 							</el-table>
-							<!--  <div class="show-d">{{ $t('table.dragTips1') }} : &nbsp; {{ oldList2 }}</div>
-	            <div class="show-d">{{ $t('table.dragTips2') }} : {{ newList2 }}</div> -->
+							  <div class="show-d">{{ $t('table.dragTips1') }} : &nbsp; {{ oldList2 }}</div>
+	            <div class="show-d">{{ $t('table.dragTips2') }} : {{ newList2 }}</div> 
 						</el-col>
 					</el-row>
 				</el-col>

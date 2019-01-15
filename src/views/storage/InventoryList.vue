@@ -24,21 +24,39 @@
 				<el-table :data="data" stripe border style="width: 100%;" show-summary :summary-method="getSummaries" size="mini">
 					<el-table-column type="index" label="序号" fixed width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="document_num" label="单据号" fixed width="150" align="center">
+					<el-table-column prop="img_url" label="图片" fixed width="100" align="center">
+						<template slot-scope="scope">
+							<img :src="scope.row.img_url" style="height: 40px;"/>
+						</template>
 					</el-table-column>
-					<el-table-column prop="created_at" label="单据日期" width="150" align="center">
+					<el-table-column prop="goods_name" label="商品名称" fixed width="150" align="center">
 					</el-table-column>
-					<el-table-column prop="shop_name" label="调出店铺" width="100" align="center">
+					<el-table-column prop="freight_number" label="货号" width="150" align="center">
 					</el-table-column>
-					<el-table-column prop="norm" label="商品规格名称" width="150" align="center">
+					<el-table-column prop="norm" label="颜色尺码" width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="total_num" label="数量" width="100" align="center">
+					<el-table-column prop="bar_code" label="条形码" width="150" align="center">
 					</el-table-column>
-					<el-table-column prop="tag_price" label="吊牌价" align="center">
+					<el-table-column prop="reserve_count" label="库存" width="100" align="center">
 					</el-table-column>
-					<el-table-column prop="count_money" label="小计" align="center">
+					<el-table-column prop="stock_price" label="采购价" align="center">
+					</el-table-column>
+					<el-table-column prop="stock_count_money" label="采购合计" align="center">
 						
 					</el-table-column>
+					<el-table-column prop="tag_price" label="吊牌价" align="center">
+						
+					</el-table-column>
+					<el-table-column prop="tag_count_money" label="合计金额" align="center">
+						
+					</el-table-column>
+					<el-table-column prop="brand_name" label="品牌" align="center">
+						
+					</el-table-column>
+					<el-table-column prop="category_name" label="分类" align="center">
+						
+					</el-table-column>
+					
 				</el-table>
 			</div>
 			<div class="block" style="margin-top: 15px;">

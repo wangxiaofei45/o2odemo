@@ -94,7 +94,6 @@
 				},
 				immediate: true
 			}
-
 		},
 		//进入页面
 		created() {},
@@ -121,16 +120,22 @@
 						this.loading = true;
 						this.$store.dispatch('LoginByUsername', this.loginForm).then((res) => {
 							this.loading = false;
-							if(res.dataEnd == 0){
+							console.log(res);
+							if(res.tokenArr.dataEnd == 0){
 								this.$router.push({
 									path:'/reminder'
-								})
-							}else{
+							 	})
+							}else if(res.userInfo.need_take_over){
+								//接班
+								this.$router.push({
+									path:'/successionTable'
+							 	})
+							}
+							else{
 								this.$router.push({
 									path: '/'
 								})
 							}
-
 						}).catch(() => {
 							this.loading = false
 						})

@@ -283,7 +283,6 @@
 				this.$refs[e].validate((valid) => {
 					if(valid) {
 						let postData = objDeepCopy(this.amend_info);
-						console.log(postData);
 						this.$post(this.$organizationRoleUpdate, postData).then((res) => {
 							let data = res;
 							if(data.status_code == 0) {
