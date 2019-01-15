@@ -1,5 +1,6 @@
 <!--收银交班表-->
 <template>
+
 	<div class="tab-container">
 		<div v-show="showModel == 1" class="showModel">
 			<div class="title">
@@ -279,7 +280,7 @@
 	.tab-container {
 		padding: 20px;
 	}
-	
+
 	.elsething {
 		.title {
 			font-size: 14px;
@@ -295,7 +296,6 @@
 		}
 	}
 	/*收支汇总*/
-	
 	.paymentSummary {
 		margin-top: 15px;
 		.title {
@@ -305,8 +305,7 @@
 			box-sizing: border-box;
 		}
 	}
-	/*其他费用汇总*/
-	
+
 	.elsesum {
 		color: #333333;
 		margin-top: 15px;
@@ -324,7 +323,7 @@
 			text-align: center;
 		}
 	}
-	
+
 	.list1 {
 		height: 120px;
 		.content {
@@ -342,7 +341,6 @@
 			}
 		}
 	}
-	
 	.list2,
 	.list4 {
 		height: 120px;
@@ -361,7 +359,6 @@
 			}
 		}
 	}
-	
 	.list3 {
 		height: 120px;
 		.content {
@@ -379,23 +376,25 @@
 			}
 		}
 	}
-	
+
 	.model_title {
 		border-bottom: 1px solid #d6d6d6;
 		margin-bottom: 20px;
 	}
-	
+
 	.recharge_title {
 		font-size: 16px;
 		color: #999;
 		padding-left: 20px;
 		margin-bottom: 20px;
 	}
+
 	
 	.title {
 		margin-bottom: 15px;
 	}
 	
+
 	.search {
 		height: 50px;
 		background: #f4f4f4;
@@ -403,7 +402,7 @@
 		padding: 20px;
 		min-width: 1300px;
 	}
-	
+
 	.search1 {
 		height: 50px;
 		/* background: #f4f4f4; */
@@ -411,18 +410,18 @@
 		padding: 20px;
 		min-width: 1300px;
 	}
-	
+
 	.search span {
 		display: inline-block;
 		margin-left: 50px;
 		margin-top: 30px;
 	}
-	
+
 	.tTable {
 		margin-top: 20px;
 		min-width: 1300px;
 	}
-	
+
 	.total {
 		width: 100%;
 		position: fixed;
@@ -432,7 +431,7 @@
 		background: #f4f4f4;
 		line-height: 38px;
 	}
-	
+
 	.total .totalNum {
 		width: 1200px;
 		display: inline-block;
