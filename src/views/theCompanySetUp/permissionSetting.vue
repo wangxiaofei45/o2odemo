@@ -3,7 +3,7 @@
   <div class="container">
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <div class="title">
-        <el-button type="primary" @click="open_newInfo">新增权限</el-button>
+        <el-button v-show="permission.indexOf('73') != -1" type="primary" @click="open_newInfo">新增权限</el-button>
       </div>
       <el-table :data="data_1" style="width: 100%">
         <el-table-column prop="id" label="Id" width="180">
@@ -12,12 +12,16 @@
         </el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" icon="el-icon-edit" @click="amend(scope.row)">修改</el-button>
-            <el-button size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.id)">删除</el-button>
+            <el-button v-show="permission.indexOf('74') != -1" size="mini" type="primary" icon="el-icon-edit" @click="amend(scope.row)">修改</el-button>
+            <el-button v-show="permission.indexOf('76') != -1" size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-tabs>
+    <div class="block" style="margin-top: 15px;">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total">
+				</el-pagination>
+			</div>
     <!--新增权限-->
     <div class="model" v-show="function_model">
       <div class="model_con">
@@ -63,7 +67,7 @@
       <div class="model_con">
         <el-row class="model_title" align="bottom">
           <el-col :span="8" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
-            修改权限
+                 修改权限
           </el-col>
           <el-col :span="4" :offset="12" style="text-align: right;">
             <el-button type="text" @click="cancel_amend_newInfo">
@@ -105,6 +109,10 @@
 	export default {
 		data() {
 			return {
+				page: 1, //分页
+				total: 0,
+				per_page: 10,
+				permission:[],
 				checkAll: false,
 				checkedCities: ['上海', '北京'],
 				cities: cityOptions,
@@ -147,18 +155,33 @@
 		//页面创建完成后
 		created() {
 			this.ajaxjson(); //请求模板列表的数据
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			//获取权限设置列表
 			ajaxjson() {
-				this.$post(this.$groupList).then((res) => {
+				let postData = {
+					page: this.page,
+					per_page: this.per_page,
+				};
+				this.$post(this.$groupList,postData).then((res) => {
 					let data = res;
 					if(data.status_code == 0) {
-						this.data_1 = data.data;
+						this.total = data.data.total;
+						this.data_1 = data.data.data;
 					} else {}
 				});
 			},
-
+			handleSizeChange(val) {
+				this.per_page = val;
+				this.ajaxjson();
+			},
+			handleCurrentChange(val) {
+				this.page = val;
+				this.ajaxjson();
+			},
 			handleClick(tab, event) {},
 			// 全选
 			handleCheckAllChange(val) {

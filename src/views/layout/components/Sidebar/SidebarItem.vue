@@ -8,12 +8,10 @@
         </el-menu-item>
       </a>
     </template>
-
     <el-submenu v-else :index="item.name||item.path">
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta.icon" :title="item.meta.title" />
       </template>
-
       <template v-for="child in item.children" v-if="!child.hidden">
         <sidebar-item v-if="child.children&&child.children.length>0" :is-nest="true" :item="child" :key="child.path" :base-path="resolvePath(child.path)" class="nest-menu"/>
         <a v-else :href="child.path" :key="child.name" target="_blank" @click="clickLink(child.path,$event)">

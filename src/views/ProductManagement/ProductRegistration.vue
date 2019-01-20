@@ -5,7 +5,8 @@
 		<div class="tablist" v-show="showModel == 1">
 			<el-row style="margin-bottom: 15px;">
 				<el-col :span="12">
-					<el-button @click="addGoods" type="primary">
+					<el-button v-show="permission.indexOf('198') != -1" @click="addGoods" type="primary">
+						<svg-icon icon-class="add" /> 
 						新增
 					</el-button>
 				</el-col>
@@ -15,12 +16,12 @@
 					</el-button>
 				</el-col>
 			</el-row>
-			<el-table :data="tableData" border style="width: 100%">
+			<el-table :data="tableData" border style="width: 100%" :height="tablehight">
 				<el-table-column type="index" label="序号" width="80" align="center">
 				</el-table-column>
 				<el-table-column type="index" label="商品主图" width="120">
 					<template slot-scope="scope">
-						<img style="height: 40px;" :src="scope.row.image_url" />
+						<img style="height: 30px;" :src="scope.row.image_url" />
 					</template>
 				</el-table-column>
 				<el-table-column prop="freight_number" label="货号" width="150" align='center'>
@@ -90,7 +91,6 @@
 								</el-col>
 							</el-row>
 						</el-row>
-						<!--第二部分-->
 						<el-row class="step2_info_2">
 							<el-row class="content_2_title" id="salesMessage">
 								销售信息
@@ -98,98 +98,58 @@
 							<el-row>
 								<el-form-item label="颜色分类">
 									<div class="hint">选择标准色可增加搜索/导购机会,标准色还可以填写颜色备注行信息(偏深,偏亮等)</div>
-									<!--修改-->
-									<div class="selectColor" v-for="(item,index) in centerColor">
-										<el-input @focus="showColor(item,index)" @blur="closeColor(item,index)" v-model="item.colorName" style="width: 200px;" placeholder="选择或输入主色"></el-input>
-										<el-input style="width: 200px; height: 36px;" v-model="item.colorRemark" placeholder="备注(如偏深偏浅等)"></el-input>
-										<img v-if="item.showImg" style="width: 36px;height: 36px;position: absolute;top: auto; margin-left: 15px;" :src="item.showImg" />
+									<div class="selectColor" v-for="(item,index) in amendCenterColor.data">
+										<el-input  v-model="item.name" style="width: 200px;" placeholder="选择或输入主色" disabled></el-input>
+										<el-input style="width: 200px; height: 36px;" v-model="item.colorRemark" placeholder="备注(如偏深偏浅等)" disabled></el-input>
+										<img v-if="item.img" style="width: 36px;height: 36px;position: absolute;top: auto; margin-left: 15px;" :src="item.img" />
 										<el-upload v-else style="display: inline-block" :multiple="true" action="http://up.qiniu.com/" accept="image/jpeg,image/gif,image/png,image/bmp" :data="postData" :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
 											<el-button size="small" type="primary" @click="upLoadListImg(item,index)">上传图片</el-button>
 										</el-upload>
-										<!--定位元素-->
-										<div class="colorArr" v-show="showColorModel == index">
-											<!--<div class="colorArr">-->
-											<!--左边的鼠标移动上去-->
-											<div class="left">
-												<div class="list" v-for="(item,index) in colorArrs" :key="item.id" v-bind:class="[showGroupId == item.id ? actives : '', select]" @mouseenter="sidebarHover(item)">
-													<div class="titleColor" :style="{backgroundColor:item.rgb}"></div>
-													<span class="text">{{item.name}}</span>
-												</div>
-											</div>
-											<!--右边的显示-->
-											<div class="right">
-												<p class="title">常用标准颜色</p>
-												<el-row v-for="(item,index) in colorArrs" :key="item.id" v-show="showGroupId==item.id">
-													<el-col :span="6" v-for="(i,j) in item.child" :key="i.name">
-														<div class="list" @mousedown="sureColor(i)">
-															<div class="titleColor" :style="{backgroundColor:i.rgb}"></div>
-															<span class="text">{{i.name}}</span>
-														</div>
-													</el-col>
-												</el-row>
-											</div>
-										</div>
 									</div>
 								</el-form-item>
 								<el-form-item label="尺码">
 									<div class="hint">选择标准尺码可增加搜索/导购机会,标准尺码还可填写尺码备注信息(偏小,偏大等)</div>
 									<div class="size">
-										<el-radio-group v-model="size">
-											<el-radio v-for="(item,index) in sizeArr" :key="item.id" :label="item.id">{{item.name}}</el-radio>
-										</el-radio-group>
+										<!--这个地方出错-->
+										{{secondInfo.name}}
 									</div>
-									<div class="diySize">
-										<el-input placeholder="请输入自定义项" v-model="customSize" style="width: 200px;"></el-input>
-										<el-button @click="customAdd">添加</el-button>
-									</div>
-									<div class="check_group" v-for="(item,index) in sizeArr" :key="item.value">
-										<div v-show="item.id == size">
-											<el-checkbox-group v-model="checkedSize" style="width: 800px;">
-												<el-checkbox style="width: 140px;padding: 0px;margin: 0px;" v-for="j in item.child" :label="j.name" :key="j.id" @change="uniterming(j,item)">{{j.name}}
-													<!--<el-input v-show="j.checked" style="width: 90px;" size="mini" placeholder="请输入备注"></el-input>-->
-												</el-checkbox>
-											</el-checkbox-group>
-										</div>
+									<div class="check_group" >
+										<el-checkbox-group v-model="checkedSize" style="width: 800px;">
+											<el-checkbox style="width: 140px;padding: 0px;margin: 0px;" v-for="(item,index) in amendCenterSizeArr.arr2" :key="item.id" checked disabled>
+												{{item.name}}
+											</el-checkbox>
+										</el-checkbox-group>
 									</div>
 								</el-form-item>
-								<!--总数量-->
-								<!--:span-method="objectSpanMethod"-->
-								<el-table :data="fromTable" max-height="600" border style="width: 760px;" v-show="fromTable.length">
-									<el-table-column prop="colorName" label="颜色" width="80">
+								<el-table :data="sku_value" max-height="600" border style="width: 760px;" v-show="sku_value.length">
+									<el-table-column prop="attr1Value" label="颜色" width="100" align="center">
 									</el-table-column>
-									<el-table-column prop="size" label="尺码" width="80">
+									<el-table-column prop="attr2Value" label="尺码" width="100" align="center">
 									</el-table-column>
-									<el-table-column prop="sku_price" label="价格" width="200" align="center">
+									<el-table-column prop="sku_price" label="价格" width="160" align="center">
 										<template slot-scope="scope">
-											<el-input v-model="scope.row.sku_price"></el-input>
+											<span>{{scope.row.sku_price/100}}</span>
 										</template>
 									</el-table-column>
 									<el-table-column prop="stock" label="库存" width="200" align="center">
-										<template slot-scope="scope">
-											<el-input v-model="scope.row.stock"></el-input>
-										</template>
 									</el-table-column>
 									<el-table-column prop="shop_code" label="商家编码" width="200" align="center">
-										<template slot-scope="scope">
-											<el-input v-model="scope.row.shop_code"></el-input>
-										</template>
 									</el-table-column>
 								</el-table>
 								<el-form-item style="margin-top: 15px;" label="商品库存" prop="stock">
-									<el-input v-model="good_info.stock" style="width: 200px;" disabled></el-input>
+									<el-input v-model="amendInfo.stock" style="width: 200px;" disabled></el-input>
 								</el-form-item>
 							</el-row>
 						</el-row>
-						<!--第三部分-->
 						<el-row class="step2_info_3">
 							<el-row class="content_2_title" id="imgMessage">
 								图文描述
 							</el-row>
 							<el-form-item label="商品图片">
 								<div class="hint">商品主图不能超过1mb,建议尺寸700*700像素</div>
-								<div v-for="(item,index) in imageUrl_1" :key="index" style="float: left;margin-right: 15px;">
+								<div v-for="(item,index) in amendShowImg" :key="index" style="float: left;margin-right: 15px;">
 									<el-upload class="avatar-uploader" :multiple="true" action="http://up.qiniu.com/" accept="image/jpeg,image/gif,image/png,image/bmp" :data="postData" :show-file-list="false" :on-success="handleAvatarSuccess_1" :before-upload="beforeAvatarUpload">
-										<img v-if="item.showImg" :src="item.showImg" class="avatar">
+										<img v-if="amendShowImg.length" :src="item.image_url" class="avatar">
 										<div v-else class="upload_img" @click="upList(index)">
 											上传图片
 										</div>
@@ -199,7 +159,7 @@
 						</el-row>
 						<el-row class="submit">
 							<el-col :sapn="24" style="text-align: center;">
-								<el-button type="primary" @click="submit" style='width: 400px;'>
+								<el-button type="primary" @click="amend" style='width: 400px;'>
 									提交
 								</el-button>
 							</el-col>
@@ -445,11 +405,14 @@
 	export default {
 		data() {
 			return {
+				permission:[],
+				clientHeight: document.documentElement.clientHeight,
+				tablehight: document.documentElement.clientHeight - 220, //表格高度
 				tableData: [],
 				total: 0,
 				page: 1, //分页
-				per_page: 20, //每页几条
-				showModel: 3, //显示列表新增 修改 
+				per_page: 10, //每页几条
+				showModel: 1, //显示列表新增 修改 
 				amendInfo: {}, //修改信息
 				//提交的数据
 				fromItem: {
@@ -477,6 +440,7 @@
 						trigger: 'blur'
 					}]
 				},
+				sku_value:[],//修改选择时候的sku表格
 				good_info: {
 					goods_images: [], //商品图片
 				},
@@ -514,6 +478,10 @@
 					imgUrl: '',
 					showImg: '',
 				}, ],
+				amendCenterColor:[],//修改时候的显示颜色的数组
+				amendCenterSizeArr:[],//修改时候的选择的size
+				amendShowImg:[],
+				secondInfo:{},//
 				//选择尺码
 				customSize: '',
 				size: 1,
@@ -558,8 +526,17 @@
 			this.getListOne(); //首次进来 获取列表第一级列表
 			this.get_qiniu_token(); //获取七牛上传信息
 			this.getGoodsList();
-
-			this.edit();
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
+		},
+		mounted() {
+			this.clientHeight = document.documentElement.clientHeight;
+			const that = this;
+			window.onresize = function temp() {
+				that.clientHeight = document.documentElement.clientHeight;
+				that.tablehight = that.clientHeight - 220;
+			};
 		},
 		//计算属性
 		methods: {
@@ -575,12 +552,26 @@
 			edit(e) {
 				//展示显示
 				let postData = {
-					id: 31,
+					id: e,
 				}
 				this.$post(this.$goodsEdit, postData).then((res) => {
 					if(res.status_code == 0) {
+						let saleAttrs = res.data.saleAttrs;
+						this.amendCenterColor = saleAttrs[0];
+						this.amendCenterSizeArr = saleAttrs[1];
+						let arr_1 = this.amendCenterSizeArr.data;
+						let arr2 = [];
+						for(let i=0;i<arr_1.length;i++){
+							arr2.push(arr_1[i].data[0]);
+						}
+						this.amendCenterSizeArr.arr2 = arr2;
 						let basic_attr_value = res.data.basic_attr_value;
+					
+						this.secondInfo = this.amendCenterSizeArr.secondInfo;
+						this.sku_value = res.data.skus;
+						this.amendShowImg = res.data.spuImages;
 						let arr = JSON.parse(basic_attr_value);
+						
 						//这里去秦秋该类目下面的类目属性
 						let postDatas = {
 							type: 2,
@@ -1187,7 +1178,52 @@
 						})
 					}
 				});
+			},
+			amend(){
+				let postData = {};
+				postData.id = this.amendInfo.id;
+				let centerArr = this.$coppyArray(this.categoryAttributes);
+				let Arr1 = [];
+				for(let i = 0; i < centerArr.length; i++) {
+					let obj = {};
+					obj.id = centerArr[i].id;
+					obj.name = centerArr[i].name;
+					obj.data = [];
+					for(let j = 0; j < centerArr[i].child.length; j++) {
+						if(centerArr[i].modelName == centerArr[i].child[j].id) {
+							let objs = {
+								id: centerArr[i].child[j].id,
+								name: centerArr[i].child[j].name,
+							};
+							obj.data.push(objs);
+						} else {}
+					}
+					Arr1.push(obj)
+				}
+				//类目属性
+				postData.basic_attr_value = JSON.stringify(Arr1);
+				let sku = this.$coppyArray(this.sku_value);
+				postData.skuData = JSON.stringify(sku);
+				//图片
+				let imgData =  this.$coppyArray(this.amendShowImg)
+				let obj3 = {
+					default: '',
+					list: []
+				};
+				obj3.default = imgData[0].image_url;
+				for(let i=0;i<imgData.length;i++){
+					if(imgData[i].default == 1){
+						obj3.default = imgData[i].image_url;
+					}else{
+						obj3.list.push(imgData[i].image_url);
+					}
+				}
+				postData.imgData = JSON.stringify(obj3);
+				this.$post(this.$goodsUpdate,postData).then((res)=>{
+					console.log(res);
+				})
 			}
+			
 		}
 	}
 </script>
@@ -1302,7 +1338,8 @@
 	
 	.step_con {
 		background-color: #ffffff;
-		padding: 15px;
+		padding: 40px 15px;
+		box-sizing: border-box;
 	}
 	/*第二部头部的样式*/
 	
@@ -1320,7 +1357,6 @@
 		box-sizing: border-box;
 	}
 	/*第二部高亮样式*/
-	
 	.aAnchor .active {
 		background-color: #D6D6D6 !important;
 		border-top: 3px solid #000;

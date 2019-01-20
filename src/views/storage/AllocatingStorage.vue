@@ -17,13 +17,13 @@
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="开始时间">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.startTime">
+								<el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="formInline.startTime">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="结束时间">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.endTime">
+								<el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="formInline.endTime">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
@@ -58,8 +58,8 @@
 					<el-row>
 						<el-col align="center">
 							<el-form-item label=" " align="center">
-								<el-button @click="submitForm('dynamicValidateForm')">清空</el-button>
-								<el-button type="primary" @click="resetForm('dynamicValidateForm')">确定</el-button>
+								<el-button @click="resetForm">清空</el-button>
+								<el-button type="primary" @click="ajaxjson">确定</el-button>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -73,7 +73,8 @@
 					<el-table-column prop="document_num" label="单据号" fixed width="150" align="center">
 						<template slot-scope="scope">
 							<!--点击单据号跳转显示单据详情-->
-							<p @click="addPurseMan(scope.row.id)" style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</p>
+							<span v-if="permission.indexOf('126') != -1" @click="addPurseMan(scope.row.id)" style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</span>
+							<span v-else style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column prop="updated_at" label="单据日期" width="150" align="center">
@@ -96,7 +97,7 @@
 					</el-table-column>
 					<el-table-column label="操作" width="200" fixed="right" align="center">
 						<template slot-scope="scope" v-if="scope.row.status == 0">
-							<el-button size="mini" type="warning" @click="bePutInStorage(scope.row.role_id)">入库</el-button>
+							<el-button v-show="permission.indexOf('127') != -1" size="mini" type="warning" @click="bePutInStorage(scope.row.role_id)">入库</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -226,6 +227,7 @@
 	export default {
 		data() {
 			return {
+				permission:[],
 				showSearch: false, //采购单输入
 				isShow: true, //采购单是否显示
 				PutInStorageModel: false, //确定入库
@@ -251,6 +253,9 @@
 		created() {
 			this.ajaxjson();
 			this.getSupplierCommonSupplierList(); //获取供应商列表
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			ajaxjson() {
@@ -342,26 +347,20 @@
 				//返回相对应合计数值
 				return sums;
 			},
-			//
-			// 提交表单
-			submitForm(formName) {
-				// this.$refs[formName].validate((valid) => {
-				// 	if (valid) {
-				// 		alert('submit!');
-				// 	} else {
-				// 		console.log('error submit!!');
-				// 		return false;
-				// 	}
-				// });
-			},
+			
 			// 重置表单
 			resetForm(formData) {
-				// 	this.$nextTick(function() {
-				//   	this.$refs[formData].resetFields();
-				//  })
-				if(this.$refs.formData !== undefined) {
-					this.$refs.formData.resetFields();
-				}
+				let formInline ={
+					type:1,//仓库调入
+					document_num:'',//单据号
+					startTime:'',//开始时间
+					endTime:'',//结束时间
+					shop_id:'',//调出店铺
+					user_id:'',//用户id
+					status:2,//状态
+				};
+				this.formInline = formInline;
+				this.ajaxjson();
 			},
 			// 新增采购单页面
 	

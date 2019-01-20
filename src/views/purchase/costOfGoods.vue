@@ -5,7 +5,7 @@
 				<el-row>
 					<el-col>
 						<el-input placeholder="输入条码搜索" style="width:240px" v-model="formInline.barcode"></el-input>
-						<el-button type="primary" @click="searchVal">搜索</el-button>
+						<el-button type="primary" @click="ajaxjson">搜索</el-button>
 						<el-button type="primary" @click="modelSearch = !modelSearch">筛选订单</el-button>
 					</el-col>
 				</el-row>
@@ -38,8 +38,8 @@
 					<el-row>
 						<el-col align="center">
 							<el-form-item label="" align="center">
-								<el-button  @click="resetForm('formInline')">清空</el-button>
-								<el-button type="primary" @click="searchVal">确定</el-button>
+								<el-button  @click="resetForm">清空</el-button>
+								<el-button type="primary" @click="ajaxjson">确定</el-button>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -142,28 +142,16 @@
 			   	this.page = val;
 			   	this.ajaxjson();
 			},
-			searchVal(){
-				this.ajaxjson();
-			},
-			// 提交表单
-			submitForm(formName) {
-				// this.$refs[formName].validate((valid) => {
-				// 	if (valid) {
-				// 		alert('submit!');
-				// 	} else {
-				// 		console.log('error submit!!');
-				// 		return false;
-				// 	}
-				// });
-			},
 			// 重置表单
 			resetForm(formData) {
-//			 	this.$nextTick(function() {
-//				   	this.$refs[formData].resetFields();
-//				  })
-				if(this.$refs.formData !== undefined) {
-					this.$refs.formData.resetFields();
-				}
+				let formInline = {
+					barcode:'',//条形码
+					startDate: '',//开始时间
+					endDate: '',//结束时间
+					cbid: '',//供应商id
+				};
+				this.formInline = formInline;
+				this.ajaxjson();
 			},
 		}
 	}

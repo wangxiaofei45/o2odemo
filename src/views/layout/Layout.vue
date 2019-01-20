@@ -3,13 +3,12 @@
 		<div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
 		<el-container>
 			<!--头部固定的内容-->
-			<el-header>
+			<el-header style='height: 80px;border-bottom: 1px solid #e3e3e3;'>
 				<navbar/>
 			</el-header>
 		<div class="main-container">
-			<sidebar class="sidebar-container" />
-			<!--面包屑-->
-			<tags-view/>
+			<sidebar class="sidebar-container"/>
+			<tags-view style="position: fixed;top: 80px;left: 180px;z-index: 100;"/>
 			<app-main/>
 		</div>
 		</el-container>
@@ -36,10 +35,11 @@
 			},
 			classObj() {
 				return {
-					hideSidebar: !this.sidebar.opened,
+//					hideSidebar: !this.sidebar.opened,
+					hideSidebar: false,
 					openSidebar: this.sidebar.opened,
 					withoutAnimation: this.sidebar.withoutAnimation,
-					mobile: this.device === 'mobile'
+//					mobile: this.device === 'mobile'
 				}
 			}
 		},
@@ -76,7 +76,7 @@
 		z-index: 999;
 	}
 	.el-header{
-    padding: 0 20px;
+	padding: 0px!important;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     -ms-flex-negative: 0;

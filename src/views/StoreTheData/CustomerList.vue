@@ -4,9 +4,9 @@
 		<div class="title">
 			<el-row>
 				<el-col :span="24">
-					<el-button type="primary" @click="addMember">添加会员</el-button>
+					<el-button type="primary" @click="addMember" v-show="permission.indexOf('105') != -1">添加会员</el-button>
 					<el-input placeholder="输入搜索" style="width:240px" v-model="searchVal"></el-input>
-					<el-button type="primary" @click="searchMember">搜索</el-button>
+					<el-button v-show="permission.indexOf('108') != -1" type="primary" @click="searchMember">搜索</el-button>
 				</el-col>
 			</el-row>
 		</div>
@@ -19,9 +19,15 @@
 				<el-table-column prop="phone" label="手机号" min-width="180" align="center">
 				</el-table-column>
 				<el-table-column prop="enable" label="是否启用" width="200" align="center">
-					<template slot-scope="scope">
-						<el-button v-if="scope.row.status == 0" @click="SiteMember(scope.row)" type="text">开启</el-button>
-						<el-button v-if="scope.row.status == 1" @click="SiteMember(scope.row)" type="text" style="color: #666;">禁用</el-button>
+					<template slot-scope="scope" >
+						<span v-if="permission.indexOf('109') != -1">
+							<el-button v-if="scope.row.status == 0" @click="SiteMember(scope.row)" type="text">开启</el-button>
+							<el-button v-if="scope.row.status == 1" @click="SiteMember(scope.row)" type="text" style="color: #666;">禁用</el-button>
+						</span>
+						<span v-else>
+							<el-button v-if="scope.row.status == 0" type="text">开启</el-button>
+							<el-button v-if="scope.row.status == 1" type="text" style="color: #666;">禁用</el-button>
+						</span>
 					</template>
 				</el-table-column>
 				<el-table-column prop="balance" label="会员折扣" min-width="200" align="center">
@@ -30,13 +36,23 @@
 				</el-table-column>
 				<el-table-column label="操作" width="300" fixed="right" align="center">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" icon="el-icon-edit" @click="amendMember(scope.row.id)">编辑</el-button>
-						<el-button size="mini" type="primary" @click="recharge(scope.row.role_id)">充值</el-button>
-						<el-button size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.id)">删除</el-button>
-
+						<el-button v-show="permission.indexOf('106') != -1" size="mini" type="primary" icon="el-icon-edit" @click="amendMember(scope.row.id)">编辑</el-button>
+						<el-button v-show="permission.indexOf('107') != -1" size="mini" type="primary" @click="recharge(scope.row.role_id)">充值</el-button>
+						<el-button v-show="permission.indexOf('115') != -1" size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.id)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
+			<div class="block" style="margin-top: 15px;">
+			    <el-pagination
+			      @size-change="handleSizeChange"
+			      @current-change="handleCurrentChange"
+			      :current-page="currentPage4"
+			      :page-sizes="[10, 20, 30, 40]"
+			      :page-size="100"
+			      layout="total, sizes, prev, pager, next, jumper"
+			      :total="total">
+			    </el-pagination>
+  			</div>
 		</div>
 		<!--添加账号-->
 		<div class="model" v-show="new_info_model">
@@ -292,6 +308,7 @@
 	export default {
 		data() {
 			return {
+				permission:[],
 				searchVal: '',
 				new_info_model: false, //添加会员控制的弹窗
 				amend_info_model: false, //修改会员信息时候的弹窗
@@ -365,25 +382,42 @@
 						message: '请输入充值金额',
 						trigger: 'blur'
 					},
-				}
+				},
+				page:1,//分页
+				total:0,
+				per_page:10,
+				currentPage4:4,
 
 			};
 		},
 		created() {
 			this.ajaxjson(); //请求模板列表的数据
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			// 首次进入加载的数据
 			ajaxjson() {
 				let postData = {
-					page:1,
+					page:this.page,
+					per_page:this.per_page,
 				};
 				this.$post(this.$memberMemberList,postData).then((res) => {
 					let data = res;
 					if(data.status_code == 0) {
-						this.data = data.data;
+						this.data = data.data.data;
+						this.total = data.data.total;
 					} else {}
 				});
+			},
+			handleSizeChange(val) {
+				this.per_page = val;
+				this.ajaxjson();
+		    },
+			handleCurrentChange(val) {
+			   	this.page = val;
+			   	this.ajaxjson();
 			},
 			// 会员设置开启和禁用
 			SiteMember(e){

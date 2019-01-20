@@ -10,7 +10,6 @@
 						<el-row class="title">
 							请完善商品信息
 						</el-row>
-
 						<el-row align="center">
 							<el-col :span="12">
 								<el-form-item label="店铺名称">
@@ -113,7 +112,7 @@
 						</el-row>
 						<el-row align="center" class="submit_button">
 							<el-col :span="24" align="center">
-								<el-button type="primary" @click="onSubmit">保存</el-button>
+								<el-button type="primary" @click="onSubmit" v-show="permission.indexOf(100)">保存</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -126,6 +125,7 @@
 	export default {
 		data() {
 			return {
+				permission:[],
 				imageUrl: '',
 				imageUrl_1: '',
 				postData: {}, //七牛上传参数
@@ -167,6 +167,11 @@
 		created() {
 			this.ajaxjson(); //请求模板列表的数据
 			this.getadress();
+//			this.$route.params.toPath;
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
+			
 		},
 		methods: {
 			ajaxjson() {
@@ -182,7 +187,6 @@
 					let data = res;
 					if(data.status_code == 0) {
 						this.options1 = data.data.address;
-						console.log(this.options1);						
 					} else {}
 				});
 			},

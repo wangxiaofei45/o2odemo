@@ -1,7 +1,7 @@
 <!-- 平台的组织架构列表 -->
 <template>
 	<div class="container">
-		<el-button type="primary" @click="addOrganization">
+		<el-button v-show="permission.indexOf('82') != -1" type="primary" @click="addOrganization">
 			新增组织
 		</el-button>
 		<el-row class="title">
@@ -235,6 +235,7 @@
 	export default {
 		data() {
 			return {
+				permission:[],
 				props1: {
 					label: 'name',
 					children: 'zones',
@@ -397,6 +398,9 @@
 		},
 		created() {
 			this.ajaxjson();
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			loadNode1(node, resolve) {
@@ -667,7 +671,7 @@
 								size: 'small',
 							},
 							style: {
-								display: !data.pid ? 'none' : '',
+								display: !data.pid&&this.permission.indexOf('84') != -1 ? 'none' : '',
 								width: '14px',
 								height: '14px',
 								padding: "0px",
@@ -693,7 +697,7 @@
 								size: 'small',
 							},
 							style: {
-								display: data.phone ? '' : 'none',
+								display: data.phone&&this.permission.indexOf('89') != -1? '' : 'none',
 								width: '14px',
 								height: '14px',
 								padding: "0px",
@@ -717,7 +721,7 @@
 								size: 'small',
 							},
 							style: {
-								display: data.pid == 15 ? '' : 'none',
+								display: data.pid == 15&&this.permission.indexOf('89') != -87? '' : 'none',
 								width: '14px',
 								height: '14px',
 								padding: "0px",
@@ -760,7 +764,7 @@
 								size: 'small',
 							},
 							style: {
-								display: data.phone ? '' : 'none',
+								display: data.phone&&this.permission.indexOf('88') != -1? '' : 'none',
 								width: '14px',
 								height: '14px',
 								padding: "0px",

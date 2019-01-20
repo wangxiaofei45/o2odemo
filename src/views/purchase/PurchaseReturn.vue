@@ -5,41 +5,40 @@
 			<div class="title">
 				<el-row>
 					<el-col>
-						<el-button type="primary" @click="purchasereturnAdd">新增</el-button>
-						<el-input placeholder="载入入库单" style="width:240px" v-model="Loadthwarehousereceipt" @keyup.enter.native="Loadwarehousereceipt"></el-input>
+						<el-button v-show="permission.indexOf('226') != -1" type="primary" @click="purchasereturnAdd">新增</el-button>
+						<el-input v-show="permission.indexOf('231') != -1" placeholder="载入入库单" style="width:240px" v-model="Loadthwarehousereceipt" @keyup.enter.native="Loadwarehousereceipt"></el-input>
 						<el-input placeholder="搜索单据号、供应商、摘要" style="width:240px"></el-input>
 						<el-button type="primary">搜索</el-button>
-						<el-button type="primary">筛选订单</el-button>
+						<el-button type="primary" @click="searchModel = !searchModel">筛选订单</el-button>
 					</el-col>
 				</el-row>
 			</div>
 			<!--搜索-->
-			<div class="search">
+			<div class="search" v-show="searchModel">
 				<el-form label-width="80px" :inline="true" v-model="formInline" class="demo-form-inline">
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="开始时间">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.dateStart">
+								<el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="formInline.startDate">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="结束时间">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.dateEnd">
+								<el-date-picker type="date" placeholder="选择日期" value-format="yyyy-MM-dd" v-model="formInline.endDate">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="供应商">
-								<el-select v-model="formInline.shop" placeholder="亿链旗舰店">
-									<el-option label="区域一" value="1"></el-option>
-									<el-option label="区域二" value="2"></el-option>
+								<el-select v-model="formInline.cbid" placeholder="请选择">
+									<el-option v-for="(item,index) in supplierCommonSupplierList" :label="item.name" :value="item.id" :key="item.id"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="制单人">
-								<el-select v-model="formInline.user" placeholder="亿链旗舰店">
+								<el-select v-model="formInline.user_id" placeholder="请选择">
 									<el-option label="区域一" value="1"></el-option>
 									<el-option label="区域二" value="2"></el-option>
 								</el-select>
@@ -49,10 +48,10 @@
 					<el-row>
 						<el-col :span="24">
 							<el-form-item label="单据状态">
-								<el-radio-group v-model="formInline.radio">
-									<el-radio :label="3">所有</el-radio>
-									<el-radio :label="6">未提交</el-radio>
-									<el-radio :label="9">已提交</el-radio>
+								<el-radio-group v-model="formInline.status">
+									<el-radio :label="100">所有</el-radio>
+									<el-radio :label="0">未退货</el-radio>
+									<el-radio :label="1">已退货</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
@@ -60,8 +59,8 @@
 					<el-row>
 						<el-col align="center">
 							<el-form-item label=" " align="center">
-								<el-button @click="submitForm('dynamicValidateForm')">清空</el-button>
-								<el-button type="primary" @click="resetForm('dynamicValidateForm')">确定</el-button>
+								<el-button @click="resetForm">清空</el-button>
+								<el-button type="primary" @click="ajaxjson">确定</el-button>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -74,7 +73,8 @@
 					</el-table-column>
 					<el-table-column prop="document_num" label="单据号" fixed width="150" align="center">
 						<template slot-scope="scope">
-							<span style="color: #18CCBA;cursor:pointer;" @click="goToSeeOrModify(scope.row)">{{scope.row.document_num}}</span>
+							<span v-if="permission.indexOf('227') != -1" style="color: #18CCBA;cursor:pointer;" @click="goToSeeOrModify(scope.row)">{{scope.row.document_num}}</span>
+							<span v-else style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column prop="created_at" label="单据日期" width="150" align="center">
@@ -95,8 +95,8 @@
 					</el-table-column>
 					<el-table-column label="操作" width="200" fixed="right" align="center">
 						<template slot-scope="scope" v-if="scope.row.is_pass == 0">
-							<el-button size="mini" type="warning" icon="el-icon-edit" @click="returnedGoods(scope.row.id)">退货</el-button>
-							<el-button size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row.id)">删除</el-button>
+							<el-button v-show="permission.indexOf('229') != -1" size="mini" type="warning" icon="el-icon-edit" @click="returnedGoods(scope.row.id)">退货</el-button>
+							<el-button v-show="permission.indexOf('230') != -1" size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row.id)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -163,8 +163,8 @@
 			<div class="title">
 				<el-row>
 					<el-col :span="24">
-						<el-button type="primary" @click="saveNotAudit">保存</el-button>
-						<el-button type="primary" @click="openSave">确认退货</el-button>
+						<el-button v-show="permission.indexOf('226') != -1" type="primary" @click="saveNotAudit">保存</el-button>
+						<el-button v-show="permission.indexOf('229') != -1" type="primary" @click="openSave">确认退货</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -342,6 +342,7 @@
 	export default {
 		data() {
 			return {
+				permission:[],
 				page: 1, //分页
 				total: 0,
 				per_page: 10,
@@ -358,12 +359,11 @@
 				fromAndSave: false, //保存并提交
 				//筛选时候的表单
 				formInline: {
-					dateStart: '1',
-					dateEnd: '',
-					shop: '',
-					Freightnumber: '',
-					radio: 3,
-					user: ''
+					startDate:'',//开始时间
+					endDate:'',//结束时间
+					cbid:'',//供应商id
+					user_id:'',//制单人
+					status:100,//单据状态
 				},
 				forMation: {},
 				editVisible: false,
@@ -390,11 +390,15 @@
 				join_order_sn:'',
 				cbid:0,
 				user_name:'',
+				searchModel:false,//显示搜索
 			}
 		},
 		created() {
 			this.ajaxjson();
 			this.getSupplierCommonSupplierList();
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			//刷新获取页面数据
@@ -805,25 +809,17 @@
 				return sums;
 			},
 			//
-			// 提交表单
-			submitForm(formName) {
-				// this.$refs[formName].validate((valid) => {
-				// 	if (valid) {
-				// 		alert('submit!');
-				// 	} else {
-				// 		console.log('error submit!!');
-				// 		return false;
-				// 	}
-				// });
-			},
 			// 重置表单
 			resetForm(formData) {
-				// 	this.$nextTick(function() {
-				//   	this.$refs[formData].resetFields();
-				//  })
-				if(this.$refs.formData !== undefined) {
-					this.$refs.formData.resetFields();
-				}
+				let formInline = {
+					startDate:'',//开始时间
+					endDate:'',//结束时间
+					cbid:'',//供应商id
+					user_id:'',//制单人
+					status:100,//单据状态
+				};
+				this.formInline = formInline;
+				this.ajaxjson();
 			},
 			// 返回采购单页面
 			back_PurchseMan() {

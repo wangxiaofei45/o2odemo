@@ -68,7 +68,7 @@
 					<el-row>
 						<el-col align="center">
 							<el-form-item label=" " align="center">
-								<el-button @click="resetForm('dynamicValidateForm')">清空</el-button>
+								<el-button @click="resetForm">清空</el-button>
 								<el-button type="primary" @click="ajaxjson">确定</el-button>
 							</el-form-item>
 						</el-col>
@@ -83,7 +83,8 @@
 					<el-table-column prop="document_num" label="单据号" fixed width="180" align="center">
 						<template slot-scope="scope">
 							<!--点击单据号跳转显示单据详情-->
-							<span @click="goToSeeEditor(scope.row)" style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</span>
+							<span v-if="permission.indexOf('244') != -1" @click="goToSeeEditor(scope.row)" style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</span>
+							<span v-else style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column prop="created_at" label="单据日期" width="180" align="center">
@@ -168,7 +169,7 @@
 			<div class="title">
 				<el-row v-show="!disabled">
 					<el-col :span="24">
-						<el-button type="primary" @click="salesReturn" v-if="showSave == 1">退单</el-button>
+						<el-button v-show="permission.indexOf('245') != -1" type="primary" @click="salesReturn" v-if="showSave == 1">退单</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -430,8 +431,9 @@
 	export default {
 		data() {
 			return {
+				permission:[],
 				showSave: 1,
-				showSearch: true, //采购单输入
+				showSearch: false, //采购单输入
 				isShow: 1, //采购单是否显示
 				PutInStorageModel: false, //确定入库
 				open_new_rult: false, //选择规格的弹窗
@@ -442,6 +444,7 @@
 				},
 				//筛选时候的表单
 				formInline: {
+					document_num: '',
 					startDate: '', //开始时间
 					endDate: '', //结束时间
 					user_id: '', //营业员
@@ -477,14 +480,6 @@
 				//未完成的订单
 				memberList: [],
 				loading: false,
-				//表单
-				formInline: {
-					document_num: '',
-					dates: '',
-					sales_id: '', //营业员id
-					remark: '', //摘要
-					member_id: '', //会员id
-				},
 				accountFrom: {},
 				seller: [],
 				datas: [], //展示出来的数据
@@ -497,6 +492,9 @@
 		created() {
 			this.ajaxjson();
 			this.getSeller(); //获取营业员
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			ajaxjson() {
@@ -757,12 +755,16 @@
 			},
 			// 重置表单
 			resetForm(formData) {
-				// 	this.$nextTick(function() {
-				//   	this.$refs[formData].resetFields();
-				//  })
-				if(this.$refs.formData !== undefined) {
-					this.$refs.formData.resetFields();
-				}
+				let formInline =  {
+					startDate: '', //开始时间
+					endDate: '', //结束时间
+					user_id: '', //营业员
+					member_id: '', //member_id
+					status: 100, //状态 100所有 0未付 1已付
+					type: 100, //类型（100 所有 0 零售 1退货）
+				};
+				this.formInline = formInline;
+				this.ajaxjson();
 			},
 			// 新增采购单页面
 

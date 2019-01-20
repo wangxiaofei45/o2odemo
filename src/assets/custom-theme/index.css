@@ -22561,7 +22561,7 @@
 }
 
 .custom-theme .el-header {
-	padding: 0 20px;
+	padding: 0px!important;
 	-webkit-box-sizing: border-box;
 	box-sizing: border-box
 }

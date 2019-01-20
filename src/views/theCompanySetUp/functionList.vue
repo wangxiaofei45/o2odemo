@@ -3,12 +3,15 @@
   <div class="container">
     <el-tabs v-model="activeName" @tab-click="handleClick">
       <div class="title">
-        <el-button type="primary" @click="open_newInfo">新增</el-button>
+        <el-button v-show="permission.indexOf('78') != -1" type="primary" @click="open_newInfo">新增</el-button>
       </div>
       <el-table :data="data_1" style="width: 100%">
         <el-table-column prop="id" label="Id" width="180">
         </el-table-column>
         <el-table-column prop="name" label="功能名称">
+        	<template slot-scope="scope">
+							<span style="color: #18CCBA;cursor:pointer;" @click="goToSeeOrModify(scope.row.id)">{{scope.row.name}}</span>
+						</template>
         </el-table-column>
         <el-table-column prop="url" label="URL">
         </el-table-column>
@@ -16,12 +19,16 @@
         </el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" icon="el-icon-edit" @click="amend(scope.row)">修改</el-button>
-            <el-button size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.id)">删除</el-button>
+            <el-button v-show="permission.indexOf('79') != -1" size="mini" type="primary" icon="el-icon-edit" @click="amend(scope.row)">修改</el-button>
+            <el-button v-show="permission.indexOf('80') != -1" size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-tabs>
+    <div class="block" style="margin-top: 15px;">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total">
+				</el-pagination>
+		</div>
     <!--新增权限-->
     <div class="model" v-show="function_model">
       <div class="model_con">
@@ -40,7 +47,7 @@
             <el-col :span="24">
               <el-form-item label="功能分类">
                 <el-select v-model="selectValue1" placeholder="请选择" @change="select_1">
-                  <el-option v-for="item in options" :key="item.value" :label="item.name" :value="item.id">
+                  <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
                   </el-option>
                 </el-select>
                 <el-select v-model="selectValue2" placeholder="请选择" @change="select_2">
@@ -121,6 +128,10 @@
 	export default {
 		data() {
 			return {
+				permission:[],
+				page: 1, //分页
+				total: 0,
+				per_page: 10,
 				checkAll: false,
 				checkedCities: ['上海', '北京'],
 				cities: cityOptions,
@@ -167,20 +178,53 @@
 		//页面创建完成后
 		created() {
 			this.ajaxjson(); //请求模板列表的数据
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			//获取权限设置列表
 			ajaxjson() {
-				let datas = {page:1};
+				let datas = {
+					page:this.page,
+					per_page:this.per_page,
+				};
 				this.$post(this.$moduleList,datas).then((res) => {
 					let data = res;
 					if(data.status_code == 0) {
-						this.data_1 = data.data;
-						this.options = data.data;
-					} else {}
+						this.data_1 = data.data.data;
+						this.options = data.data.data;
+						this.total = data.data.total;
+					} else {
+						
+					}
 				});
 			},
-
+			goToSeeOrModify(e){
+				let datas = {
+					page:this.page,
+					per_page:this.per_page,
+					id:e,
+				};
+				this.$post(this.$moduleList,datas).then((res) => {
+					let data = res;
+					if(data.status_code == 0) {
+						this.data_1 = data.data.data;
+						this.options = data.data.data;
+						this.total = data.data.total;
+					} else {
+						
+					}
+				});
+			},
+			handleSizeChange(val) {
+				this.per_page = val;
+				this.ajaxjson();
+			},
+			handleCurrentChange(val) {
+				this.page = val;
+				this.ajaxjson();
+			},
 			handleClick(tab, event) {},
 			// 全选
 			handleCheckAllChange(val) {

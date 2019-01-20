@@ -3,7 +3,8 @@ import Cookies from 'js-cookie'
 const app = {
   state: {
     sidebar: {
-      opened: !+Cookies.get('sidebarStatus'),
+//    opened: !+Cookies.get('sidebarStatus'),
+      opened: true,
       withoutAnimation: false
     },
     device: 'desktop',
@@ -17,12 +18,12 @@ const app = {
       } else {
         Cookies.set('sidebarStatus', 0)
       }
-      state.sidebar.opened = !state.sidebar.opened
+      state.sidebar.opened = true
       state.sidebar.withoutAnimation = false
     },
     CLOSE_SIDEBAR: (state, withoutAnimation) => {
       Cookies.set('sidebarStatus', 1)
-      state.sidebar.opened = false
+      state.sidebar.opened = true
       state.sidebar.withoutAnimation = withoutAnimation
     },
     TOGGLE_DEVICE: (state, device) => {

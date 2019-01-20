@@ -1,11 +1,13 @@
 import { loginByUsername, logout, getUserInfo } from '@/api/login'
-import { getRoleId,setRoleId,removeRoleId,getShopId,setShopId,removeShopId, getToken, setToken, removeToken } from '@/utils/auth'
+import { getRoleId,setRoleId,removeRoleId,getShopId,setShopId,removeShopId,setOrgtype,getOrgType,getToken, setToken, removeToken } from '@/utils/auth'
+import router from '../../router'
 
 const user = {
 	state: {
 		user: '',
 		status: '',
 		code: '',
+		root_org_type:getOrgType(),
 		token: getToken(),
 		shop_id:getShopId(),
 		role_id:getRoleId(),
@@ -23,6 +25,9 @@ const user = {
 		},
 		SET_TOKEN: (state, token) => {
 			state.token = token
+		},
+		SET_ORG_TYPE:(state, root_org_type) =>{
+			state.root_org_type = root_org_type
 		},
 		SET_ID:(state, id)=>{
 			state.id = id
@@ -67,11 +72,17 @@ const user = {
 					if(datas.status_code == 0) {
 						commit('SET_TOKEN', datas.data.tokenArr.token);
 						setToken(datas.data.tokenArr.token);
-						sessionStorage.setItem("token", datas.data.tokenArr.token);
-						commit('SET_ID', datas.data.userInfo.id);
-						setToken(datas.data.userInfo.id);
-						sessionStorage.setItem("id", datas.data.userInfo.id);
+						commit('SET_ORG_TYPE', datas.data.userInfo.root_org_type);
+						setOrgtype(datas.data.userInfo.root_org_type);
+						sessionStorage.setItem("root_org_type", datas.data.userInfo.root_org_type);
 						
+						commit('SET_ID', datas.data.userInfo.id);
+						setRoleId(datas.data.userInfo.id);
+						sessionStorage.setItem("id", datas.data.userInfo.id);
+						sessionStorage.setItem("name", datas.data.userInfo.name);
+						sessionStorage.setItem("updated_at", datas.data.userInfo.updated_at);
+						let str = JSON.stringify(datas.data.userNodeList);
+						sessionStorage.setItem("userNodeList", str);	
 						resolve(datas.data);
 						this.$message({
 							type: 'success',

@@ -139,7 +139,8 @@ export const asyncRouterMap = [
 				name: 'Permissionslist',
 				meta: {
 					title: "Permissionslist",
-					name:"权限设置"
+					name:"权限设置",
+					permission:[],
 				},
 			},
 			//组织架构列表
@@ -157,6 +158,7 @@ export const asyncRouterMap = [
 	},
 	
 	{
+		
 		path: '/basicSetting',
 		component: Layout,
 		redirect: '/basicSetting/storeFiles',
@@ -527,8 +529,6 @@ export const asyncRouterMap = [
 
 		]
 	},
-
-
 	// 平台端的设置
 	{
 		path: '/theCompanySetUp',
@@ -646,43 +646,4 @@ export const asyncRouterMap = [
 		
 		]
 	},
-
-	//		{
-	//		path: '/permission',
-	//		component: Layout,
-	//		redirect: '/permission/index',
-	//		alwaysShow: false, // will always show the root menu
-	//		meta: {
-	//			title: 'permission',
-	//			icon: 'lock',
-	//			roles: ['admin', 'editor'] // you can set roles in root nav
-	//		},
-	//		children: [{
-	//				path: 'page',
-	//				component: () =>
-	//					import('@/views/permission/page'),
-	//				name: 'PagePermission',
-	//				meta: {
-	//					title: 'pagePermission',
-	//					roles: ['admin'] // or you can only set roles in sub nav
-	//				}
-	//			},
-	//			//指令权限
-	//			{
-	//
-	//				path: 'directive',
-	//				component: () =>
-	//					import('@/views/permission/directive'),
-	//				name: 'DirectivePermission',
-	//				meta: {
-	//					title: 'directivePermission'
-	//					// if do not set roles, means: this page does not require permission
-	//				}
-	//			}
-	//		]
-	//	},
-//		componentsRouter, //富文本编辑
-//		chartsRouter,
-//		tableRouter,
-
 ]

@@ -7,7 +7,7 @@
 					<el-row>
 						<el-col>
 							<el-input placeholder="搜索单据号、供应商、摘要" style="width:240px" v-model="formInline.document_num"></el-input>
-							<el-button type="primary">搜索</el-button>
+							<el-button type="primary" @click="ajaxjson">搜索</el-button>
 							<el-button type="primary" @click="showSearch = !showSearch">筛选订单</el-button>
 						</el-col>
 					</el-row>
@@ -34,31 +34,12 @@
 								</el-select>
 							</el-form-item>
 						</el-col>
-						<el-col :span="6">
-							<el-form-item label="制单人">
-								<el-select v-model="formInline.user_id" placeholder="亿链旗舰店">
-									<el-option label="区域一" value="1"></el-option>
-									<el-option label="区域二" value="2"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-					</el-row>
-					<el-row>
-						<el-col :span="24">
-							<el-form-item label="单据状态">
-								<el-radio-group v-model="formInline.status">
-									<el-radio :label="2">所有</el-radio>
-									<el-radio :label="0">未入库</el-radio>
-									<el-radio :label="1">已入库</el-radio>
-								</el-radio-group>
-							</el-form-item>
-						</el-col>
 					</el-row>
 					<el-row>
 						<el-col align="center">
 							<el-form-item label=" " align="center">
-								<el-button @click="submitForm('dynamicValidateForm')">清空</el-button>
-								<el-button type="primary" @click="resetForm('dynamicValidateForm')">确定</el-button>
+								<el-button @click="resetForm">清空</el-button>
+								<el-button type="primary" @click="ajaxjson">确定</el-button>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -212,26 +193,15 @@
 				//返回相对应合计数值
 				return sums;
 			},
-			//
-			// 提交表单
-			submitForm(formName) {
-				// this.$refs[formName].validate((valid) => {
-				// 	if (valid) {
-				// 		alert('submit!');
-				// 	} else {
-				// 		console.log('error submit!!');
-				// 		return false;
-				// 	}
-				// });
-			},
-			// 重置表单
-			resetForm(formData) {
-				// 	this.$nextTick(function() {
-				//   	this.$refs[formData].resetFields();
-				//  })
-				if(this.$refs.formData !== undefined) {
-					this.$refs.formData.resetFields();
-				}
+			resetForm() {
+				let formInline = {
+					document_num:'',//单据号
+					startTime:'',//开始时间
+					endTime:'',//结束时间
+					shop_id:'',//调出店铺
+				};
+				this.formInline = formInline;
+				this.ajaxjson();
 			},
 		}
 	}

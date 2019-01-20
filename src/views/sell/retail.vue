@@ -5,7 +5,7 @@
 			<div class="title">
 				<el-row>
 					<el-col>
-						<el-button type="primary" @click="closeAnAbccount">结算</el-button>
+						<el-button v-show="permission.indexOf('240') != -1 ||permission.indexOf('241') != -1||permission.indexOf('242') != -1" type="primary" @click="closeAnAbccount">结算</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -191,6 +191,7 @@
 	export default {
 		data() {
 			return {
+				permission:[],
 				memberList: [],
 				loading: false,
 				//表单
@@ -214,6 +215,9 @@
 			this.getBarCode(); //获取条形码
 			this.getSeller(); //获取营业员
 			this.getData(); //显示当前时间
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			remoteMethod(query) {
