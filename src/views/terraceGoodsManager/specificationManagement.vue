@@ -10,7 +10,7 @@
       <el-col :span="8" style="border:1px solid #e6e6e6;padding:15px;">
 	        <el-row class="title">
 	          <el-col :span="8">
-	            <el-button type="text" style="font-size:40px;padding:0px" :disabled="disabled1 == 1"  @click="leval_1_add" v-if="button_1">
+	            <el-button v-show="permission.indexOf('181') != -1" type="text" style="font-size:40px;padding:0px" :disabled="disabled1 == 1"  @click="leval_1_add" v-if="button_1">
 	              +
 	            </el-button>
 	             <el-button type="text" style="font-size:20px;padding:0px;" @click="leval_1_sure" v-else>
@@ -21,7 +21,7 @@
 	            一级分类
 	          </el-col>
 	          <el-col :span="8" style="text-align:right">
-	            <el-button type="text" style="font-size:40px;padding:0px" :disabled="disabled1 == 1" @click="leval_1_del" v-if="button_delete1 == 1">
+	            <el-button v-show="permission.indexOf('183') != -1" type="text" style="font-size:40px;padding:0px" :disabled="disabled1 == 1" @click="leval_1_del" v-if="button_delete1 == 1">
 	              -
 	            </el-button>
 	             <el-button type="text" style="font-size:20px;padding:0px;" @click="leval_1_sure_delete" v-else>
@@ -34,7 +34,7 @@
 	            <el-table v-loading="listLoading" :data="list" row-key="id" fit highlight-current-row style="width: 100%"  @current-change="selectTable1">
 	              <el-table-column align="center" label="禁用" width="65" v-if="button_delete1 == 1">
 	                <template slot-scope="scope" v-if="button_delete1 == 1">
-	                  <el-switch v-model="scope.row.disabled?false:true" @change="switchChange_1(scope.row)"></el-switch>
+	                  <el-switch v-show="permission.indexOf('182') != -1" v-model="scope.row.disabled?false:true" @change="switchChange_1(scope.row)"></el-switch>
 	                </template>
 	              </el-table-column>
 	              <el-table-column align="center" label="" v-if="button_delete1 == 1">
@@ -76,7 +76,7 @@
       <el-col :span="8" style="border:1px solid #e6e6e6;padding:15px;">
 	      	<el-row class="title">
 	          <el-col :span="8">
-	            <el-button type="text" style="font-size:40px;padding:0px" :disabled="disabled2 == 1" @click="leval_2_add" v-if="button_2">
+	            <el-button v-show="permission.indexOf('185') != -1" type="text" style="font-size:40px;padding:0px" :disabled="disabled2 == 1" @click="leval_2_add" v-if="button_2">
 	              +
 	            </el-button>
 	             <el-button type="text" style="font-size:20px;padding:0px;" @click="leval_2_sure" v-else>
@@ -87,7 +87,7 @@
 	            二级分类
 	          </el-col>
 	          <el-col :span="8" style="text-align:right">
-	             <el-button type="text" style="font-size:40px;padding:0px" :disabled="disabled2 == 1" @click="leval_2_del" v-if="button_delete2 == 1">
+	             <el-button v-show="permission.indexOf('187') != -1" type="text" style="font-size:40px;padding:0px" :disabled="disabled2 == 1" @click="leval_2_del" v-if="button_delete2 == 1">
 	              -
 	            </el-button>
 	             <el-button type="text" style="font-size:20px;padding:0px;" @click="leval_2_sure_delete" v-else>
@@ -100,7 +100,7 @@
 	            <el-table v-loading="listLoading" :data="list2" row-key="id" fit highlight-current-row style="width: 100%"  @current-change="selectTable2">
 	              <el-table-column align="center" label="禁用" width="65" v-if="button_delete2 == 1">
 	                <template slot-scope="scope" v-if="button_delete2 == 1">
-	                  <el-switch v-model="scope.row.disabled?false:true" @change="switchChange_2(scope.row)"></el-switch>
+	                  <el-switch v-show="permission.indexOf('186') != -1" v-model="scope.row.disabled?false:true" @change="switchChange_2(scope.row)"></el-switch>
 	                </template>
 	              </el-table-column>
 	               <el-table-column align="center" label="删除" width="65" v-if="button_delete2 == 0">
@@ -200,6 +200,7 @@ export default {
   },
   data() {
     return {
+    	permission:[],
     	type:1,
     	disabled1:0,
     	button_delete1:1,
@@ -246,6 +247,9 @@ export default {
   },
   created() {
     this.ajaxjson();
+    let str = sessionStorage.getItem('permission');
+		let permission = str.split(',');
+		this.permission = permission;
   },
   methods: {
   	// 删除

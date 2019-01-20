@@ -1,42 +1,42 @@
 <template>
 	<div>
 		<div class="tab-container" v-show="isShow == 1">
-			<div class="title">
-				<el-row>
-					<el-col>
-						<el-button type="primary" @click="addPurseMan">新增</el-button>
-						<el-input placeholder="搜索单据号、供应商、摘要" style="width:240px" v-model="search"></el-input>
-						<el-button type="primary">搜索</el-button>
-						<el-button type="primary">筛选订单</el-button>
-					</el-col>
-				</el-row>
-			</div>
-			<!--搜索-->
-			<div class="search">
-				<el-form label-width="80px" :inline="true" v-model="formInline" class="demo-form-inline">
+			<el-form label-width="80px" :inline="true" :model="formInline" ref='formInline' class="demo-form-inline">
+				<div class="title">
+					<el-row>
+						<el-col>
+							<el-button v-show="permission.indexOf('218') != -1" type="primary" @click="addPurseMan">新增</el-button>
+							<el-input placeholder="搜索单据号、供应商、摘要" style="width:240px" v-model="formInline.document_num"></el-input>
+							<el-button type="primary" @click="ajaxjson">搜索</el-button>
+							<el-button type="primary" @click="seachModel = !seachModel">筛选订单</el-button>
+						</el-col>
+					</el-row>
+				</div>
+				<!--搜索-->
+				<div class="search" v-show="seachModel">
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="开始时间">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.dateStart">
+								<el-date-picker type="date" value-format="yyyy-MM-dd" placeholder="选择日期" v-model="formInline.startDate">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="结束时间">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.dateEnd">
+								<el-date-picker type="date" value-format="yyyy-MM-dd" placeholder="选择日期" v-model="formInline.endDate">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="供应商">
-								<el-select v-model="formInline.shop" placeholder="请选择">
+								<el-select v-model="formInline.cbid" placeholder="请选择">
 									<el-option v-for="(item,index) in supplierCommonSupplierList" :label="item.name" :value="item.id" :key="item.id"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="制单人">
-								<el-select v-model="formInline.user" placeholder="亿链旗舰店">
+								<el-select v-model="formInline.user_id" placeholder="亿链旗舰店">
 									<el-option label="区域一" value="1"></el-option>
 									<el-option label="区域二" value="2"></el-option>
 								</el-select>
@@ -46,10 +46,10 @@
 					<el-row>
 						<el-col :span="24">
 							<el-form-item label="单据状态">
-								<el-radio-group v-model="formInline.radio">
-									<el-radio :label="3">所有</el-radio>
-									<el-radio :label="6">未提交</el-radio>
-									<el-radio :label="9">已提交</el-radio>
+								<el-radio-group v-model="formInline.audit_status">
+									<el-radio :label="100">所有</el-radio>
+									<el-radio :label="0">未审核</el-radio>
+									<el-radio :label="1">已审核</el-radio>
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
@@ -57,13 +57,13 @@
 					<el-row>
 						<el-col align="center">
 							<el-form-item label=" " align="center">
-								<el-button type="primary" @click="submitForm('dynamicValidateForm')">清空</el-button>
-								<el-button type="primary" @click="resetForm('dynamicValidateForm')">确定</el-button>
+								<el-button type="primary" @click="reSetForm">清空</el-button>
+								<el-button type="primary" @click="ajaxjson">确定</el-button>
 							</el-form-item>
 						</el-col>
 					</el-row>
-				</el-form>
-			</div>
+				</div>
+			</el-form>
 			<!--展示出来的表格-->
 			<div class="tTable">
 				<el-table :data="data" stripe border style="width: 100%;" show-summary :summary-method="getSummaries" size="mini">
@@ -71,7 +71,8 @@
 					</el-table-column>
 					<el-table-column prop="document_num" label="单据号" fixed width="150" align="center">
 						<template slot-scope="scope">
-							<span style="color: #18CCBA;cursor:pointer;" @click="goToSeeOrModify(scope.row)">{{scope.row.document_num}}</span>
+							<span v-if="permission.indexOf('219') != -1" style="color: #18CCBA;cursor:pointer;" @click="goToSeeOrModify(scope.row)">{{scope.row.document_num}}</span>
+							<span v-else style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column prop="created_at" label="单据日期" width="150" align="center">
@@ -92,23 +93,16 @@
 					</el-table-column>
 					<el-table-column prop="audit_status" label="操作" width="200" fixed="right" align="center">
 						<template slot-scope="scope" v-if="scope.row.audit_status == 0">
-							<el-button size="mini" type="primary" icon="el-icon-edit" @click="openAudit(scope.row.id)">审核</el-button>
-							<el-button size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row.id)">删除</el-button>
+							<el-button v-show="permission.indexOf('221') != -1" size="mini" type="primary" icon="el-icon-edit" @click="openAudit(scope.row.id)">审核</el-button>
+							<el-button v-show="permission.indexOf('223') != -1" size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row.id)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
 			</div>
 			<div class="block" style="margin-top: 15px;">
-			    <el-pagination
-			      @size-change="handleSizeChange"
-			      @current-change="handleCurrentChange"
-			      :current-page="currentPage4"
-			      :page-sizes="[10, 20, 30, 40]"
-			      :page-size="100"
-			      layout="total, sizes, prev, pager, next, jumper"
-			      :total="total">
-			    </el-pagination>
-  			</div>
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[10, 20, 30, 40]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total">
+				</el-pagination>
+			</div>
 		</div>
 		<!-- 新增采购单 -->
 		<div class="tab-container" v-show="isShow ==2">
@@ -127,7 +121,7 @@
 				<el-row>
 					<el-col :span="12">
 						<el-button type="primary" @click="saveNotAudit">保存</el-button>
-						<el-button type="primary" @click="openSave">审核</el-button>
+						<el-button v-show="permission.indexOf('221') != -1" type="primary" @click="openSave">审核</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -205,7 +199,7 @@
 					<el-table-column label="操作" width="200" fixed="right" align="center">
 						<template slot-scope="scope">
 							<el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteAdd()">删除</el-button>
-						</template> 
+						</template>
 					</el-table-column>
 				</el-table>
 			</div>
@@ -322,22 +316,23 @@
 	export default {
 		data() {
 			return {
-				page:1,//分页
-				total:0,
-				per_page:10,
-				search: '', //采购单输入
+				permission:[],
+				page: 1, //分页
+				total: 0,
+				per_page: 10,
+				seachModel: false, //显示筛选订单
 				isShow: 1, //采购单是否显示
 				fromAndSave: false, //保存并提交
 				modelShow: -1,
 				currentPage4: 4, //
 				//筛选时候的表单
 				formInline: {
-					dateStart: '1',
-					dateEnd: '',
-					shop: '',
-					Freightnumber: '',
-					radio: 3,
-					user: ''
+					document_num: '', //单据号
+					startDate: '', //开始时间
+					endDate: '', //结束时间
+					cbid: '', //供应商id
+					user_id: '', //操作人
+					audit_status: 100, //审核状态
 				},
 				forMation: {}, //新增采购订单表单
 				supplierCommonSupplierList: [], //供应商下拉选择的列表
@@ -358,28 +353,31 @@
 					{
 						color: '', //颜色
 						size: '', //尺码
-						stock:'',//数量
-						total_price:'',
+						stock: '', //数量
+						total_price: '',
 					},
 				],
-				purchase_id:'',//订单id
+				purchase_id: '', //订单id
 			}
 		},
 		created() {
 			this.ajaxjson(); //获取到的数据
-			this.getSupplierCommonSupplierList();//获取供应商列表
+			this.getSupplierCommonSupplierList(); //获取供应商列表
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			ajaxjson() {
-				let postData = {
-					per_page:this.per_page,
+				let postData = Object.assign(this.formInline, {
+					per_page: this.per_page,
 					page: this.page,
-				}
+				});
 				this.$post(this.$purchaseList, postData).then((res) => {
 					if(res.status_code == 0) {
 						this.data = res.data.data;
-						this.total = res.data.total;//多少条
-						this.per_page = res.data.per_page;//当前一页多少条
+						this.total = res.data.total; //多少条
+						this.per_page = res.data.per_page; //当前一页多少条
 					} else {
 						this.$message({
 							type: 'error',
@@ -388,14 +386,27 @@
 					}
 				})
 			},
+			//手写的重置表单
+			reSetForm() {
+				let formInline = {
+					document_num: '', //单据号
+					startDate: '', //开始时间
+					endDate: '', //结束时间
+					cbid: '', //供应商id
+					user_id: '', //操作人
+					audit_status: 100, //审核状态
+				};
+				this.formInline = formInline;
+				this.ajaxjson();
+			},
 			//分页
 			handleSizeChange(val) {
 				this.per_page = val;
 				this.ajaxjson();
-		    },
+			},
 			handleCurrentChange(val) {
-			   	this.page = val;
-			   	this.ajaxjson();
+				this.page = val;
+				this.ajaxjson();
 			},
 			//打开审核的弹窗
 			openAudit(e) {
@@ -432,18 +443,18 @@
 				})
 			},
 			//删除
-			handleDelete(e){
+			handleDelete(e) {
 				let postData = {
-					id:e,
+					id: e,
 				}
-				this.$delete(this.$purchaseDelete,postData);
+				this.$delete(this.$purchaseDelete, postData);
 			},
 			//打开编辑 
-			goToSeeOrModify(e){
+			goToSeeOrModify(e) {
 				console.log(e);
-				if(e.audit_status == 0){
+				if(e.audit_status == 0) {
 					let postData = {
-						id:e.id,
+						id: e.id,
 					}
 					this.$post(this.$purchaseInfo, postData).then((res) => {
 						if(res.status_code == 0) {
@@ -453,8 +464,8 @@
 							this.newTableData = res.data.goodsData;
 						}
 					})
-				}else{
-					
+				} else {
+
 				}
 			},
 			// 新增采购单页面
@@ -475,7 +486,7 @@
 				})
 			},
 			//获取供应商列表
-			getSupplierCommonSupplierList(){
+			getSupplierCommonSupplierList() {
 				this.$post(this.$supplierCommonSupplierList).then((res) => {
 					if(res.status_code == 0) {
 						this.supplierCommonSupplierList = res.data;
@@ -498,10 +509,10 @@
 							if(res.status_code == 0) {
 								let datas = res.data;
 								datas.stock = '';
-								datas.discount = this.currentVendor.discounts/ 100;
+								datas.discount = this.currentVendor.discounts / 100;
 								datas.price = datas.sku_price / 100;
 								datas.unit_price = datas.price * datas.discount;
-								datas.goods_name = datas.goods_name+'|'+datas.specnamestr;
+								datas.goods_name = datas.goods_name + '|' + datas.specnamestr;
 								let canAdd = true;
 								for(let i = 0; i < this.newTableData.length; i++) {
 									if(datas.id == this.newTableData[i].id) {
@@ -559,7 +570,7 @@
 						for(let i = 0; i < this.sku_data.length; i++) {
 							if(this.sku_data[i].specnamestr == str) {
 								item = Object.assign(item, this.sku_data[i]);
-								item.discount = this.currentVendor.discounts/100;
+								item.discount = this.currentVendor.discounts / 100;
 								item.price = item.sku_price / 100;
 								item.unit_price = item.price * item.discount;
 							};
@@ -588,7 +599,7 @@
 						for(let i = 0; i < this.sku_data.length; i++) {
 							if(this.sku_data[i].specnamestr == str) {
 								item = Object.assign(item, this.sku_data[i]);
-								item.discount = this.currentVendor.discounts/100;
+								item.discount = this.currentVendor.discounts / 100;
 								item.price = item.sku_price / 100;
 								item.unit_price = item.price * item.discount;
 							}
@@ -607,8 +618,8 @@
 					let obj = {
 						color: '',
 						size: '',
-						stock:'',
-						total_price:'',
+						stock: '',
+						total_price: '',
 					}
 					this.specificationOfGoods.push(obj);
 				} else {
@@ -627,8 +638,8 @@
 				let Arr = this.$coppyArray(this.specificationOfGoods);
 				let newTableData = this.$coppyArray(this.newTableData);
 				console.log(Arr);
-				for(let i=0;i<Arr.length;i++){
-					Arr[i].goods_name = Arr[i].goods_name+'|'+Arr[i].specnamestr;
+				for(let i = 0; i < Arr.length; i++) {
+					Arr[i].goods_name = Arr[i].goods_name + '|' + Arr[i].specnamestr;
 					delete Arr[i].color;
 					delete Arr[i].size;
 					delete Arr[i].specnamestr;
@@ -636,24 +647,24 @@
 				this.newTableData = newTableData.concat(Arr);
 			},
 			//失去焦点时去触发
-			multiply(e){
-				e.total_price = Number(e.stock)*e.unit_price;
+			multiply(e) {
+				e.total_price = Number(e.stock) * e.unit_price;
 			},
-			saveNotAudit(){
+			saveNotAudit() {
 				let newTableData = this.$coppyArray(this.newTableData);
 				let postData = {
-					id:this.purchase_id,//采购单id
-					cbid:this.currentVendor.id,//供应商id
-					abstract:'',//摘要,
-					goodsData:JSON.stringify(newTableData),//商品数据
+					id: this.purchase_id, //采购单id
+					cbid: this.currentVendor.id, //供应商id
+					abstract: '', //摘要,
+					goodsData: JSON.stringify(newTableData), //商品数据
 				}
-				this.$post(this.$purchaseUpdate,postData).then((res)=>{
-					if(res.status_code == 0){
+				this.$post(this.$purchaseUpdate, postData).then((res) => {
+					if(res.status_code == 0) {
 						this.$message({
 							type: 'success',
 							message: res.message,
 						})
-					}else{
+					} else {
 						this.$message({
 							type: 'error',
 							message: res.message,
@@ -697,18 +708,6 @@
 				//返回相对应合计数值
 				return sums;
 			},
-			//
-			// 提交表单
-			submitForm(formName) {
-				
-			},
-			// 重置表单
-			resetForm(formData) {
-				if(this.$refs.formData !== undefined) {
-					this.$refs.formData.resetFields();
-				}
-			},
-
 			// 返回采购单页面
 			back_PurchseMan() {
 				this.isShow = 1
@@ -717,7 +716,7 @@
 			cancel_new_rult() {
 				this.open_new_rult = false;
 			},
-			
+
 			//
 			deleteAdd() {
 

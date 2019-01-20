@@ -1,20 +1,15 @@
 <template>
-  <div :class="className" :style="{height:height,width:width}"/>
+  <div id="main" :style="{height:height,width:width}"/>
 </template>
 
 <script>
 import echarts from 'echarts'
 require('echarts/theme/macarons') // echarts theme
 import { debounce } from '@/utils'
-
 const animationDuration = 6000
 
 export default {
   props: {
-    className: {
-      type: String,
-      default: 'chart'
-    },
     width: {
       type: String,
       default: '100%'
@@ -26,7 +21,6 @@ export default {
   },
   data() {
     return {
-      chart: null
     }
   },
   mounted() {
@@ -47,9 +41,9 @@ export default {
     this.chart = null
   },
   methods: {
+  	//初始化数据
     initChart() {
-      this.chart = echarts.init(this.$el, 'macarons')
-
+      this.chart = echarts.init(document.getElementById('main'), 'macarons')
       this.chart.setOption({
         tooltip: {
           trigger: 'axis',
@@ -81,24 +75,11 @@ export default {
           name: 'pageA',
           type: 'bar',
           stack: 'vistors',
-          barWidth: '60%',
-          data: [79, 52, 200, 334, 390, 330, 220],
+          barWidth: '40%',
+          data: [100, 50, 200, 334, 390, 330, 220],
           animationDuration
-        }, {
-          name: 'pageB',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [80, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }, {
-          name: 'pageC',
-          type: 'bar',
-          stack: 'vistors',
-          barWidth: '60%',
-          data: [30, 52, 200, 334, 390, 330, 220],
-          animationDuration
-        }]
+        }
+        ]
       })
     }
   }

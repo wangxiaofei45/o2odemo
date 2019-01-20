@@ -10,7 +10,7 @@
 							<el-button type="primary">搜索</el-button>
 						</el-col>
 						<el-col :span="12" style="text-align: right;">
-							<a :href="upload()">
+							<a :href="upload()" v-show="permission.indexOf('151') != -1">
 								<el-button type="primary">
 									导出
 								</el-button>
@@ -70,6 +70,7 @@
 	export default {
 		data() {
 			return {
+				permission:[],
 				showSearch: true, //采购单输入
 				//筛选时候的表单
 				formInline: {
@@ -93,6 +94,9 @@
 		},
 		created() {
 			this.getShopList(); //获取供应商列表
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			ajaxjson() {

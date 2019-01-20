@@ -5,7 +5,8 @@
     transition: margin-left .28s;
     margin-left: 180px;
     position: relative;
-    margin-top: 60px;
+    padding-top: 100px;
+    box-sizing: border-box;
   }
   // 侧边栏
   .sidebar-container {
@@ -14,7 +15,7 @@
 //  height: 100%;
     position: fixed;
     font-size: 0px;
-    top: 50px;
+    top: 80px;
     bottom: 0;
     left: 0;
     z-index: 1001;
@@ -89,9 +90,9 @@
   .sidebar-container .nest-menu .el-submenu>.el-submenu__title,
   .sidebar-container .el-submenu .el-menu-item {
     min-width: 180px !important;
-    background-color: $subMenuBg !important;
+    background-color: #252928 !important;
     &:hover {
-      background-color: $menuHover !important;
+      background-color:#233332  !important;
     }
   }
   .el-menu--collapse .el-menu .el-submenu {

@@ -1,38 +1,27 @@
 <template>
 	<div class="login-container">
 		<div class="logo">
-			<img src="../../../static/img/erp_logo.png"></img>
-			<div class="text">
-				欢迎使用ERP系统
-			</div>
+			<img src="../../../static/img/login/logo.png"></img>
 		</div>
-		<el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-			<div class="title-container">
-				<h3 class="title">{{ $t('login.title') }}</h3>
-				<lang-select class="set-language" />
-			</div>
-
-			<el-form-item prop="username">
-				<span class="svg-container svg-container_login">
-          <svg-icon icon-class="user" />
-        </span>
-				<el-input v-model="loginForm.username" :placeholder="$t('login.username')" name="username" type="text" auto-complete="on" />
-			</el-form-item>
-			<el-form-item prop="password">
-				<span class="svg-container">
-          <svg-icon icon-class="password" />
-        </span>
-				<el-input :type="passwordType" v-model="loginForm.password" :placeholder="$t('login.password')" name="password" auto-complete="on" @keyup.enter.native="handleLogin" />
-				<span class="show-pwd" @click="showPwd">
-          <svg-icon icon-class="eye" />
-        </span>
-			</el-form-item>
-			<el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">{{ $t('login.logIn') }}</el-button>
-			<!--<router-link to="/perfectInfo">
-				<el-button>
-					完善资料
-				</el-button>
-			</router-link>-->
+		<el-form ref="loginForm" :model="loginForm" class="login-form" label-width="60px">
+			<el-row style="margin-top: 40px;">
+				<el-col :span="12" :offset="4">
+					<el-form-item prop="username" label="账号">
+						<el-input v-model="loginForm.username" placeholder="请输入账号" name="username" type="text" />
+					</el-form-item>
+				</el-col>
+				<el-col :span="16" :offset="4" style="margin-top: 20px;">
+					<el-form-item prop="password" label="密码">
+						<el-input :type="passwordType" v-model="loginForm.password" placeholder="请输入密码" name="password" @keyup.enter.native="handleLogin" />
+						<span class="forgetpsw">忘记密码</span>
+					</el-form-item>
+				</el-col>
+				<el-col :span="24" style="text-align: center; margin-top: 20px;">
+					<el-button :loading="loading" type="primary" style="width: 120px;height:40px;margin-bottom:30px;" @click.native.prevent="handleLogin">
+						登录
+					</el-button>
+				</el-col>
+			</el-row>
 		</el-form>
 	</div>
 </template>
@@ -61,13 +50,15 @@
 			}
 			return {
 				loginForm: {
-//					username: '13522224444', //平台账号
-//					password: '123456'
-					 username: '15736748889',//店铺账号
-					 password: '123456',
-					 type:2,
-					// username: '13888888889',//公司账号
-					// password: '123456'
+					username: '', //平台账号
+					password: '',
+//					username: '', //店铺账号
+//					password: '',
+					type: 2,
+					//					 username: '13888888889',//公司账号
+					//					 password: '123456'
+					//					username: '13755556666', //店铺账号
+					//					password: '123456',
 				},
 				loginRules: {
 					username: [{
@@ -120,22 +111,22 @@
 						this.loading = true;
 						this.$store.dispatch('LoginByUsername', this.loginForm).then((res) => {
 							this.loading = false;
-							console.log(res);
-							if(res.tokenArr.dataEnd == 0){
-								this.$router.push({
-									path:'/reminder'
-							 	})
-							}else if(res.userInfo.need_take_over){
-								//接班
-								this.$router.push({
-									path:'/successionTable'
-							 	})
-							}
-							else{
-								this.$router.push({
-									path: '/'
-								})
-							}
+							//这里还是要做判断 是否 路由列表加载完成
+								this.$addRoutes();
+								if(res.tokenArr.dataEnd == 0) {
+									this.$router.push({
+										path: '/reminder'
+									})
+								} else if(res.userInfo.need_take_over) {
+									//接班
+									this.$router.push({
+										path: '/successionTable'
+									})
+								} else {
+									this.$router.push({
+										path: '/'
+									})
+								}
 						}).catch(() => {
 							this.loading = false
 						})
@@ -148,34 +139,19 @@
 	}
 </script>
 <style rel="stylesheet/scss" lang="scss">
-	/* 修复input 背景不协调 和光标变色 */
-	/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
-	
-	$bg:#283443;
+	$bg:#222b2a;
 	$light_gray:#eee;
 	$cursor: #fff;
-	@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-		.login-container .el-input input {
-			color: $cursor;
-			&::first-line {
-				color: $light_gray;
-			}
-		}
-	}
-	/* reset element-ui css */
-	
 	.login-container {
 		.logo {
-			width: 80%;
-			height: 150px;
+			width: 442px;
+			height: 60px;
 			margin: 0 auto;
-			color: #ffffff;
 			clear: both;
+			margin-top: 200px;
 			img {
-				display: inline-block;
-				width: 150px;
-				height: 150px;
-				float: left;
+				width: 442px;
+				height: 60px;
 			}
 			.text {
 				height: 150px;
@@ -187,26 +163,28 @@
 		}
 		.el-input {
 			display: inline-block;
-			height: 47px;
-			width: 85%;
+			height: 40px;
+			width: 300px;
 			input {
-				background: transparent;
-				border: 0px;
 				-webkit-appearance: none;
-				border-radius: 0px;
 				padding: 12px 5px 12px 15px;
-				color: $light_gray;
-				height: 47px;
-				caret-color: $cursor;
+				height: 40px;
 				&:-webkit-autofill {
 					-webkit-box-shadow: 0 0 0px 1000px $bg inset !important;
 					-webkit-text-fill-color: $cursor !important;
 				}
 			}
 		}
+		/*忘记密码*/
+		.forgetpsw {
+			font-size: 14px;
+			color: #18ccba;
+			font-family: "微软雅黑";
+			margin-left: 20px;
+			cursor: pointer;
+		}
 		.el-form-item {
 			border: 1px solid rgba(255, 255, 255, 0.1);
-			background: rgba(0, 0, 0, 0.1);
 			border-radius: 5px;
 			color: #454545;
 		}
@@ -214,20 +192,25 @@
 </style>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-	$bg:#2d3a4b;
+	$bg:#222b2a;
 	$dark_gray:#889aa4;
 	$light_gray:#eee;
 	.login-container {
 		position: fixed;
 		height: 100%;
 		width: 100%;
-		background-color: $bg;
+		background-image: url(../../../static/img/login/bj.png);
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		background-repeat: no-repeat;
 		.login-form {
 			position: absolute;
 			left: 0;
 			right: 0;
-			width: 520px;
-			max-width: 100%;
+			width: 750px;
+			height: 370px;
+			border-radius: 10px;
+			background-color: #FFFFFF;
 			padding: 35px 35px 15px 35px;
 			margin: 60px auto;
 		}

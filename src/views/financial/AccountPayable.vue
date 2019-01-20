@@ -7,16 +7,16 @@
 				<div class="title">
 					<el-row>
 						<el-col :span="24">
-							<el-button type="primary" @click="openReconciliation">
+							<el-button v-show="permission.indexOf('165') != -1" type="primary" @click="openReconciliation">
 								对账
 							</el-button>
 							<el-input placeholder="搜索单据号、供应商、摘要" style="width:240px" v-model="formInline.document_num"></el-input>
 							<el-button type="primary" @click='ajaxjson'>搜索</el-button>
-							<el-button type="primary">筛选订单</el-button>
+							<el-button type="primary" @click="showModel = !showModel">筛选订单</el-button>
 						</el-col>
 					</el-row>
 				</div>
-				<div class="search">
+				<div class="search" v-show="showModel">
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="开始时间">
@@ -52,7 +52,7 @@
 						<el-col align="center">
 							<el-form-item label=" " align="center">
 								<el-button type="primary" @click="ajaxjson">确定</el-button>
-								<el-button @click="resetForm('dynamicValidateForm')">清空</el-button>
+								<el-button @click="resetForm">清空</el-button>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -65,7 +65,8 @@
 					</el-table-column>
 					<el-table-column prop="document_num" label="单据号" fixed width="180" align="center">
 						<template slot-scope="scope">
-							<p style="cursor:pointer;color: #18CCBA" @click='opendetail(scope.row)'>{{scope.row.document_num}}</p>
+							<span v-if="permission.indexOf('171') != -1" style="cursor:pointer;color: #18CCBA" @click='opendetail(scope.row)'>{{scope.row.document_num}}</span>
+							<span v-else style="cursor:pointer;color: #18CCBA">{{scope.row.document_num}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column prop="created_at" label="单据日期" width="200" align="center">
@@ -97,8 +98,8 @@
 						</template>
 					</el-table-column>
 					<el-table-column label="操作" width="180" align="center">
-						<template slot-scope="scope">
-							<el-button v-if="scope.row.status !== 2" type="warning" size="mini" @click="pay_money(scope.row)">付款</el-button>
+						<template slot-scope="scope" v-show="permission.indexOf('169') != -1">
+							<el-button  v-if="scope.row.status !== 2" type="warning" size="mini" @click="pay_money(scope.row)">付款</el-button>
 							<!--<el-button v-if="scope.row.status == 0" type="danger" size="mini" @click="pay_money">删除</el-button>-->
 						</template>
 					</el-table-column>
@@ -168,7 +169,7 @@
 							<el-button type="primary" @click="surePay">
 								确定
 							</el-button>
-							<el-button type="primary">
+							<el-button type="primary" v-show="permission.indexOf('167') != -1">
 								结算并打印
 							</el-button>
 						</el-col>
@@ -296,7 +297,7 @@
 			<div class="title">
 				<el-row>
 					<el-col :span="24">
-						<el-button type="primary" @click="open_balanceShow">结存</el-button>
+						<el-button v-show="permission.indexOf('168') != -1" type="primary" @click="open_balanceShow">结存</el-button>
 						<el-input style="width:200px" placeholder="搜索供应商"></el-input>
 						<el-button type="primary">搜索</el-button>
 					</el-col>
@@ -632,6 +633,8 @@
 	export default {
 		data() {
 			return {
+				permission:[],
+				showModel:false,
 				SupplierCommonSupplierList: [], //供应商列表
 				// 搜索提交的数据
 				page: 1, //分页
@@ -712,6 +715,9 @@
 		created() {
 			this.ajaxjson();
 			this.getSupplierCommonSupplierList(); //获取供应商列表
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			handleSizeChange(val) {
@@ -793,15 +799,6 @@
 				});
 				//返回相对应合计数值
 				return sums;
-			},
-			// 重置表单
-			resetForm(formData) {
-				// 	this.$nextTick(function() {
-				//   	this.$refs[formData].resetFields();
-				//  })
-				if(this.$refs.formData !== undefined) {
-					this.$refs.formData.resetFields();
-				}
 			},
 			// 打开付款
 			pay_money(e) {
@@ -990,7 +987,19 @@
 			handleSelectionChange(val) {
 				this.multipleSelection = val;
 				console.log(this.multipleSelection);
-			}
+			},
+			resetForm() {
+				let formInline =  {
+					document_num: '', //单据号
+					startTime: '', //开始时间
+					endTime: '', //结束时间
+					supplier_id: '', //供应商列表
+					user_id: '', //制单人
+					status: 3, //单据状态
+				};
+				this.formInline = formInline;
+				this.ajaxjson();
+			},
 		}
 	}
 </script>

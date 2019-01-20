@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import router from './router'
 import store from './store'
 import { Message } from 'element-ui'
@@ -17,34 +18,36 @@ function hasPermission(roles, permissionRoles) {
 	if(!permissionRoles) return true
 	return roles.some(role => permissionRoles.indexOf(role) >= 0)
 }
+//暴露全局的 添加路由列表
+Vue.prototype.$addRoutes = addRoutes
 //获取路由表
-function addRoutes() {
-	let roles = ["admin"];
-	store.dispatch('GenerateRoutes', {
-		roles
-	}).then(() => { // 根据roles权限生成可访问的路由表
-		router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
-		//		next({ ...to,
-		//			replace: true
-		//		})
-		// hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-	})
+export function addRoutes() {
+	if(getToken()) {
+		let roles = ["admin"];
+		//获取路由列表
+		store.dispatch('GenerateRoutes', {
+			roles
+		}).then(() => { // 根据roles权限生成可访问的路由表
+			router.addRoutes(store.getters.addRouters) // 动态添加可访问路由表
+		})
+	} else {
+		
+	}
+
 };
 addRoutes();
-
 const whiteList = ['/login', '/auth-redirect'] // no redirect whitelist
-
 router.beforeEach((to, from, next) => {
 	NProgress.start() // start progress bar
 	if(getToken()) {
 		if(to.path === '/login') {
-				next({
-					path: '/'
-				})
-				NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
-			} else {
-				next();
-			}
+			next({
+				path: '/'
+			})
+			NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
+		} else {
+			next()
+		}
 		//获取到token
 		// if(!store.state.permission.permissionList) {
 		// 	store.dispatch('permission/FETCH_PERMISSION').then(() => {
@@ -69,6 +72,11 @@ router.beforeEach((to, from, next) => {
 	}
 	//修改
 	Util.title(to.meta.name);
+	//判断是否有权限之类的东西
+	if(to.meta.permission){
+		Util.permission(to.meta.permission);
+	}
+
 })
 
 router.afterEach(() => {

@@ -5,7 +5,7 @@
 				<el-col :span="8" style="border:1px solid #e6e6e6;padding:15px;">
 					<el-row class="title">
 						<el-col :span="8">
-							<el-button type="text" style="font-size:40px;padding:0px" :disabled="disabled1 == 1" @click="leval_1_add" v-if="button_1">
+							<el-button v-show="permission.indexOf('174') != -1" type="text" style="font-size:40px;padding:0px" :disabled="disabled1 == 1" @click="leval_1_add" v-if="button_1">
 								+
 							</el-button>
 							<el-button type="text" style="font-size:20px;padding:0px;" @click="leval_1_sure" v-else>
@@ -16,7 +16,7 @@
 							一级分类
 						</el-col>
 						<el-col :span="8" style="text-align:right">
-							<el-button type="text" style="font-size:40px;padding:0px" :disabled="disabled1 == 1" @click="leval_1_del" v-if="button_delete1 == 1">
+							<el-button v-show="permission.indexOf('176') != -1" type="text" style="font-size:40px;padding:0px" :disabled="disabled1 == 1" @click="leval_1_del" v-if="button_delete1 == 1">
 								-
 							</el-button>
 							<el-button type="text" style="font-size:20px;padding:0px;" @click="leval_1_sure_delete" v-else>
@@ -29,7 +29,7 @@
 							<el-table height="300" v-loading="listLoading" :data="list" row-key="id" fit highlight-current-row style="width: 100%" @current-change="selectTable1">
 								<el-table-column align="center" label="禁用" width="65" v-if="button_delete1 == 1">
 									<template slot-scope="scope" v-if="button_delete1 == 1">
-										<el-switch v-model="scope.row.disabled?false:true" @change="switchChange_1(scope.row)"></el-switch>
+										<el-switch v-show="permission.indexOf('175') != -1" v-model="scope.row.disabled?false:true" @change="switchChange_1(scope.row)"></el-switch>
 									</template>
 								</el-table-column>
 								<el-table-column align="center" label="删除" width="65" v-if="button_delete1 == 0">
@@ -183,7 +183,7 @@
 				</el-row>
 			</el-col>
 			<el-col :span="2">
-				<el-button type="text" @click="classattributesave">
+				<el-button v-show="permission.indexOf('179') != -1" type="text" @click="classattributesave">
 					保存/删除
 				</el-button>
 			</el-col>
@@ -213,6 +213,7 @@
 		},
 		data() {
 			return {
+				permission:[],
 				addSpecification: false,
 				// 删除的控制
 				disabled1: 0,
@@ -249,6 +250,9 @@
 		},
 		created() {
 			this.ajaxjson();
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			// 添加商品规格 勾选添加规则时候获取

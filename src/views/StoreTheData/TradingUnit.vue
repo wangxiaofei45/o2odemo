@@ -4,7 +4,7 @@
 		<div class="title">
 			<el-row>
 				<el-col :span="24">
-					<el-button type="primary" @click="addMember">添加供应商</el-button>
+					<el-button v-show="permission.indexOf('111') != -1" type="primary" @click="addMember">添加供应商</el-button>
 					<el-input placeholder="输入供应商名称、手机号" style="width:240px" v-model="searchVal"></el-input>
 					<el-button type="primary">搜索</el-button>
 				</el-col>
@@ -22,11 +22,22 @@
 				</el-table-column>
 				<el-table-column label="操作" width="300" fixed="right" align="center">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" icon="el-icon-edit" @click="amendMember(scope.row)">编辑</el-button>
-						<el-button size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.id)">删除</el-button>
+						<el-button v-show="permission.indexOf('112') != -1" size="mini" type="primary" icon="el-icon-edit" @click="amendMember(scope.row)">编辑</el-button>
+						<el-button v-show="permission.indexOf('113') != -1" size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.id)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
+			<div class="block" style="margin-top: 15px;">
+			    <el-pagination
+			      @size-change="handleSizeChange"
+			      @current-change="handleCurrentChange"
+			      :current-page="currentPage4"
+			      :page-sizes="[10, 20, 30, 40]"
+			      :page-size="100"
+			      layout="total, sizes, prev, pager, next, jumper"
+			      :total="total">
+			    </el-pagination>
+  			</div>
 		</div>
 		<!--添加账号-->
 		<div class="model" v-show="new_info_model">
@@ -205,6 +216,7 @@
 	export default {
 		data() {
 			return {
+				permission:[],
 				searchVal: '',
 				new_info_model: false, //添加供应商弹窗
 				amend_info_model: false, //修改供应商弹窗
@@ -271,22 +283,44 @@
 						trigger: 'blur'
 					},
 				},
+				page:1,//分页
+				total:0,
+				per_page:10,
+				currentPage4:4,
 			};
 		},
 		created() {
 			this.ajaxjson(); //请求模板列表的数据
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			ajaxjson() {
 				let postData = {
-					page:1,
+					page:this.page,
+					per_page:this.per_page,
 				};
 				this.$post(this.$supplierSupplierList,postData).then((res) => {
 					let data = res;
 					if(data.status_code == 0) {
-						this.data = data.data;
-					} else {}
+						this.data = data.data.data;
+						this.total = data.data.total;
+					} else {
+						 this.$message({
+						 	type:'error',
+						 	message:res.message,
+						 })
+					}
 				});
+			},
+			handleSizeChange(val) {
+				this.per_page = val;
+				this.ajaxjson();
+		    },
+			handleCurrentChange(val) {
+			   	this.page = val;
+			   	this.ajaxjson();
 			},
 			// 全选
 			SelectionChange(val) {

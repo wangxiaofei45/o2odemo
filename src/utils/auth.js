@@ -3,6 +3,7 @@ import Cookies from 'js-cookie'
 const TokenKey = 'token'
 const shopId = 'shop_id'
 const roleId = 'role_id'
+const rootOrgType = 'root_org_type'
 
 //Token操作
 export function getToken() {
@@ -11,6 +12,13 @@ export function getToken() {
 
 export function setToken(token) {
   return Cookies.set(TokenKey, token)
+}
+
+export function getOrgType() {
+  return Cookies.get(rootOrgType)
+}
+export function setOrgtype(root_org_type) {
+  return Cookies.set(rootOrgType, root_org_type)
 }
 
 export function removeToken() {

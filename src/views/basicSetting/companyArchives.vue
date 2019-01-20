@@ -3,7 +3,6 @@
 	<div class="tab-container">
 		<!--<div style="padding-left:20%;padding-top:5%;">-->
 		<div>
-
 			<el-row align="center">
 				<el-row :span="20">
 					<el-form ref="form" :model="form" label-width="90px" style="width:80%;">
@@ -91,7 +90,7 @@
 						<el-row align="center" class="submit_button">
 							<el-col :span="6" align="center">
 								<el-button>取消</el-button>
-								<el-button type="primary">保存</el-button>
+								<el-button type="primary" v-if="permission.indexOf(254)">保存</el-button>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -104,6 +103,7 @@
 	export default {
 		data() {
 			return {
+				permission:[],
 				imageUrl: '',
 				imageUrl_1: '',
 				postData: {}, //七牛上传参数
@@ -119,7 +119,19 @@
 				}
 			}
 		},
+		created() {
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
+			this.ajaxjson();
+		},
 		methods: {
+			ajaxjson(){
+				this.$post(this.$archivesList).then((res)=>{
+				
+			})
+			},
+			
 			onSubmit() {
 				console.log('submit!');
 			},

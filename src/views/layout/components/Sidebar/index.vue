@@ -5,14 +5,13 @@
       :default-active="$route.path"
       :collapse="isCollapse"
       mode="vertical"
-      background-color="#304156"
+      background-color="#314240"
       text-color="#bfcbd9"
     >
       <sidebar-item v-for="route in permission_routers" :key="route.name" :item="route" :base-path="route.path"/>
     </el-menu>
   </el-scrollbar>
 </template>
-
 <script>
 import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'

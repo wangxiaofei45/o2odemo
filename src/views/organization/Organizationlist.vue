@@ -1,7 +1,7 @@
 <!-- 平台的组织架构列表 -->
 <template>
 	<div class="container">
-		<el-button type="primary" @click="addOrganization" v-if="can_add == 1">
+		<el-button type="primary" @click="addOrganization" v-if="shop_type == 1">
 			新增组织
 		</el-button>
 		<el-row class="title">
@@ -292,6 +292,7 @@
 	</div>
 </template>
 <script>
+	import { getOrgType } from '@/utils/auth' // 获取是公司还是店铺
 	let id = 1000;
 	const cityOptions = ['上海', '北京', '广州', '深圳'];
 
@@ -313,7 +314,8 @@
 	export default {
 		data() {
 			return {
-				can_add:'0',//是否可以显示新增组织按钮
+				permission:[],
+				shop_type:'',//是否可以显示新增组织按钮
 				showName:'',//显示的店铺的名字
 				props1: {
 					label: 'name',
@@ -517,6 +519,10 @@
 		},
 		created() {
 			this.ajaxjson();
+			this.shop_type = getOrgType();//获取是公司还是店铺
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			// 点击展示下一级
@@ -579,7 +585,6 @@
 					if(data.status_code == 0) {
 						let datas = JSON.parse(JSON.stringify(data.data));
 						this.showName = datas.name;
-						this.can_add = datas.can_add;
 					} else {
 
 					}
@@ -817,7 +822,7 @@
 								size: 'small',
 							},
 							style: {
-								display: data.can_add_child == 1 ? '' : 'none',
+								display: data.can_add_child == 1&&this.permission.indexOf('207') != -1 ? '' : 'none',
 								width: '14px',
 								height: '14px',
 								padding: "0px",
@@ -842,7 +847,7 @@
 								size: 'small',
 							},
 							style: {
-								display: data.can_add_child == 0 ? '' : 'none',
+								display: data.can_add_child == 0&&this.permission.indexOf('208') != -1?  '' : 'none',
 								width: '14px',
 								height: '14px',
 								padding: "0px",
@@ -868,7 +873,7 @@
 								size: 'small',
 							},
 							style: {
-								display: data.is_user ? '' : 'none',
+								display: data.is_user&&this.permission.indexOf('213') != -1? '' : 'none',
 								width: '14px',
 								height: '14px',
 								padding: "0px",

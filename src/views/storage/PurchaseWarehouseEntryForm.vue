@@ -5,16 +5,16 @@
 				<div class="title">
 					<el-row>
 						<el-col :span="24">
-							<el-button type="primary" @click="addPurseMan">新增</el-button>
+							<el-button v-show="permission.indexOf('119') != -1" type="primary" @click="addPurseMan">新增</el-button>
 							<el-input placeholder="载入入库单" style="width:240px" v-model="loadPurchaseList" @keyup.enter.native="loadPurchase"></el-input>
 							<el-input placeholder="搜索单据号、供应商" style="width:240px" v-model="formInline.document_num"></el-input>
 							<el-button type="primary">搜索</el-button>
-							<el-button type="primary">筛选订单</el-button>
+							<el-button type="primary" @click="showModel = !showModel">筛选订单</el-button>
 						</el-col>
 					</el-row>
 				</div>
 				<!--搜索-->
-				<div class="search">
+				<div class="search" v-if="showModel">
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="开始时间">
@@ -59,8 +59,8 @@
 					<el-row>
 						<el-col align="center">
 							<el-form-item label=" " align="center">
-								<el-button type="primary" @click="submitForm('dynamicValidateForm')">清空</el-button>
-								<el-button type="primary" @click="resetForm('dynamicValidateForm')">确定</el-button>
+								<el-button type="primary" @click="resetForm">清空</el-button>
+								<el-button type="primary" @click="ajaxjson">确定</el-button>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -74,7 +74,8 @@
 					</el-table-column>
 					<el-table-column prop="document_num" label="单据号" fixed width="150" align="center">
 						<template slot-scope="scope">
-							<span style="color: #18CCBA;cursor:pointer;" @click="goToSeeOrModify(scope.row)">{{scope.row.document_num}}</span>
+							<span v-if="permission.indexOf('120') != -1" style="color: #18CCBA;cursor:pointer;" @click="goToSeeOrModify(scope.row)">{{scope.row.document_num}}</span>
+							<span v-else style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column prop="created_at" label="单据日期" width="150" align="center">
@@ -96,8 +97,8 @@
 					</el-table-column>
 					<el-table-column label="操作" width="200" fixed="right" align="center">
 						<template slot-scope="scope" v-if="scope.row.status == 0">
-							<el-button size="mini" type="warning" icon="el-icon-edit" @click="bePutIntorage(scope.row.id)">入库</el-button>
-							<el-button size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row.id)">删除</el-button>
+							<el-button v-show="permission.indexOf('124') != -1" size="mini" type="warning" icon="el-icon-edit" @click="bePutIntorage(scope.row.id)">入库</el-button>
+							<el-button v-show="permission.indexOf('123') != -1" size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row.id)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -190,10 +191,10 @@
 			<div class="title">
 				<el-row>
 					<el-col :span="12">
-						<el-button type="primary" @click="saveNotAudit" :disabled="disabled">保存</el-button>
+						<el-button  type="primary" @click="saveNotAudit" :disabled="disabled">保存</el-button>
 					</el-col>
 					<el-col :span="12" style="text-align: right;">
-						<el-button type="primary" @click="ToLead" :disabled="disabled">
+						<el-button v-show="permission.indexOf('122') != -1" type="primary" @click="ToLead" :disabled="disabled">
 							导入
 						</el-button>
 					</el-col>
@@ -446,6 +447,8 @@
 	export default {
 		data() {
 			return {
+				permission:[],
+				showModel:false,
 				page: 1, //分页
 				total: 0,
 				per_page: 10,
@@ -522,6 +525,9 @@
 		created() {
 			this.ajaxjson();
 			this.getSupplierCommonSupplierList(); //获取供应商列表
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 
 		methods: {
@@ -894,26 +900,19 @@
 						})
 					}
 				})
-			},
-			// 提交表单
-			submitForm(formName) {
-				// this.$refs[formName].validate((valid) => {
-				// 	if (valid) {
-				// 		alert('submit!');
-				// 	} else {
-				// 		console.log('error submit!!');
-				// 		return false;
-				// 	}
-				// });
-			},
+			},		
 			// 重置表单
 			resetForm(formData) {
-				// 	this.$nextTick(function() {
-				//   	this.$refs[formData].resetFields();
-				//  })
-				if(this.$refs.formData !== undefined) {
-					this.$refs.formData.resetFields();
-				}
+				let formInline = {
+					document_num: '', //单据号
+					startTime: '', //开始时间
+					endTime: '', //结束时间
+					supplier_id: '', //供应商
+					user_id: '', //制单人
+					status: 2, //状态
+				};
+				this.formInline = formInline;
+				this.ajaxjson();
 			},
 
 			// 返回采购单页面

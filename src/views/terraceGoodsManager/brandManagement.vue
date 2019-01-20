@@ -4,7 +4,7 @@
 		<div class="title">
 			<el-row>
 				<el-col :span="24">
-					<el-button type="primary" @click="addMember">添加</el-button>
+					<el-button v-show="permission.indexOf('190') != -1" type="primary" @click="addMember">添加</el-button>
 				</el-col>
 			</el-row>
 		</div>
@@ -17,15 +17,25 @@
 				<el-table-column prop="disabled" label="是否显示" align="center">
 					<template slot-scope="scope">
 						<el-button type="text">
-							<el-button v-if="scope.row.disabled == 0" @click="SiteMember(scope.row)" type="text">是</el-button>
-							<el-button v-if="scope.row.disabled == 1" @click="SiteMember(scope.row)" type="text" style="color: #666;">否</el-button>
+							<span v-if="permission.indexOf('192') != -1">
+								<el-button v-if="scope.row.disabled == 0" @click="SiteMember(scope.row)" type="text">是</el-button>
+								<el-button v-if="scope.row.disabled == 1" @click="SiteMember(scope.row)" type="text" style="color: #666;">否</el-button>
+							</span>
+							<span v-else>
+								<span v-if="scope.row.disabled == 0">
+									 是
+								</span>
+								<span v-if="scope.row.disabled == 1">
+									 否
+								</span>
+							</span>
 						</el-button>
 					</template>
 				</el-table-column>
 				<el-table-column label="操作" width="300" fixed="right" align="center">
 					<template slot-scope="scope">
-						<el-button size="mini" type="primary" icon="el-icon-edit" @click="amendMember(scope.row)">编辑</el-button>
-						<el-button size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.brand_id)">删除</el-button>
+						<el-button v-show="permission.indexOf('192') != -1" size="mini" type="primary" icon="el-icon-edit" @click="amendMember(scope.row)">编辑</el-button>
+						<el-button v-show="permission.indexOf('193') != -1" size="mini" type="danger" icon="el-icon-delete" @click="deletes(scope.row.brand_id)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -176,6 +186,7 @@
 	export default {
 		data() {
 			return {
+				permission:[],
 				postData: {}, //七牛上传参数
 				new_info_model: false, //添加弹窗
 				amend_info_model: false, //修改弹窗
@@ -248,6 +259,9 @@
 		created() {
 			this.ajaxjson(); //请求模板列表的数据
 			this.get_qiniu_token();//获取到的七牛云上传配置信息
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 		methods: {
 			ajaxjson() {

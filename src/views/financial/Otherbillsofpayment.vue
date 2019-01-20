@@ -2,46 +2,45 @@
 <template>
 	<div>
 		<div class="tab-container">
+			<el-form label-width="80px" :inline="true" v-model="formInline" class="demo-form-inline">
 			<div class="title">
 				<el-row>
 					<el-col :span="24">
-						<el-button type="primary" @click="closeAnAbccount">新增</el-button>
-						<el-input style="width:200px"></el-input>
-						<el-button type="primary">筛选订单</el-button>
+						<el-button v-show="permission.indexOf('159') != -1" type="primary" @click="closeAnAbccount">新增</el-button>
+						<el-input style="width:200px" v-model="formInline.document_num"></el-input>
+						<el-button type="primary" @click='ajaxjson'>搜索</el-button>
+						<el-button type="primary" @click="showModel = !showModel">筛选订单</el-button>
 					</el-col>
 				</el-row>
 			</div>
-			<div class="search">
-				<el-form label-width="80px" :inline="true" v-model="formInline" class="demo-form-inline">
+			<div class="search" v-show="showModel">
+				
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="开始日期">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.dateStart">
+								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.startTime">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="结束日期">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.dateStart">
+								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.endTime">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
-
 						<el-col :span="6">
 							<el-form-item label="费用名称">
-								<el-select v-model="formInline.shop" placeholder="请选择">
-									<el-option label="区域一" value="1"></el-option>
-									<el-option label="区域二" value="2"></el-option>
-								</el-select>
+								<el-input style="width:200px" v-model="formInline.cost_name"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" style="text-align:center">
-							<el-button>清空</el-button>
-							<el-button type="primary">确定</el-button>
+							<el-button @click="resetForm">清空</el-button>
+							<el-button type="primary" @click='ajaxjson'>确定</el-button>
 						</el-col>
 					</el-row>
-				</el-form>
+			
 			</div>
+			</el-form>
 			<!--展示出来的表格-->
 			<div class="tTable">
 				<el-table :data="data" stripe border style="width: 100%;" size="mini">
@@ -49,7 +48,8 @@
 					</el-table-column>
 					<el-table-column prop="document_num" label="单据号" fixed width="200" align="center">
 						<template slot-scope="scope">
-							<span @click="goToEditor(scope.row)" style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</span>
+							<span v-if="permission.indexOf('237') != -1" @click="goToEditor(scope.row)" style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</span>
+							<span v-else style="color: #18CCBA;cursor:pointer;">{{scope.row.document_num}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column prop="created_at" label="单据日期" fixed width="180" align="center">
@@ -64,7 +64,7 @@
 					</el-table-column>
 					<el-table-column label="操作" width="100" align="center">
 						<template slot-scope="scope">
-							<el-button @click="deletes(scope.row.id)" type="danger" size="mini">删除</el-button>
+							<el-button v-show="permission.indexOf('160') != -1" @click="deletes(scope.row.id)" type="danger" size="mini">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -202,12 +202,14 @@
 	export default {
 		data() {
 			return {
+				permission:[],
 				search: '', //采购单输入
+				showModel:false,
 				//表单
 				formInline: {
-					dateStart: '1',
-					dateEnd: '',
-					shop: '',
+					document_num: '',
+					startTime: '',
+					endTime: '',
 					Freightnumber: '',
 				},
 				//添加时候的提交数据
@@ -243,6 +245,9 @@
 		},
 		created() {
 			this.ajaxjson();
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 
 		methods: {
@@ -367,7 +372,17 @@
 			//取消修改
 			cancelAmend(){
 				this.amendModel = false;
-			}
+			},
+			resetForm(formData) {
+				let formInline =  {
+					document_num: '',
+					startTime: '',
+					endTime: '',
+					Freightnumber: '',
+				};
+				this.formInline = formInline;
+				this.ajaxjson();
+			},
 		}
 	}
 </script>

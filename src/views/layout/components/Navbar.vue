@@ -1,34 +1,21 @@
 <template>
   <div class="navbar">
   	<!--侧边栏打开折叠-->
-    <hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>
+    <!--<hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>-->
 		<!--面包屑-->
-    <breadcrumb class="breadcrumb-container"/>
-
+    <!--<breadcrumb class="breadcrumb-container"/>-->
+		<div class="img" >
+			<img src="../../../../static/img/login/banner_logo.png" style="height: 40px; margin-top: 20px;"/>
+		</div>
+		<div class="title">
+			杭州领沃电子商务有限公司
+		</div>
     <div class="right-menu">
-      <template v-if="device!=='mobile'">
-        <error-log class="errLog-container right-menu-item"/>
-
-				<!--是否全屏展示-->
-        <!--<el-tooltip :content="$t('navbar.screenfull')" effect="dark" placement="bottom">
-          <screenfull class="screenfull right-menu-item"/>
-        </el-tooltip>-->
-				<!--文字布局大小-->
-        <!--<el-tooltip :content="$t('navbar.size')" effect="dark" placement="bottom">
-          <size-select class="international right-menu-item"/>
-        </el-tooltip>-->
-				<!--语言切换-->
-        <!--<lang-select class="international right-menu-item"/>-->
-				<!--拾色器-->
-        <el-tooltip content="换肤" effect="dark" placement="bottom">
-          <theme-picker class="theme-switch right-menu-item"/>
-        </el-tooltip>
-      </template>
-			<!--右上角退出登录-->
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom"/>
+          <img src="../../../../static/img/login/user.png" style="display: inline-block;" class="user-avatar">
+          <span class="avatar_text">{{names}}</span>
+          <img src="../../../../static/img/login/arrowhead.png"/>
         </div>
         <el-dropdown-menu slot="dropdown">
         	<!--跳转到首页-->
@@ -51,11 +38,9 @@
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      
     </div>
   </div>
 </template>
-
 <script>
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -65,7 +50,6 @@ import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import LangSelect from '@/components/LangSelect'
 import ThemePicker from '@/components/ThemePicker'
-
 export default {
   components: {
     Breadcrumb,
@@ -76,6 +60,12 @@ export default {
     LangSelect,
     ThemePicker
   },
+  data() {
+			return {
+				names:sessionStorage.getItem("name"),
+			}
+		},
+  
   computed: {
     ...mapGetters([
       'sidebar',
@@ -85,6 +75,7 @@ export default {
     ])
   },
   methods: {
+  	
     toggleSideBar() {
       this.$store.dispatch('toggleSideBar')
     },
@@ -99,14 +90,13 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
-  height: 50px;
-  line-height: 50px;
+  height: 60px;
+  line-height: 60px;
   border-radius: 0px !important;
   .hamburger-container {
     line-height: 58px;
     height: 50px;
     float: left;
-    padding: 0 10px;
   }
   .breadcrumb-container{
     float: left;
@@ -135,16 +125,26 @@ export default {
       vertical-align: 15px;
     }
     .avatar-container {
-      height: 50px;
       margin-right: 30px;
       .avatar-wrapper {
         cursor: pointer;
-        margin-top: 5px;
         position: relative;
+        height:80px;
+        line-height:80px;
+        display:flex;
+        justify-content: center;
+      align-items: center;
         .user-avatar {
           width: 40px;
           height: 40px;
           border-radius: 10px;
+        }
+        .avatar_text{
+        	font-size: 18px;
+        	padding-left:10px;
+        	padding-right: 10px;
+        	color: #333333;
+        	font-family: "微软雅黑";
         }
         .el-icon-caret-bottom {
           position: absolute;
@@ -154,6 +154,24 @@ export default {
         }
       }
     }
+  }
+  .img{
+  	background-color: #314240;
+  	border-bottom: 1px solid #242827;
+  	width: 180px; 
+  	height: 80px; 
+  	display: inline-block;
+  	text-align: center;
+  	float: left;
+  }
+  .title{
+  	float: left;
+  	font-size: 18px;
+  	color: #333333;
+		font-family: "微软雅黑";
+		line-height: 80px;
+		font-weight: 500;
+		padding-left: 20px;
   }
 }
 </style>

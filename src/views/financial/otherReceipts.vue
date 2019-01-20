@@ -2,46 +2,45 @@
 <template>
 	<div>
 		<div class="tab-container">
+			<el-form label-width="80px" :inline="true" v-model="formInline" class="demo-form-inline">
 			<div class="title">
 				<el-row>
 					<el-col :span="24">
-						<el-button type="primary" @click="closeAnAbccount">新增</el-button>
-						<el-input style="width:200px"></el-input>
-						<el-button type="primary">筛选订单</el-button>
+						<el-button v-show="permission.indexOf('162') != -1" type="primary" @click="closeAnAbccount">新增</el-button>
+						<el-input style="width:200px" v-model="formInline.document_num"></el-input>
+						<el-button type="primary" @click="ajaxjson">搜索</el-button>
+						<el-button type="primary" @click="showModel = !showModel">筛选订单</el-button>
 					</el-col>
 				</el-row>
 			</div>
-			<div class="search">
-				<el-form label-width="80px" :inline="true" v-model="formInline" class="demo-form-inline">
+			<div class="search" v-show="showModel">
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="开始日期">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.dateStart">
+								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.startTime">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item label="结束日期">
-								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.dateStart">
+								<el-date-picker type="date" placeholder="选择日期" v-model="formInline.endTime">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
-
 						<el-col :span="6">
-							<el-form-item label="费用名称">
-								<el-select v-model="formInline.shop" placeholder="请选择">
-									<el-option label="区域一" value="1"></el-option>
-									<el-option label="区域二" value="2"></el-option>
+							<el-form-item label="供应商">
+								<el-select v-model="formInline.supplier_id" placeholder="请选择">
+									<el-option v-for="(item,index) in SupplierCommonSupplierList" :key="item.id" :label="item.name" :value="item.id"></el-option>
 								</el-select>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" style="text-align:center">
-							<el-button>清空</el-button>
-							<el-button type="primary">确定</el-button>
+							<el-button @click="resetForm">清空</el-button>
+							<el-button type="primary" @click="ajaxjson">确定</el-button>
 						</el-col>
 					</el-row>
-				</el-form>
 			</div>
+			</el-form>
 			<!--展示出来的表格-->
 			<div class="tTable">
 				<el-table :data="data" stripe border style="width: 100%;" size="mini">
@@ -62,7 +61,7 @@
 					</el-table-column>
 					<el-table-column label="操作" width="100" align="center">
 						<template slot-scope="scope">
-							<el-button @click="deletes(scope.row.id)" type="danger" size="mini">删除</el-button>
+							<el-button v-show="permission.indexOf('163') != -1" @click="deletes(scope.row.id)" type="danger" size="mini">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -134,7 +133,6 @@
 				</el-form>
 			</div>
 		</div>
-		
 		<!--编辑-->
 		<div class="model" v-show="amendModel">
 			<div class="model_con">
@@ -189,7 +187,7 @@
 							<el-button @click="cancelAmend">
 								取消
 							</el-button>
-							<el-button type="primary" @click="amend('amendInfo')">
+							<el-button v-show="permission.indexOf('236') != -1" type="primary" @click="amend('amendInfo')">
 								保存
 							</el-button>
 						</el-col>
@@ -204,13 +202,14 @@
 	export default {
 		data() {
 			return {
-				search: '', //采购单输入
+				permission:[],
+				showModel:false,
 				//表单
 				formInline: {
-					dateStart: '1',
-					dateEnd: '',
-					shop: '',
-					Freightnumber: '',
+					document_num:'',
+					startTime:'',
+					endTime:'',
+					supplier_id:'',
 				},
 				//添加时候的提交数据
 				accountFrom: {
@@ -246,14 +245,14 @@
 		created() {
 			this.ajaxjson();
 			this.getSupplierCommonSupplierList();//获取供应商列表
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 
 		methods: {
 			ajaxjson() {
-				let postData = {
-					page: this.page,
-					per_page: this.per_page,
-				}
+				let postData =  Object.assign(this.formInline,{page: this.page,per_page: this.per_page,})
 				this.$post(this.$otherCostRevenueList, postData).then((res) => {
 					if(res.status_code == 0) {
 						let datas = res.data.data;
@@ -383,7 +382,17 @@
 			//取消修改
 			cancelAmend(){
 				this.amendModel = false;
-			}
+			},
+			resetForm() {
+				let formInline =  {
+					document_num:'',
+					startTime:'',
+					endTime:'',
+					supplier_id:'',
+				};
+				this.formInline = formInline;
+				this.ajaxjson();
+			},
 		}
 	}
 </script>

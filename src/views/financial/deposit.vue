@@ -2,18 +2,18 @@
 <template>
 	<div>
 		<div class="tab-container">
+			<el-form label-width="80px" :inline="true" v-model="formInline" class="demo-form-inline">
 			<div class="title">
 				<el-row>
 					<el-col :span="24">
-						<el-button type="primary" @click="closeAnAbccount">新增</el-button>
+						<el-button v-show="permission.indexOf('155') != -1" type="primary" @click="closeAnAbccount">新增</el-button>
 						<el-input style="width:200px" v-model="formInline.document_num"></el-input>
 						<el-button type="primary" @click="ajaxjson">搜索</el-button>
-						<el-button type="primary">筛选订单</el-button>
+						<el-button type="primary" @click="showModel=!showModel">筛选订单</el-button>
 					</el-col>
 				</el-row>
 			</div>
-			<div class="search">
-				<el-form label-width="80px" :inline="true" v-model="formInline" class="demo-form-inline">
+			<div class="search" v-show="showModel">
 					<el-row>
 						<el-col :span="6">
 							<el-form-item label="开始日期">
@@ -52,12 +52,12 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" style="text-align:center">
-							<el-button>清空</el-button>
+							<el-button @click="resetForm">清空</el-button>
 							<el-button type="primary" @click="ajaxjson">确定</el-button>
 						</el-col>
 					</el-row>
-				</el-form>
 			</div>
+			</el-form>
 			<!--展示出来的表格-->
 			<div class="tTable">
 				<el-table :data="data" stripe border style="width: 100%;" size="mini">
@@ -89,8 +89,8 @@
 					</el-table-column>
 					<el-table-column label="操作" width="180" align="center">
 						<template slot-scope="scope" v-if="scope.row.status == 0">
-							<el-button @click="pay(scope.row)" type="warning" size="mini">付款</el-button>
-							<el-button @click="deletes(scope.row.id)" type="danger" size="mini">删除</el-button>
+							<el-button v-show="permission.indexOf('156') != -1" @click="pay(scope.row)" type="warning" size="mini">付款</el-button>
+							<el-button v-show="permission.indexOf('157') != -1" @click="deletes(scope.row.id)" type="danger" size="mini">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -217,7 +217,7 @@
 							<el-button @click="cancelAmend">
 								取消
 							</el-button>
-							<el-button type="primary" @click="amend('amendInfo')">
+							<el-button v-show="permission.indexOf('232') != -1" type="primary" @click="amend('amendInfo')">
 								保存
 							</el-button>
 						</el-col>
@@ -302,6 +302,8 @@
 	export default {
 		data() {
 			return {
+				permission:[],
+				showModel:false,
 				//首页表单提交的数据
 				formInline: {
 					document_num: '', //单据号
@@ -355,6 +357,9 @@
 		created() {
 			this.ajaxjson();
 			this.getSupplierCommonSupplierList(); //获取供应商列表
+			let str = sessionStorage.getItem('permission');
+			let permission = str.split(',');
+			this.permission = permission;
 		},
 
 		methods: {
@@ -532,7 +537,19 @@
 			//取消修改
 			cancelAmend() {
 				this.amendModel = false;
-			}
+			},
+			resetForm() {
+				let formInline =  {
+					document_num: '', //单据号
+					startTime: '', //开始时间
+					endTime: '', //结束时间
+					supplier_id: '', //供应商列表
+					user_id: '', //制单人
+					status: 2, //单据状态
+				};
+				this.formInline = formInline;
+				this.ajaxjson();
+			},
 		}
 	}
 </script>
