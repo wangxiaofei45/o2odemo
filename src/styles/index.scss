@@ -186,7 +186,12 @@ code {
 .multiselect {
     line-height: 16px;
 }
-
+.el-button--warning {
+	background-color: #f48b25;
+}
+.el-button--danger {
+	background-color: #ef4d4c;
+}
 .multiselect--active {
     z-index: 1000 !important;
 }

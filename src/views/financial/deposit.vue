@@ -6,7 +6,7 @@
 				<div class="title">
 					<el-row>
 						<el-col :span="24">
-							<el-button v-show="permission.indexOf('155') != -1" type="primary" @click="closeAnAbccount" style="margin-right: 20px;">
+							<el-button  type="primary" @click="closeAnAbccount" style="margin-right: 20px;">
 								<svg-icon icon-class="add" style="margin-right: 10px;" /> <span>新增</span>
 							</el-button>
 							<el-input placeholder="输入单据号" style="width:300px;margin-right: 20px;" v-model="formInline.document_num">
