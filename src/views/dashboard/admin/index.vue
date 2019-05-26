@@ -246,6 +246,7 @@
 			//新增
 			AddOtherCost(e) {
 				this.$refs[e].validate((valid) => {
+					// 表单的验证 规则
 					if(valid) {
 						let postData = this.$objDeepCopy(this.accountFrom);
 						postData.user_id = sessionStorage.getItem('id');

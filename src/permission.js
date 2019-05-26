@@ -52,15 +52,6 @@ router.beforeEach((to, from, next) => {
 		} else {
 			next()
 		}
-		//获取到token
-		// if(!store.state.permission.permissionList) {
-		// 	store.dispatch('permission/FETCH_PERMISSION').then(() => {
-		// 		next({
-		// 			path: to.path
-		// 		})
-		// 	})
-		// } else {
-		// }
 	} else {
 		//没有token判断跳转到注册页面
 		if(to.path === '/perfectInfo') {

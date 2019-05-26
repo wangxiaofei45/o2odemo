@@ -1,6 +1,10 @@
 //翻译中文
 export default {
   route: {
+		user:'用户管理',
+		archivesManagement:'档案管理',
+		filingCabinetManagement:"档案柜管理",
+		fileBoxManagement:"档案盒管理",
     // 平台端的成员管理
     memberManagement:'成员管理',
     storeList:'商家列表',

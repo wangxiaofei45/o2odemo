@@ -68,37 +68,44 @@ const user = {
 		}, userInfo) {
 			const username = userInfo.username.trim()
 			return new Promise((resolve, reject) => {
-				loginByUsername(username, userInfo.password).then(response => {	
-					let datas = response.data;
-					if(datas.status_code == 0) {
-						commit('SET_TOKEN', datas.data.tokenArr.token);
-						setToken(datas.data.tokenArr.token);
-						sessionStorage.setItem('token',datas.data.tokenArr.token);
-						commit('SET_ORG_TYPE', datas.data.userInfo.root_org_type);
-						setOrgtype(datas.data.userInfo.root_org_type);
-						sessionStorage.setItem("root_org_type", datas.data.userInfo.root_org_type);
-						commit('SET_ID', datas.data.userInfo.id);
-						setRoleId(datas.data.userInfo.id);
-						sessionStorage.setItem("id", datas.data.userInfo.id);
-						commit('SET_SHOP_ID', datas.data.userInfo.oid);
-						setShopId(datas.data.userInfo.id);
-						sessionStorage.setItem("shop_id", datas.data.userInfo.oid);//店铺的id
-						sessionStorage.setItem("name", datas.data.userInfo.name);
-						sessionStorage.setItem("updated_at", datas.data.userInfo.updated_at);
-						sessionStorage.setItem("org_name", datas.data.userInfo.org_name);
-						let str = JSON.stringify(datas.data.userNodeList);
-						sessionStorage.setItem("userNodeList", str);	
-						resolve(datas.data);
-						Message({
-							type: 'success',
-							message: datas.message,
-						});
-					} else {
-						Message.error(datas.message);
-					}
-				}).catch(error => {
-					reject(error);
-				})
+				commit('SET_TOKEN', "123456");
+				setToken("123456");
+				sessionStorage.setItem('token',"123456");
+				// commit('SET_ORG_TYPE', datas.data.userInfo.root_org_type);
+				// setOrgtype(datas.data.userInfo.root_org_type);
+				// sessionStorage.setItem("root_org_type", datas.data.userInfo.root_org_type);
+				
+				// loginByUsername(username, userInfo.password).then(response => {	
+				// 	let datas = response.data;
+				// 	if(datas.status_code == 0) {
+				// 		commit('SET_TOKEN', datas.data.tokenArr.token);
+				// 		setToken(datas.data.tokenArr.token);
+				// 		sessionStorage.setItem('token',datas.data.tokenArr.token);
+				// 		commit('SET_ORG_TYPE', datas.data.userInfo.root_org_type);
+				// 		setOrgtype(datas.data.userInfo.root_org_type);
+				// 		sessionStorage.setItem("root_org_type", datas.data.userInfo.root_org_type);
+				// 		commit('SET_ID', datas.data.userInfo.id);
+				// 		setRoleId(datas.data.userInfo.id);
+				// 		sessionStorage.setItem("id", datas.data.userInfo.id);
+				// 		commit('SET_SHOP_ID', datas.data.userInfo.oid);
+				// 		setShopId(datas.data.userInfo.id);
+				// 		sessionStorage.setItem("shop_id", datas.data.userInfo.oid);//店铺的id
+				// 		sessionStorage.setItem("name", datas.data.userInfo.name);
+				// 		sessionStorage.setItem("updated_at", datas.data.userInfo.updated_at);
+				// 		sessionStorage.setItem("org_name", datas.data.userInfo.org_name);
+				// 		let str = JSON.stringify(datas.data.userNodeList);
+				// 		sessionStorage.setItem("userNodeList", str);	
+				// 		resolve(datas.data);
+				// 		Message({
+				// 			type: 'success',
+				// 			message: datas.message,
+				// 		});
+				// 	} else {
+				// 		Message.error(datas.message);
+				// 	}
+				// }).catch(error => {
+				// 	reject(error);
+				// })
 			})
 		},
 		// 登出

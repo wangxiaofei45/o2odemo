@@ -1,5 +1,6 @@
 export default {
   route: {
+		user:"user",
     // 平台端
     memberManagement:'memberManagement',
     storeList:'storeList',
