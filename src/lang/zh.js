@@ -77,7 +77,7 @@ export default {
   	Organizationlist:'组织架构列表',
   	membershiplist:'组织成员列表',
   	Permissionslist:'权限设置',
-    dashboard: '首页',
+    dashboard: '档案室管理',
     introduction: '简述',
     documentation: '文档',
     guide: '引导页',

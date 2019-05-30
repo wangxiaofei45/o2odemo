@@ -142,7 +142,18 @@ export const asyncRouterMap = [
 				name: '档案管理',
 				icon: 'setting',
 			},
-			children: [{
+			children: [
+				{
+					path: '/archivesManagement/filingCabinetManagement',
+					component: () =>
+						import('@/views/archivesManagement/filingCabinetManagement.vue'),
+						name:"filingCabinetManagement",
+					meta: {
+						title: 'filingCabinetManagement',
+						name: '档案柜管理',
+						permission: []
+					}
+				},{
 				path: '/archivesManagement/fileBoxManagement',
 				component: () =>
 					import('@/views/archivesManagement/fileBoxManagement.vue'),
@@ -152,18 +163,8 @@ export const asyncRouterMap = [
 					name: '档案盒管理',
 					permission: []
 				}
-			},
-			{
-				path: '/archivesManagement/filingCabinetManagement',
-				component: () =>
-					import('@/views/archivesManagement/filingCabinetManagement.vue'),
-					name:"filingCabinetManagement",
-				meta: {
-					title: 'filingCabinetManagement',
-					name: '档案柜管理',
-					permission: []
-				}
-			}, ]
+			}
+			 ]
 		},
 	{
 		path: '/organization',

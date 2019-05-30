@@ -8,7 +8,7 @@
 						<el-button  type="primary" @click="closeAnAbccount" style="margin-right: 20px;">
 							<svg-icon icon-class="add" style="margin-right: 10px;" /> <span>添加用户</span>
 						</el-button>
-						<el-input placeholder="输入单据号" style="width:300px;margin-right: 20px;">
+						<el-input placeholder="输入 档案室/真实姓名/用户名" style="width:350px;margin-right: 20px;">
 							<el-button slot="append" type="primary" @click='ajaxjson' style="background-color: #e0e0e0;border-radius: 0px;">
 								<svg-icon style="margin-right: 5px;" icon-class="icon_search"/><span>搜索</span>
 							</el-button>
@@ -148,7 +148,7 @@
 			<div class="model_con">
 				<el-row class="model_title">
 					<el-col :span="12" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
-						编辑档案室
+						编辑用户
 					</el-col>
 					<el-col :span="12" style="text-align: right;">
 						<el-button type="text" @click="cancelAmend" name="topRightCancel">
@@ -158,29 +158,66 @@
 				</el-row>
 				<el-form label-width="120px" :model="amendInfo" :rules="ruleaccountFrom" ref="amendInfo" class="demo-form-inline">
 					<el-row>
-						<el-col :span="24">
-							<el-form-item label="档案室名称" prop="join_code">
-								<el-input placeholder="请输入" v-model="accountFrom.name"></el-input>
+						<el-col :span="12">
+							<el-form-item label="角色" prop="join_code">
+								<el-select placeholder="请选择" v-model="amendInfo.role">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="档案室" prop="archivesRoom">
+								<el-select placeholder="请选择" v-model="amendInfo.archivesRoom">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="用户名" prop="nickName">
+								<el-input placeholder="请输入" v-model="amendInfo.nickName"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="密码" prop="password">
+								<el-input placeholder="请输入" v-model="amendInfo.password"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="真是姓名" prop="name">
+								<el-input placeholder="请输入" v-model="amendInfo.name"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="联系电话" prop="phone">
+								<el-input placeholder="请输入" v-model="amendInfo.phone"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="职务" prop="duty">
+								<el-select placeholder="请选择" v-model="amendInfo.duty">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item label="账号状态" prop="type">
+								<el-radio-group v-model="amendInfo.type">
+									<el-radio :label="1" :value="1">启用</el-radio>
+									<el-radio :label="2" :value="2">禁用</el-radio>
+								</el-radio-group>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24">
-							<el-form-item label="简称" prop="join_code">
-								<el-input placeholder="请输入" v-model="accountFrom.nickName"></el-input>
+							<el-form-item label="备注" prop="remark">
+								<el-input type="textarea" placeholder="请输入" v-model="amendInfo.remark"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24">
-							<el-form-item label="使用单位名称" prop="join_code">
-								<el-input placeholder="请输入" v-model="accountFrom.unitName"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="24">
-							<el-form-item label="单位联系人电话" prop="join_code">
-								<el-input placeholder="请输入" v-model="accountFrom.phone"></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="24">
-							<el-form-item label="备注">
-								<el-input placeholder="请输入" v-model="accountFrom.remark"></el-input>
+							<el-form-item label="档案盒" prop="fileBox">
+								<el-input placeholder="请输入" v-model="amendInfo.fileBox"></el-input>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -268,14 +305,18 @@
 				},
 				// 编辑时候的信息
 				amendInfo: {
-					nickName:"wxf12",
-					name:"测试档案",
-					number:"12234",
-					unitName:"测试的使用单位",
+					role:"档案管理员",
+					archivesRoom:"王XX",
+					nickName:"用户名",
+					password:"123456",
+					name:"真实姓名",
 					phone:"18888888888",
-					remark:"",
+					duty:"中央党委书记",
+					type:1,
+					remark:"备注",
+					fileBox:"档案盒",
 				}, //编辑时候的
-				PutInStorageModel: true,
+				PutInStorageModel: false,
 				amendModel: false, //修改时候的弹窗
 				page: 1, //分页
 				total: 0,
@@ -459,10 +500,12 @@
 		background-color: rgba(0, 0, 0, 0.4);
 		.model_con {
 			width: 900px;
+			height: 500px;
 			position: absolute;
 			left: 50%;
 			top: 50%;
-			transform: translateX(-50%) translateY(-50%);
+			margin-left: -450px;
+			margin-top: -250px;
 			background-color: #FFF;
 			padding: 20px;
 			box-sizing: border-box;
