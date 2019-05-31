@@ -163,7 +163,18 @@ export const asyncRouterMap = [
 					name: '档案盒管理',
 					permission: []
 				}
-			}
+			},
+			{
+				path: '/archivesManagement/documentQuery',
+				component: () =>
+					import('@/views/archivesManagement/documentQuery.vue'),
+				name: 'documentQuery',
+				meta: {
+					title: 'documentQuery',
+					name: '档案添加与查询',
+					permission: []
+				}
+			},
 			 ]
 		},
 	{
