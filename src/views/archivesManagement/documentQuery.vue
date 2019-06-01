@@ -144,6 +144,11 @@
 								<el-input placeholder="请输入" v-model="accountFrom.adress"></el-input>
 							</el-form-item>
 						</el-col>
+						<el-col :span="12">
+							<el-form-item label="选择文件" prop="adress">
+								<el-input placeholder="请输入" v-model="accountFrom.file"></el-input>
+							</el-form-item>
+						</el-col>
 						<el-col :span="24">
 							<el-form-item label="备注" prop="remark">
 								<el-input type="textarea" placeholder="请输入" v-model="accountFrom.remark"></el-input>
@@ -250,6 +255,11 @@
 								<el-input placeholder="请输入" v-model="amendInfo.adress"></el-input>
 							</el-form-item>
 						</el-col>
+						<el-col :span="12">
+							<el-form-item label="选择文件" prop="file">
+								<el-input placeholder="请输入" v-model="amendInfo.file"></el-input>
+							</el-form-item>
+						</el-col>
 						<el-col :span="24">
 							<el-form-item label="备注" prop="remark">
 								<el-input type="textarea" placeholder="请输入" v-model="amendInfo.remark"></el-input>
@@ -334,7 +344,8 @@
 					filecabinet:"2号柜",//档案柜
 					confidentiality:1,//保密等级
 					adress:"室内",//存放位置
-					type:1,//文档类型
+					file:"",//文件
+					type:1,//文档类型				
 					remake:"备注",//备注
 				},
 				ruleaccountFrom: {
@@ -371,6 +382,7 @@
 					confidentiality:1,//保密等级
 					adress:"室内",//存放位置
 					type:1,//文档类型
+					file:"",//文件
 					remake:"备注",//备注
 				}, //编辑时候的
 				PutInStorageModel: false,

@@ -175,7 +175,19 @@ export const asyncRouterMap = [
 					permission: []
 				}
 			},
-			 ]
+			{
+				path: '/archivesManagement/theFilePreview',
+				component: () =>
+					import('@/views/archivesManagement/theFilePreview.vue'),
+				name: 'theFilePreview',
+				meta: {
+					title: 'theFilePreview',
+					name: '档案预览',
+					permission: []
+				}
+			},
+			
+			]
 		},
 	{
 		path: '/organization',

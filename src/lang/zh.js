@@ -6,6 +6,7 @@ export default {
 		filingCabinetManagement:"档案柜管理",
 		fileBoxManagement:"档案盒管理",
 		documentQuery:"档案添加与查询",
+		theFilePreview:"档案预览",
     // 平台端的成员管理
     memberManagement:'成员管理',
     storeList:'商家列表',
