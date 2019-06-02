@@ -1,144 +1,142 @@
 <template>
-	<div class="login-container">
-		<div class="logo">
-			<img src="../../../static/img/login/logo.svg"></img>
-		</div>
-		<el-form ref="loginForm" :model="loginForm" class="login-form" label-width="60px">
-			<el-row style="margin-top: 40px;">
-				<el-col :span="20" :offset="4">
-					<el-form-item prop="username" label="账号">
-						<el-input v-model="loginForm.username" placeholder="请输入账号" name="username" type="text" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="20" :offset="4" style="margin-top: 20px;">
-					<el-form-item prop="password" label="密码">
-						<el-input :type="passwordType" v-model="loginForm.password" placeholder="请输入密码" name="password" @keyup.enter.native="handleLogin" />
-						<router-link to="forgetpass">
-							<el-button type="text" class="forgetpsw">忘记密码</el-button>
-						</router-link>
-					</el-form-item>
-				</el-col>
-				<el-col :span="24" style="text-align: center; margin-top: 20px;">
-					<el-button :loading="loading" type="primary" style="width: 120px;height:40px;margin-bottom:30px;" @click.native.prevent="handleLogin">
-						登录
-					</el-button>
-				</el-col>
-			</el-row>
-		</el-form>
-	</div>
+  <div class="login-container">
+    <div class="logo"/>
+    <el-form ref="loginForm" :model="loginForm" class="login-form" label-width="60px">
+      <el-row style="margin-top: 40px;">
+        <el-col :span="20" :offset="4">
+          <el-form-item prop="username" label="账号">
+            <el-input v-model="loginForm.username" placeholder="请输入账号" name="username" type="text" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="20" :offset="4" style="margin-top: 20px;">
+          <el-form-item prop="password" label="密码">
+            <el-input :type="passwordType" v-model="loginForm.password" placeholder="请输入密码" name="password" @keyup.enter.native="handleLogin" />
+            <router-link to="forgetpass">
+              <el-button type="text" class="forgetpsw">忘记密码</el-button>
+            </router-link>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24" style="text-align: center; margin-top: 20px;">
+          <el-button :loading="loading" type="primary" style="width: 120px;height:40px;margin-bottom:30px;" @click.native.prevent="handleLogin">
+            登录
+          </el-button>
+        </el-col>
+      </el-row>
+    </el-form>
+  </div>
 </template>
 <script>
-	import { isvalidUsername } from '@/utils/validate'
-	import LangSelect from '@/components/LangSelect'
-	export default {
-		name: 'Login',
-		components: {
-			LangSelect,
-		},
-		data() {
-			const validateUsername = (rule, value, callback) => {
-				if(!isvalidUsername(value)) {
-					callback(new Error('Please enter the correct user name'))
-				} else {
-					callback()
-				}
-			}
-			const validatePassword = (rule, value, callback) => {
-				if(value.length < 6) {
-					callback(new Error('The password can not be less than 6 digits'))
-				} else {
-					callback()
-				}
-			}
-			return {
-				loginForm: {
-					username: '', //平台账号
-					password: '',
-					type: 2,
-				},
-				loginRules: {
-					username: [{
-						required: true,
-						trigger: 'blur',
-						message: '账号为空',
-					}],
-					password: [{
-						required: true,
-						trigger: 'blur',
-						message: '密码为空',
-					}]
-				},
-				passwordType: 'password',
-				loading: false,
-				showDialog: false,
-				redirect: undefined
-			}
-		},
-		watch: {
-			$route: {
-				handler: function(route) {
-					this.redirect = route.query && route.query.redirect
-				},
-				immediate: true
-			}
-		},
-		//进入页面
-		created() {},
-		//页面销毁
-		destroyed() {},
-		methods: {
-			showPwd() {
-				if(this.passwordType === 'password') {
-					this.passwordType = ''
-				} else {
-					this.passwordType = 'password'
-				}
-			},
-			register() {
-				this.$router.push({
-					path: '/register'
-				})
-			},
-			//最初 的登录时候的
-			handleLogin() {
-				this.loading = true;
-				this.$addRoutes();
-				this.$refs.loginForm.validate(valid => {
-					if(valid) {
-						//表单
-						this.loading = true;
-						this.$store.dispatch('LoginByUsername', this.loginForm).then((res) => {
-							this.loading = false;
-							//这里还是要做判断 是否 路由列表加载完成
-							this.$addRoutes();
-							this.$router.push({
-								path: '/'
-							})							
-							// if(res.tokenArr.dataEnd == 0) {
-							// 	this.$router.push({
-							// 		path: '/reminder'
-							// 	})
-							// } else if(res.userInfo.need_take_over) {
-							// 	//接班
-							// 	this.$router.push({
-							// 		path: '/successionTable'
-							// 	})
-							// } else {
-							// 	this.$router.push({
-							// 		path: '/'
-							// 	})
-							// }
-						}).catch(() => {
-							this.loading = false
-						})
-						this.loading = false;
-					} else {
-						return false
-					}
-				})
-			},
-		}
-	}
+import { isvalidUsername } from '@/utils/validate'
+import LangSelect from '@/components/LangSelect'
+export default {
+  name: 'Login',
+  components: {
+    LangSelect
+  },
+  data() {
+    const validateUsername = (rule, value, callback) => {
+      if (!isvalidUsername(value)) {
+        callback(new Error('Please enter the correct user name'))
+      } else {
+        callback()
+      }
+    }
+    const validatePassword = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback(new Error('The password can not be less than 6 digits'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      loginForm: {
+        username: '', // 平台账号
+        password: '',
+        type: 2
+      },
+      loginRules: {
+        username: [{
+          required: true,
+          trigger: 'blur',
+          message: '账号为空'
+        }],
+        password: [{
+          required: true,
+          trigger: 'blur',
+          message: '密码为空'
+        }]
+      },
+      passwordType: 'password',
+      loading: false,
+      showDialog: false,
+      redirect: undefined
+    }
+  },
+  watch: {
+    $route: {
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
+    }
+  },
+  // 进入页面
+  created() {},
+  // 页面销毁
+  destroyed() {},
+  methods: {
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
+    },
+    register() {
+      this.$router.push({
+        path: '/register'
+      })
+    },
+    // 最初 的登录时候的
+    handleLogin() {
+      this.loading = true
+      this.$addRoutes()
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          // 表单
+          this.loading = true
+          this.$store.dispatch('LoginByUsername', this.loginForm).then((res) => {
+            this.loading = false
+            // 这里还是要做判断 是否 路由列表加载完成
+            this.$addRoutes()
+            this.$router.push({
+              path: '/'
+            })
+            // if(res.tokenArr.dataEnd == 0) {
+            // 	this.$router.push({
+            // 		path: '/reminder'
+            // 	})
+            // } else if(res.userInfo.need_take_over) {
+            // 	//接班
+            // 	this.$router.push({
+            // 		path: '/successionTable'
+            // 	})
+            // } else {
+            // 	this.$router.push({
+            // 		path: '/'
+            // 	})
+            // }
+          }).catch(() => {
+            this.loading = false
+          })
+          this.loading = false
+        } else {
+          return false
+        }
+      })
+    }
+  }
+}
 </script>
 <style rel="stylesheet/scss" lang="scss">
 	$bg:#ffffff;
@@ -242,7 +240,7 @@
 		}
 	}
 	}
-	
+
 	@media only screen and (min-width: 1680px) {
 		.login-container {
 		.logo {
@@ -364,7 +362,7 @@
 			min-width: 516px;
 			max-width: 750px;
 			height: 370px;
-			
+
 			background-color: #FFFFFF;
 			padding: 35px 35px 15px 35px;
 			margin: 60px auto;

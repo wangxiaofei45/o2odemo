@@ -1,85 +1,17 @@
-//翻译中文
+// 翻译中文
 export default {
   route: {
-		user:'用户管理',
-		archivesManagement:'档案管理',
-		filingCabinetManagement:"档案柜管理",
-		fileBoxManagement:"档案盒管理",
-		documentQuery:"档案添加与查询",
-		theFilePreview:"档案预览",
-    // 平台端的成员管理
-    memberManagement:'成员管理',
-    storeList:'商家列表',
-    // 平台端的设置
-    permissionSetting:'权限设置',
-    functionList:'功能列表',
-    organizationalStructureList:'组织架构列表',
-  	//报表管理
-  	statement:'报表管理',
-  	DailyReport:'日结报表',
-  	InTransitDocuments:'在途单据',
-		RetailReport:'零售报表',
-		InventoryStatistics:'库存统计',
-		WarehouseInAndOut:'仓库进出存',
-		StoreInAndOut:'店铺进出存',
-  	//财务管理
-  	financial:'财务管理',
-  	AccountPayable:'应付款',
-    Otherbillsofpayment:'其他支出单',
-    otherReceipts:'其他收入单',
-    deposit:'定金',
-  	//销售管理
-  	sell:'销售管理',
-  	retail:'零售开票',
-  	CashierInventory:'收银盘点',
-  	sales:'销货订单',
-  	cashierWatch:'收银交班表',
-  	successionTable:'收银接班表',
-  	//购货管理
-  	purchase:'采购管理',
-  	PurchasingSystem:'采购入库',
-  	PurchasingManagement:'采购单',
-  	costOfGoods:'商品成本',
-  	PurchaseReturn:'采购退货',
-  	PurchaseOrder:'采购订单',
-  	//仓库管理
-  	storage:'仓库管理',
-		PurchaseWarehouseEntryForm:'采购入库单',
-  	AllocatingStorage:'仓库调入',
-  	AllocatingOutbound:'仓库调出',
-  	GoodsInTransit:'在途商品',
-  	StockTaking:'库存盘点',
-  	TheOverflowOfSingle:'报溢单',
-  	ReportedLossOfSingle:'报损单',
-  	InventoryList:'库存列表',
-  
-  	//商品管理
-  	// BarCodeManagement:'条码管理',
-  	ProductRegistration:'商品注册',
-  	BrandList:'品牌列表',
-  	ProductTypes:'商品类型',
-  	ProductManagement:'商品管理',
-    brandManagement:'商品管理',
-    goodsClass:'商品分类',
-    specificationManagement:'规格管理',
-  	//店铺资料
-  	StaffFiles:'职员档案',
-  	RoleManagement:'角色列表',
-    CustomerList:'会员列表',
-    CollectMethod:'收银方式',
-    TradingUnit:'往来单位',
-  	contactManagement:'联系人管理',
-  	//基础设置
-  	basicSetting:'基础设置',
-    storeFiles:'店铺档案',
-    companyArchives:'公司档案',
-    personalFiles:'个人档案',
-  	//系统设置
-  	systemSettings:'设置',
-  	Organizationlist:'组织架构列表',
-  	membershiplist:'组织成员列表',
-  	Permissionslist:'权限设置',
+    user: '用户管理',
+    archivesManagement: '档案管理',
+    filingCabinetManagement: '档案柜管理',
+    fileBoxManagement: '档案盒管理',
+    documentQuery: '档案添加与查询',
+    theFilePreview: '档案预览',
+    CategoryForArchives: '档案归总',
+    fileTransfer: '档案转移',
+    Permissionslist: '角色管理',
     dashboard: '档案室管理',
+    Organizationlist: '带单管理',
     introduction: '简述',
     documentation: '文档',
     guide: '引导页',
@@ -137,7 +69,7 @@ export default {
     title: '系统登录',
     logIn: '登录',
     username: '账号',
-    phone:'账号',
+    phone: '账号',
     password: '密码',
     any: '随便填',
     thirdparty: '第三方登录',
@@ -151,7 +83,7 @@ export default {
     roles: '你的权限',
     switchRoles: '切换权限'
   },
- 
+
   components: {
     documentation: '文档',
     tinymceTips: '富文本是管理后台一个核心的功能，但同时又是一个有很多坑的地方。在选择富文本的过程中我也走了不少的弯路，市面上常见的富文本都基本用过了，最终权衡了一下选择了Tinymce。更详细的富文本比较和介绍见',

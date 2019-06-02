@@ -1,40 +1,27 @@
 <template>
   <div class="navbar">
-  	<!--侧边栏打开折叠-->
-    <!--<hamburger :toggle-click="toggleSideBar" :is-active="sidebar.opened" class="hamburger-container"/>-->
-		<!--面包屑-->
-    <!--<breadcrumb class="breadcrumb-container"/>-->
-		<div class="img" >
+    <!-- <div class="img" >
 			<img src="../../../../static/img/login/banner_logo.svg" style="margin-top: 20px;"/>
-			<!--<img src="../../../../static/img/login/banner_logo.png" style="margin-top: 20px;"/>-->
-		</div>
-		<div class="title">
-			{{org_name}}
-		</div>
+		</div> -->
+    <div class="title">
+      {{ org_name }}
+    </div>
     <div class="right-menu">
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
           <img src="../../../../static/img/login/user.svg" style="display: inline-block;" class="user-avatar">
-          <span class="avatar_text">{{names}}</span>
-          <img src="../../../../static/img/login/arrowhead.png"/>
+          <span class="avatar_text">{{ names }}</span>
+          <img src="../../../../static/img/login/arrowhead.png">
         </div>
         <el-dropdown-menu slot="dropdown">
-        	<!--跳转到首页-->
           <router-link to="/">
             <el-dropdown-item>
-             	 首页
+              档案室管理
             </el-dropdown-item>
           </router-link>
-          <router-link to="/forgetpass">
-            <el-dropdown-item>
-             		修改密码
-            </el-dropdown-item>
-          </router-link>
-          <!--退出登录-->
-          <!--divided 分割-->
           <el-dropdown-item>
             <span style="display:block;" @click="logout">
-            	退出登录
+              退出登录
             </span>
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -62,12 +49,12 @@ export default {
     ThemePicker
   },
   data() {
-			return {
-				names:sessionStorage.getItem("name"),
-				org_name:sessionStorage.getItem("org_name"),
-			}
-		},
-  
+    return {
+      names: sessionStorage.getItem('name'),
+      org_name: sessionStorage.getItem('org_name')
+    }
+  },
+
   computed: {
     ...mapGetters([
       'sidebar',
@@ -77,7 +64,7 @@ export default {
     ])
   },
   methods: {
-  	
+
     toggleSideBar() {
       this.$store.dispatch('toggleSideBar')
     },
@@ -158,8 +145,8 @@ export default {
   .img{
   	background-color: #2E3332;
   	border-bottom: 1px solid #242827;
-  	width: 180px; 
-  	height: 80px; 
+  	width: 180px;
+  	height: 80px;
   	display: inline-block;
   	text-align: center;
   	float: left;
