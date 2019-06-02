@@ -99,41 +99,31 @@ export default {
     },
     // 最初 的登录时候的
     handleLogin() {
-      this.loading = true
-      this.$addRoutes()
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          // 表单
-          this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then((res) => {
-            this.loading = false
-            // 这里还是要做判断 是否 路由列表加载完成
-            this.$addRoutes()
-            this.$router.push({
-              path: '/'
-            })
-            // if(res.tokenArr.dataEnd == 0) {
-            // 	this.$router.push({
-            // 		path: '/reminder'
-            // 	})
-            // } else if(res.userInfo.need_take_over) {
-            // 	//接班
-            // 	this.$router.push({
-            // 		path: '/successionTable'
-            // 	})
-            // } else {
-            // 	this.$router.push({
-            // 		path: '/'
-            // 	})
-            // }
-          }).catch(() => {
-            this.loading = false
-          })
-          this.loading = false
-        } else {
-          return false
-        }
-      })
+		sessionStorage.setItem('token',"123456")
+      this.loading = true;
+	  this.$addRoutes();
+	  this.$router.push({
+	  	path: '/'
+	  })
+   //    this.$refs.loginForm.validate(valid => {
+   //      if (valid) {
+   //        // 表单
+   //        this.loading = true
+   //        this.$store.dispatch('LoginByUsername', this.loginForm).then((res) => {
+   //          this.loading = false
+   //          // 这里还是要做判断 是否 路由列表加载完成
+			// this.$addRoutes();
+			// this.$router.push({
+			// 	path: '/'
+			// })
+   //        }).catch(() => {
+   //          this.loading = false
+   //        })
+   //        this.loading = false
+   //      } else {
+   //        return false
+   //      }
+   //    })
     }
   }
 }

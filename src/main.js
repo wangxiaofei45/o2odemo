@@ -25,7 +25,12 @@ import './assets/icon/iconfont.css' //自定义图标
 import * as filters from './filters' // global filters
 
 import Print from 'vue-print-nb'
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+
+// require styles
+import 'swiper/dist/css/swiper.css'
 Vue.use(Print)
+Vue.use(VueAwesomeSwiper)
 Vue.prototype.apiUrl = "http://api_dev.yilianerptest.com/api/"; //全局的定义api
 Vue.use(Element, {
 	size: Cookies.get('size') || 'medium', // set element-ui default size
