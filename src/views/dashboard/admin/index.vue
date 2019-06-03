@@ -31,7 +31,7 @@
 					</el-table-column>
 					<el-table-column label="操作" width="300" align="center">
 						<template slot-scope="scope">
-							<el-button type="primary" size="mini">查看管理员</el-button>
+							<el-button @click="seemaster" type="primary" size="mini">查看管理员</el-button>
 							<el-button @click="goToEditor(scope.row)" type="warning" size="mini">编辑</el-button>
 							<el-button @click="deletes(scope.row.id)" type="danger" size="mini">删除</el-button>
 						</template>
@@ -215,11 +215,12 @@
 		},
 		created() {
 			// this.ajaxjson();
-			let str = sessionStorage.getItem('permission');
-			let permission = str.split(',');
-			this.permission = permission;
+			// let str = sessionStorage.getItem('permission');
+			// let permission = str.split(',');
+			// this.permission = permission;
 		},
 		methods: {
+			
 			ajaxjson() {
 				//合并提交
 				let postData = Object.assign({
@@ -241,6 +242,12 @@
 							message: res.message,
 						})
 					}
+				})
+			},
+			// 跳转到用户管理的页面
+			seemaster(){
+				this.$router.push({
+					path:"/user"
 				})
 			},
 			//新增

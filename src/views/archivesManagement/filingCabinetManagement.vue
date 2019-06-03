@@ -276,6 +276,7 @@
 					}
 				})
 			},
+			
 			//新增
 			AddOtherCost(e) {
 				this.$refs[e].validate((valid) => {
@@ -315,9 +316,11 @@
 				console.log("删除!")
 				// this.$delete(this.$earnestDelEarnest, postData);
 			},
-			// 跳转到档案查询页
+			// 跳转到档案盒页面
 			gotosee(e){
-				console.log(e)
+				this.$router.push({
+					path:"/archivesManagement/fileBoxManagement",
+				})
 			},
 			//打开编辑
 			goToEditor(e) {

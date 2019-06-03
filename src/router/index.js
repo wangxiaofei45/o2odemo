@@ -52,6 +52,7 @@ export const constantRouterMap = [{
     name: '登录页'
   }
 },
+// 轮播图
 {
   path: '/banner',
   component: () =>
@@ -60,6 +61,17 @@ export const constantRouterMap = [{
   meta: {
     title: 'banner',
     name: 'banner'
+  }
+},
+// 档案详情
+{
+  path: '/fileForDetails',
+  component: () =>
+			import('@/views/archivesManagement/fileForDetails'),
+  hidden: true,
+  meta: {
+    title: 'fileForDetails',
+    name: 'fileForDetails'
   }
 },
   // 错误进入的页面

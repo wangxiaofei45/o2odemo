@@ -464,7 +464,9 @@
 			},
 			// 跳转到档案查询页
 			gotosee(e){
-				console.log(e)
+				this.$router.push({
+					path:"/fileForDetails",
+				})
 			},
 			//打开编辑
 			goToEditor(e) {
