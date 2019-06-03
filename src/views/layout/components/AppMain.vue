@@ -27,7 +27,7 @@
 
 <style scoped>
 	.app-main {
-		min-height: calc(100vh - 110px);
+		min-height: calc(100vh - 114px);
 		width: 100%;
 		min-width: 1100px;
 		position: relative;

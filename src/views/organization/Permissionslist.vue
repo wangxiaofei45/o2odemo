@@ -195,11 +195,11 @@
 		},
 		//页面创建完成后
 		created() {
-			this.ajaxjson(); //请求模板列表的数据
-			this.shop_type = getOrgType();
-			let str = sessionStorage.getItem('permission');
-			let permission = str.split(',');
-			this.permission = permission;
+			// this.ajaxjson();
+			// this.shop_type = getOrgType();
+			// let str = sessionStorage.getItem('permission');
+			// let permission = str.split(',');
+			// this.permission = permission;
 		},
 		methods: {
 			//获取权限设置列表
