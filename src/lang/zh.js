@@ -11,6 +11,8 @@ export default {
     fileTransfer: '档案转移',
     Permissionslist: '角色管理',
     dashboard: '档案室管理',
+		menuManagement:"菜单管理",
+		fileReview:"档案审核",
     Organizationlist: '带单管理',
     introduction: '简述',
     documentation: '文档',

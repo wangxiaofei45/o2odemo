@@ -11,9 +11,9 @@
         <el-col :span="20" :offset="4" style="margin-top: 20px;">
           <el-form-item prop="password" label="密码">
             <el-input :type="passwordType" v-model="loginForm.password" placeholder="请输入密码" name="password" @keyup.enter.native="handleLogin" />
-            <router-link to="forgetpass">
+          <!--  <router-link to="forgetpass">
               <el-button type="text" class="forgetpsw">忘记密码</el-button>
-            </router-link>
+            </router-link> -->
           </el-form-item>
         </el-col>
         <el-col :span="24" style="text-align: center; margin-top: 20px;">

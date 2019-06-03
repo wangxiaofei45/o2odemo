@@ -115,24 +115,7 @@ export default new Router({
 
 // 表示需要动态判断权限并通过动态添加的页面
 export const asyncRouterMap = [
-  // 用户管理
-  {
-    path: '/user',
-    component: Layout,
-    redirect: '/user/index',
-    children: [{
-      path: '/user/index',
-      component: () =>
-				import('@/views//user/index.vue'),
-      name: 'user',
-      meta: {
-        title: 'user',
-        name: '用户管理',
-        icon: 'user',
-        permission: []
-      }
-    }]
-  },
+ 
   // 档案盒管理
   {
     path: '/archivesManagement',
@@ -211,7 +194,19 @@ export const asyncRouterMap = [
           name: '档案转移',
           permission: []
         }
-      }
+      },
+			
+			 {
+			  path: '/archivesManagement/fileReview',
+			  component: () =>
+					import('@/views/archivesManagement/fileReview.vue'),
+			  name: 'fileReview',
+			  meta: {
+			    title: 'fileReview',
+			    name: '档案审核',
+			    permission: []
+			  }
+			},
     ]
   },
   {
@@ -235,17 +230,35 @@ export const asyncRouterMap = [
           permission: []
         }
       },
-      // 组织架构列表
+      // 菜单管理
       {
-        path: '/Organizationlist',
+        path: '/menuManagement',
         component: () =>
-					import('@/views/organization/Organizationlist'),
-        name: 'Organizationlist',
+					import('@/views/organization/menuManagement'),
+        name: 'menuManagement',
         meta: {
-          title: 'Organizationlist',
+          title: 'menuManagement',
           name: '菜单管理'
         }
       }
     ]
-  }
+  },
+	 // 用户管理
+	{
+	  path: '/user',
+	  component: Layout,
+	  redirect: '/user/index',
+	  children: [{
+	    path: '/user/index',
+	    component: () =>
+				import('@/views//user/index.vue'),
+	    name: 'user',
+	    meta: {
+	      title: 'user',
+	      name: '用户管理',
+	      icon: 'user',
+	      permission: []
+	    }
+	  }]
+	},
 ]
