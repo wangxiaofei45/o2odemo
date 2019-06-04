@@ -1,22 +1,22 @@
-<!--权限列表-->
 <template>
+	<!--权限列表-->
 	<div class="container">
 		<div v-show="showModel == 1">
 			<div class="title">
-				<el-button v-show="permission.indexOf('201') != -1" type="primary" @click="open_newInfo">
-					<svg-icon icon-class="add" style="margin-right: 10px;" /> <span>新增</span>
+				<el-button type="primary" @click="open_newInfo">
+					<svg-icon icon-class="add" style="margin-right: 10px;" /> <span>新增角色</span>
 				</el-button>
 			</div>
 			<el-tabs v-model="activeName">
 				<el-table :data="data_1" stripe border size="mini" min-height="840px" style="width: 100%">
 					<el-table-column type="index" label="序号" width="80" align="center">
 					</el-table-column>
-					<el-table-column prop="role_name" label="权限组">
+					<el-table-column prop="role_name" label="角色">
 					</el-table-column>
 					<el-table-column label="操作" width="200" align="center">
 						<template slot-scope="scope">
-							<el-button v-show="permission.indexOf('203') != -1" size="mini" type="primary" @click="amend(scope.row)">编辑</el-button>
-							<el-button v-show="permission.indexOf('204') != -1" size="mini" type="danger" @click="deletes(scope.row.id)">删除</el-button>
+							<el-button size="mini" type="primary" @click="amend(scope.row)">编辑</el-button>
+							<el-button size="mini" type="danger" @click="deletes(scope.row.id)">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>
@@ -31,7 +31,7 @@
 			<div class="model_con">
 				<el-row class="model_title" align="bottom">
 					<el-col :span="8" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
-						新增权限
+						新增角色
 					</el-col>
 					<el-col :span="4" :offset="12" style="text-align: right;">
 						<el-button type="text" @click="cancel_newInfo('new_info')">
@@ -39,29 +39,10 @@
 						</el-button>
 					</el-col>
 				</el-row>
-				<el-row v-if="shop_type == 1">
-					<el-form>
-						<el-col :span="4">
-							<el-form-item label="类型">
-								<el-radio-group v-model="radio" @change="checkRadio">
-									<el-radio label="1">公司</el-radio>
-									<el-radio label="2">店铺</el-radio>
-								</el-radio-group>
-							</el-form-item>
-						</el-col>
-						<el-col :span="4">
-							<el-form-item label="" style="display: inline-block;">
-								<el-select v-model="shop_id" @change="selectShopId">
-									<el-option v-for="(item,index) in options" :key="item.id" :value="item.id" :label="item.name"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-col>
-					</el-form>
-				</el-row>
 				<el-form :model="new_info" ref="new_info" :rules="new_inforules" label-width="100px">
 					<el-row>
 						<el-col :span="24">
-							<el-form-item label="权限组名称" prop="name">
+							<el-form-item label="角色名称" prop="name">
 								<el-input v-model="new_info.name" style="width: 200px;"></el-input>
 							</el-form-item>
 						</el-col>
@@ -95,7 +76,7 @@
 			<div class="model_con">
 				<el-row class="model_title" align="bottom">
 					<el-col :span="8" style="border-left: #13C2C2 3px solid; padding-left: 15px;">
-						修改权限
+						修改角色权限
 					</el-col>
 					<el-col :span="4" :offset="12" style="text-align: right;">
 						<el-button type="text" @click="cancel_amend_newInfo">
@@ -106,7 +87,7 @@
 				<el-form :model="amend_info" ref="amend_info" :rules="amend_inforules" label-width="100px">
 					<el-row>
 						<el-col :span="24">
-							<el-form-item label="权限组名称" prop="name">
+							<el-form-item label="角色名称" prop="name">
 								<el-input v-model="amend_info.name" style="width: 200px;" disabled></el-input>
 							</el-form-item>
 						</el-col>
@@ -147,16 +128,49 @@
 			return {
 				permission: [],
 				radio: '1', //默认是店铺
-				checkGroup: [], //权限选择
+				checkGroup: [{
+					id:1,
+					name:"权限1",
+					children:[
+						{
+							id:2,
+							name:"二级权限",
+							children:[
+								{
+									id:3,
+									name:"三级权限",
+								}
+							]
+						}
+					]
+				}], //权限选择
 				checkList: [], //权限选择的
-				anemdCheckList: [], //修改时候的
+				anemdCheckList: [{
+					id:1,
+					name:"权限1",
+					children:[
+						{
+							id:2,
+							name:"二级权限",
+							children:[
+								{
+									id:3,
+									name:"三级权限",
+								}
+							]
+						}
+					]
+				}], //修改时候的
 				checkAll: false,
 				checkedCities: ['上海', '北京'],
 				isIndeterminate: true,
 				activeName: 'second',
 				options: [],
 				showModel: 1,
-				data_1: [], //权限设置列表table
+				data_1: [
+					{id:1,
+					role_name:"角色1",}
+				], 
 				new_info: {
 					name: '', //新增权限的name
 					idstr: '', //id字符串
@@ -237,43 +251,43 @@
 			open_newInfo() {
 				//获取结点权限
 				this.showModel = 2;
-				let postData = {
-					type: this.radio,
-					role_id: this.role_id,
-				};
-				this.$post(this.$organizationRolenode, postData).then((res) => {
-					let data = res;
-					if(data.status_code == 0) {
-						this.checkGroup = data.data;
-					}
-				});
+				// let postData = {
+				// 	type: this.radio,
+				// 	role_id: this.role_id,
+				// };
+				// this.$post(this.$organizationRolenode, postData).then((res) => {
+				// 	let data = res;
+				// 	if(data.status_code == 0) {
+				// 		this.checkGroup = data.data;
+				// 	}
+				// });
 			},
 			// 选择店铺去切换
-			checkRadio(e) {
-				if(e == 2) {
-					this.$post(this.$organizationGetCompanyShop).then((res) => {
-						let data = res;
-						if(data.status_code == 0) {
-							this.options = res.data; //下拉选择
-						} else {
-							this.$message.error(data.message);
-						}
-					});
-				} else {
-					let postData = {
-						type: this.radio,
-						role_id: this.role_id,
-					};
-					this.options = [];
-					this.shop_id = '';
-					this.$post(this.$organizationRolenode, postData).then((res) => {
-						let data = res;
-						if(data.status_code == 0) {
-							this.checkGroup = data.data;
-						}
-					});
-				}
-			},
+			// checkRadio(e) {
+			// 	if(e == 2) {
+			// 		this.$post(this.$organizationGetCompanyShop).then((res) => {
+			// 			let data = res;
+			// 			if(data.status_code == 0) {
+			// 				this.options = res.data; //下拉选择
+			// 			} else {
+			// 				this.$message.error(data.message);
+			// 			}
+			// 		});
+			// 	} else {
+			// 		let postData = {
+			// 			type: this.radio,
+			// 			role_id: this.role_id,
+			// 		};
+			// 		this.options = [];
+			// 		this.shop_id = '';
+			// 		this.$post(this.$organizationRolenode, postData).then((res) => {
+			// 			let data = res;
+			// 			if(data.status_code == 0) {
+			// 				this.checkGroup = data.data;
+			// 			}
+			// 		});
+			// 	}
+			// },
 			// 第一级全选
 			check1(val, item) {
 				//全选
@@ -476,45 +490,46 @@
 			},
 			//修改权限
 			amend(e) {
-				let postData = {
-					type: this.radio,
-					role_id: e.id,
-				};
-				this.$post(this.$organizationRolenode, postData).then((res) => {
-					let data = res;
-					if(data.status_code == 0) {
-						let datas = res.data;
-						let arr = [];
-						for(var i = 0; i < datas.length; i++) {
-							if(datas[i].is_hide == 1) {
-								arr.push(datas[i].id);
-							}
-							if(datas[i].children) {
-								for(var j = 0; j < datas[i].children.length; j++) {
-									if(datas[i].children[j].is_hide == 1) {
-										arr.push(datas[i].children[j].id);
-										if( datas[i].children[j].children){
-											for(let z = 0; z < datas[i].children[j].children.length; z++) {
-												if(datas[i].children[j].children[z].is_hide == 1) {
-													arr.push(datas[i].children[j].children[z].id);
-												}
-											}
-										}
-										
-									}
-
-								}
-							}
-						}
-						this.anemdCheckList = arr;
-						this.checkGroup = data.data;
-						this.showModel = 3;
-						this.amend_info.name = e.role_name;
-						this.amend_info.idstr = arr.join(",");
-						this.amend_info.type = e.is_shop ? '0' : '1';
-						this.amend_info.role_id = e.id;
-					}
-				});
+				this.showModel = 3;
+// 				let postData = {
+// 					type: this.radio,
+// 					role_id: e.id,
+// 				};
+// 				this.$post(this.$organizationRolenode, postData).then((res) => {
+// 					let data = res;
+// 					if(data.status_code == 0) {
+// 						let datas = res.data;
+// 						let arr = [];
+// 						for(var i = 0; i < datas.length; i++) {
+// 							if(datas[i].is_hide == 1) {
+// 								arr.push(datas[i].id);
+// 							}
+// 							if(datas[i].children) {
+// 								for(var j = 0; j < datas[i].children.length; j++) {
+// 									if(datas[i].children[j].is_hide == 1) {
+// 										arr.push(datas[i].children[j].id);
+// 										if( datas[i].children[j].children){
+// 											for(let z = 0; z < datas[i].children[j].children.length; z++) {
+// 												if(datas[i].children[j].children[z].is_hide == 1) {
+// 													arr.push(datas[i].children[j].children[z].id);
+// 												}
+// 											}
+// 										}
+// 										
+// 									}
+// 
+// 								}
+// 							}
+// 						}
+// 						this.anemdCheckList = arr;
+// 						this.checkGroup = data.data;
+// 						this.showModel = 3;
+// 						this.amend_info.name = e.role_name;
+// 						this.amend_info.idstr = arr.join(",");
+// 						this.amend_info.type = e.is_shop ? '0' : '1';
+// 						this.amend_info.role_id = e.id;
+// 					}
+// 				});
 			},
 			//取消保存用户信息
 			cancel_amend_newInfo() {
