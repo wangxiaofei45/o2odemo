@@ -8,7 +8,7 @@
 						<el-button  type="primary" @click="closeAnAbccount" style="margin-right: 20px;">
 							<svg-icon icon-class="add" style="margin-right: 10px;" /> <span>添加档案室</span>
 						</el-button>
-						<el-input placeholder="输入单据号" style="width:300px;margin-right: 20px;">
+						<el-input placeholder="请输入" style="width:300px;margin-right: 20px;">
 							<el-button slot="append" type="primary" @click='ajaxjson' style="background-color: #e0e0e0;border-radius: 0px;">
 								<svg-icon style="margin-right: 5px;" icon-class="icon_search"/><span>搜索</span>
 							</el-button>
@@ -26,6 +26,11 @@
 					<el-table-column prop="name" label="档案室名称" fixed width="200" align="center">
 					</el-table-column>
 					<el-table-column prop="unitName" label="使用单位名称" width="200" align="center">
+					</el-table-column>
+					<el-table-column prop="url" label="LOGO" width="200" align="center">
+						<template slot-scope="scope">
+							<img style="width: 100px;" :src="scope.row.url" alt="">
+						</template>
 					</el-table-column>
 					<el-table-column prop="phone" label="使用单位联系人电话" align="center">
 					</el-table-column>
@@ -76,6 +81,19 @@
 						<el-col :span="24">
 							<el-form-item label="单位联系人电话" prop="join_code">
 								<el-input placeholder="请输入" v-model="accountFrom.phone"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24">
+							<el-form-item label="LOGO" prop="imageUrl">
+							<el-upload
+							  class="avatar-uploader"
+							  action="https://jsonplaceholder.typicode.com/posts/"
+							  :show-file-list="false"
+							  :on-success="handleAvatarSuccess"
+							  :before-upload="beforeAvatarUpload">
+							  <img v-if="imageUrl" :src="imageUrl" class="avatar">
+							  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+							</el-upload>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24">
@@ -133,6 +151,19 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="24">
+							<el-form-item label="LOGO" prop="imageUrl">
+							<el-upload
+							  class="avatar-uploader"
+							  action="https://jsonplaceholder.typicode.com/posts/"
+							  :show-file-list="false"
+							  :on-success="handleAvatarSuccess"
+							  :before-upload="beforeAvatarUpload">
+							  <img v-if="imageUrl" :src="imageUrl" class="avatar">
+							  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+							</el-upload>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24">
 							<el-form-item label="备注">
 								<el-input placeholder="请输入" v-model="accountFrom.remark"></el-input>
 							</el-form-item>
@@ -157,12 +188,14 @@
 	export default {
 		data() {
 			return {
+				imageUrl:"",
 				//展示出来的数据
 				data: [
 					{
 						nickName:"wxf12",
 						name:"测试档案",
 						unitName:"测试的使用单位",
+						url:"../../../../static/img/demo.jpg",
 						phone:"18888888888"
 					}
 				], 
@@ -173,6 +206,7 @@
 					unitName:"测试的使用单位",
 					phone:"18888888888",
 					remark:"",
+					imageUrl:"",
 				},
 				ruleaccountFrom: {
 					nickName: [{
@@ -203,6 +237,7 @@
 					number:"12234",
 					unitName:"测试的使用单位",
 					phone:"18888888888",
+					imageUrl:"",
 					remark:"",
 				}, //编辑时候的
 				PutInStorageModel: false,
@@ -250,6 +285,22 @@
 					path:"/user"
 				})
 			},
+			// 上传文件
+			handleAvatarSuccess(res, file) {
+				this.imageUrl = URL.createObjectURL(file.raw);
+			  },
+			  beforeAvatarUpload(file) {
+				const isJPG = file.type === 'image/jpeg';
+				const isLt2M = file.size / 1024 / 1024 < 2;
+
+				if (!isJPG) {
+				  this.$message.error('上传头像图片只能是 JPG 格式!');
+				}
+				if (!isLt2M) {
+				  this.$message.error('上传头像图片大小不能超过 2MB!');
+				}
+				return isJPG && isLt2M;
+			  },
 			//新增
 			AddOtherCost(e) {
 				this.$refs[e].validate((valid) => {
@@ -395,13 +446,13 @@
 		z-index: 100;
 		background-color: rgba(0, 0, 0, 0.4);
 		.model_con {
-			width: 550px;
-			height: 450px;
+			width: 650px;
+			height: 700px;
 			position: absolute;
 			left: 50%;
 			top: 50%;
-			margin-top: -225px;
-			margin-left: -275px;
+			margin-top: -350px;
+			margin-left: -325px;
 			background-color: #FFF;
 			padding: 20px;
 			box-sizing: border-box;
@@ -430,4 +481,29 @@
 		padding-bottom: 20px;
 		margin-bottom: 20px;
 	}
+</style>
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>

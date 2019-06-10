@@ -2,20 +2,40 @@
 	<!-- 档案室管理 -->
 	<div>
 		<div class="tab-container">
-		<!-- 	<div class="title">
-				<el-row>
-					<el-col :span="24">
-						<el-button  type="primary" @click="closeAnAbccount" style="margin-right: 20px;">
-							<svg-icon icon-class="add" style="margin-right: 10px;" /> <span>添加用户</span>
-						</el-button>
-						<el-input placeholder="输入 档案室/真实姓名/用户名" style="width:350px;margin-right: 20px;">
-							<el-button slot="append" type="primary" @click='ajaxjson' style="background-color: #e0e0e0;border-radius: 0px;">
-								<svg-icon style="margin-right: 5px;" icon-class="icon_search"/><span>搜索</span>
-							</el-button>
-						</el-input>
+		<el-row class="search">
+			<el-col>
+				<el-form :model="searchfrom" :rules="rules" ref="searchfrom" label-width="100px" class="demo-ruleForm">
+					<el-col :span="6">
+						<el-form-item label="转入转出" prop="room">
+							<el-select placeholder="请选择" v-model="accountFrom.archivesRoom">
+								<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
 					</el-col>
-				</el-row>
-			</div> -->
+					<el-col :span="6">
+						<el-form-item label="类型" prop="boxName">
+							<el-select placeholder="请选择" v-model="accountFrom.archivesRoom">
+								<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<el-col :span="6">
+						<el-form-item label="状态" prop="smipleName">
+							<el-select placeholder="请选择" v-model="accountFrom.archivesRoom">
+								<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+					</el-col>
+					<!-- <el-col :span="24" style="text-align: center;">
+						<el-button type="primary" @click="submitForm('searchfrom')">搜索</el-button>
+						<el-button @click="resetForm('searchfrom')">重置</el-button>
+					</el-col> -->
+				</el-form>
+			</el-col>
+		</el-row>
 			<!--展示出来的表格-->
 			<div class="tTable">
 				<el-table :data="data" stripe border style="width: 100%;" size="mini">
@@ -240,6 +260,12 @@
 	export default {
 		data() {
 			return {
+				searchfrom: {
+					room: "", //档案室
+					boxName: "", //
+					time: "", //时间
+					smipleName: "", //简称
+				},
 				 options: [{
 					  value: '选项1',
 					  label: '黄金糕'
@@ -468,7 +494,7 @@
 	}
 	.search {
 		background: #f4f4f4;
-		padding: 20px 20px 20px;
+		padding: 20px 20px 0px;
 	}
 	.search .el-input{
 		min-width: 220px;

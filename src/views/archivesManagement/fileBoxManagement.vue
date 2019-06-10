@@ -5,14 +5,47 @@
 			<div class="title">
 				<el-row>
 					<el-col :span="24">
-						<el-button  type="primary" @click="closeAnAbccount" style="margin-right: 20px;">
+						<el-button type="primary" @click="closeAnAbccount" style="margin-right: 20px;">
 							<svg-icon icon-class="add" style="margin-right: 10px;" /> <span>添加档案盒</span>
 						</el-button>
-						<el-input placeholder="输入 档案室/真实姓名/用户名" style="width:350px;margin-right: 20px;">
+						<el-button type="primary" @click="select">
+							<svg-icon style="margin-right: 10px;" icon-class="filter"/><span>筛选</span>
+						</el-button>
+						<!-- <el-input placeholder="输入 档案室/真实姓名/用户名" style="width:350px;margin-right: 20px;">
 							<el-button slot="append" type="primary" @click='ajaxjson' style="background-color: #e0e0e0;border-radius: 0px;">
 								<svg-icon style="margin-right: 5px;" icon-class="icon_search"/><span>搜索</span>
 							</el-button>
-						</el-input>
+						</el-input> -->
+					</el-col>
+				</el-row>
+				<el-row v-show="showSelect" class="search">
+					<el-col>
+						<el-form :model="searchfrom" ref="searchfrom" label-width="100px" class="demo-ruleForm">
+							<el-col :span="6">
+								<el-form-item label="档案盒名称" prop="room">
+									<el-input v-model="searchfrom.room"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="档案室名称" prop="boxName">
+									<el-input v-model="searchfrom.boxName"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item  label="年度" prop="time">
+									<el-date-picker type="date" placeholder="选择日期" v-model="searchfrom.time" style="width: 100%;"></el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="简称" prop="smipleName">
+									<el-input v-model="searchfrom.smipleName"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="24" style="text-align: center;">
+								<el-button type="primary" @click="submitForm('searchfrom')">搜索</el-button>
+								<el-button @click="resetForm('searchfrom')">重置</el-button>
+							</el-col>
+						</el-form>
 					</el-col>
 				</el-row>
 			</div>
@@ -43,7 +76,8 @@
 				</el-table>
 			</div>
 			<div class="block" style="margin-top: 15px;">
-				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page" :page-sizes="[10, 20, 30, 40]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total">
+				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page"
+				 :page-sizes="[10, 20, 30, 40]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="total">
 				</el-pagination>
 			</div>
 		</div>
@@ -100,7 +134,7 @@
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="年度" prop="adress">
-								 <el-date-picker v-model="accountFrom.time" type="date" placeholder="选择日期">
+								<el-date-picker v-model="accountFrom.time" type="date" placeholder="选择日期">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
@@ -181,7 +215,7 @@
 						</el-col>
 						<el-col :span="12">
 							<el-form-item label="年度" prop="adress">
-								 <el-date-picker v-model="amendInfo.time" type="date" placeholder="选择日期">
+								<el-date-picker v-model="amendInfo.time" type="date" placeholder="选择日期">
 								</el-date-picker>
 							</el-form-item>
 						</el-col>
@@ -210,33 +244,39 @@
 	export default {
 		data() {
 			return {
-				 options: [{
-					  value: '选项1',
-					  label: '黄金糕'
-					}, {
-					  value: '选项2',
-					  label: '双皮奶'
-					}],
+				imageUrl:"",
+				showSelect: false,
+				searchfrom: {
+					room: "", //档案室
+					boxName: "", //
+					time: "", //时间
+					smipleName: "", //简称
+				},
+				options: [{
+					value: '选项1',
+					label: '黄金糕'
+				}, {
+					value: '选项2',
+					label: '双皮奶'
+				}],
 				//展示出来的数据
-				data: [
-					{
-						name:"真实姓名",
-						nickName:"用户名",
-						sort:23,
-						time:"2018-09",
-						number:1,
-						remake:"",//备注
-					},
-				], 
+				data: [{
+					name: "真实姓名",
+					nickName: "用户名",
+					sort: 23,
+					time: "2018-09",
+					number: 1,
+					remake: "", //备注
+				}, ],
 				//添加时候的提交数据
 				accountFrom: {
-					archivesRoom:"王XX",
-					nickName:"用户名",
-					name:"真实姓名",
-					time:"",
-					sort:"",
-					adress:"",
-					remark:"备注",
+					archivesRoom: "王XX",
+					nickName: "用户名",
+					name: "真实姓名",
+					time: "",
+					sort: "",
+					adress: "",
+					remark: "备注",
 				},
 				ruleaccountFrom: {
 					nickName: [{
@@ -262,14 +302,14 @@
 				},
 				// 编辑时候的信息
 				amendInfo: {
-					archivesRoom:"王XX",
-					number:'sds12',
-					nickName:"用户名",
-					name:"真实姓名",
-					time:"2012-09-31",
-					sort:"",
-					adress:"",
-					remark:"备注",
+					archivesRoom: "王XX",
+					number: 'sds12',
+					nickName: "用户名",
+					name: "真实姓名",
+					time: "2012-09-31",
+					sort: "",
+					adress: "",
+					remark: "备注",
 				}, //编辑时候的
 				PutInStorageModel: false,
 				amendModel: false, //修改时候的弹窗
@@ -286,6 +326,24 @@
 			this.permission = permission;
 		},
 		methods: {
+			// 筛选按钮
+			select() {
+				this.showSelect = !this.showSelect;
+			},
+			submitForm(formName) {
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						alert('submit!');
+					} else {
+						console.log('error submit!!');
+						return false;
+					}
+				});
+			},
+			// 重置表单
+			resetForm(formName) {
+				this.$refs[formName].resetFields();
+			},
 			ajaxjson() {
 				//合并提交
 				let postData = Object.assign({
@@ -293,7 +351,7 @@
 					per_page: this.per_page,
 				})
 				this.$post(this.$earnestList, postData).then((res) => {
-					if(res.status_code == 0) {
+					if (res.status_code == 0) {
 						let datas = res.data.data;
 						//						for(let i = 0; i < datas.length; i++) {
 						//							datas[i].created_at = this.$formatTimestamp(datas[i].created_at);
@@ -313,13 +371,13 @@
 			AddOtherCost(e) {
 				this.$refs[e].validate((valid) => {
 					// 表单的验证 规则
-					if(valid) {
+					if (valid) {
 						let postData = this.$objDeepCopy(this.accountFrom);
 						postData.user_id = sessionStorage.getItem('id');
 						postData.earnest_money = postData.earnest_money * 100 + '';
 						this.$post(this.$earnestAdd, postData).then((res) => {
 							let data = res;
-							if(data.status_code == 0) {
+							if (data.status_code == 0) {
 								this.$message({
 									type: 'success',
 									message: data.message,
@@ -349,16 +407,16 @@
 				// this.$delete(this.$earnestDelEarnest, postData);
 			},
 			// 跳转到档案查询页
-			gotosee(e){
+			gotosee(e) {
 				this.$router.push({
-					path:"/archivesManagement/documentQuery",
+					path: "/archivesManagement/documentQuery",
 				})
 			},
 			//打开编辑
 			goToEditor(e) {
 				let amendInfo = this.$objDeepCopy(e);
 				amendInfo.dateTime = this.$formatTimestamp(amendInfo.created_at);
-				if(amendInfo.status == 1) {
+				if (amendInfo.status == 1) {
 					this.disabled = true;
 				} else {
 					this.disabled = false;
@@ -370,12 +428,12 @@
 			//编辑
 			amend(e) {
 				this.$refs[e].validate((valid) => {
-					if(valid) {
+					if (valid) {
 						let postData = this.$objDeepCopy(this.amendInfo);
 						postData.earnest_money = postData.earnest_money * 100 + '';
 						this.$post(this.$earnestEditEarnest, postData).then((res) => {
 							let data = res;
-							if(data.status_code == 0) {
+							if (data.status_code == 0) {
 								this.$message({
 									type: 'success',
 									message: data.message,
@@ -404,8 +462,8 @@
 				this.page = val;
 				this.getSaleInfo();
 			},
-			indexMethod(index){
-				return (this.page - 1)* this.per_page+index+1;
+			indexMethod(index) {
+				return (this.page - 1) * this.per_page + index + 1;
 			},
 			//新增生成单号
 			closeAnAbccount() {
@@ -427,29 +485,26 @@
 	.title {
 		margin-bottom: 15px;
 	}
+	
 	.search {
 		background: #f4f4f4;
-		padding: 20px 20px 20px;
+		padding: 20px;
+		margin-top: 20px;
+		.el-input {
+			min-width: 220px;
+		}
+		.el-select {
+			min-width: 220px;
+		}
 	}
-	.search .el-input{
-		min-width: 220px;
-	}
-	.search .el-select{
-		min-width: 220px;
-	}
-	.search span {
-		display: inline-block;
-		margin-left: 50px;
-		margin-top: 30px;
-	}
-	
 	.tTable {
 		margin-top: 20px;
 	}
-	
+
 	.tab-container {
 		margin: 25px;
 	}
+
 	.model {
 		position: absolute;
 		left: 0px;
@@ -458,6 +513,7 @@
 		bottom: 0px;
 		z-index: 100;
 		background-color: rgba(0, 0, 0, 0.4);
+
 		.model_con {
 			width: 900px;
 			height: 450px;
@@ -470,28 +526,35 @@
 			padding: 20px;
 			box-sizing: border-box;
 			border-radius: 15px;
+
 			.bottom {
 				text-align: center;
 			}
+
 			.title {
 				color: #666666;
 				font-size: 16px;
 			}
 		}
+
 		.model_con .el-input {
 			width: 300px;
 		}
+
 		.model_con .el-select {
 			width: 300px;
 		}
+
 		.model_con .el-input[type='textarea'] {
 			width: 300px;
 		}
 	}
+
 	.delete {
 		text-align: center;
 		margin-top: 50px;
 	}
+
 	.model_title {
 		border-bottom: 1px solid #d6d6d6;
 		padding-bottom: 20px;

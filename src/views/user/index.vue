@@ -52,7 +52,7 @@
 				</el-pagination>
 			</div>
 		</div>
-		<!--添加档案室-->
+		<!--添加用户-->
 		<div class="model" v-show="PutInStorageModel">
 			<div class="model_con">
 				<el-row class="model_title">
@@ -126,7 +126,14 @@
 						</el-col>
 						<el-col :span="24">
 							<el-form-item label="档案盒" prop="fileBox">
-								<el-input placeholder="请输入" v-model="accountFrom.fileBox"></el-input>
+								<el-select placeholder="请选择档案室" v-model="accountFrom.archivesRoom">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
+								<el-select placeholder="请选择档案盒" v-model="accountFrom.archivesRoom">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -217,7 +224,14 @@
 						</el-col>
 						<el-col :span="24">
 							<el-form-item label="档案盒" prop="fileBox">
-								<el-input placeholder="请输入" v-model="amendInfo.fileBox"></el-input>
+								<el-select placeholder="请选择档案室" v-model="accountFrom.archivesRoom">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
+								<el-select placeholder="请选择档案盒" v-model="accountFrom.archivesRoom">
+									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+									</el-option>
+								</el-select>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -271,7 +285,7 @@
 				//添加时候的提交数据
 				accountFrom: {
 					role:"档案管理员",
-					archivesRoom:"王XX",
+					archivesRoom:"",
 					nickName:"用户名",
 					password:"123456",
 					name:"真实姓名",

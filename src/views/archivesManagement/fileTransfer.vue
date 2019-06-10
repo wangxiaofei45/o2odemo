@@ -29,7 +29,7 @@
           </el-col>
         </el-row>
         <el-row style="text-align: center">
-          <el-button type="primary" @click="getCheckedKeys">转移</el-button>
+          <el-button type="primary" @click="getCheckedKeys">转移档案</el-button>
         </el-row>
       </el-row>
     </div>
@@ -52,7 +52,7 @@
           </el-col>
         </el-row>
         <el-row style="text-align: center">
-          <el-button type="primary" @click="getCheckedKeys">转移</el-button>
+          <el-button type="primary" @click="getCheckedKeys">转移档案盒</el-button>
         </el-row>
       </el-row>
     </div>

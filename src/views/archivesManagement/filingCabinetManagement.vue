@@ -8,11 +8,18 @@
 						<el-button  type="primary" @click="closeAnAbccount" style="margin-right: 20px;">
 							<svg-icon icon-class="add" style="margin-right: 10px;" /> <span>添加档案柜</span>
 						</el-button>
-						<el-input placeholder="输入 档案室/真实姓名/用户名" style="width:350px;margin-right: 20px;">
-							<el-button slot="append" type="primary" @click='ajaxjson' style="background-color: #e0e0e0;border-radius: 0px;">
+						<el-input placeholder="输入 档案室/真实姓名/用户名" style="width:300px;">
+							<!-- <el-button slot="append" type="primary" @click='ajaxjson' style="background-color: #e0e0e0;border-radius: 0px;">
 								<svg-icon style="margin-right: 5px;" icon-class="icon_search"/><span>搜索</span>
-							</el-button>
+							</el-button> -->
 						</el-input>
+						<el-select placeholder="请选择档案室" v-model="archivesRoom">
+							<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+							</el-option>
+						</el-select>
+						<el-button  type="primary" style="margin-right: 20px;">
+							<span>搜索</span>
+						</el-button>
 					</el-col>
 				</el-row>
 			</div>
@@ -180,6 +187,7 @@
 	export default {
 		data() {
 			return {
+				archivesRoom:"",
 				 options: [{
 					  value: '选项1',
 					  label: '黄金糕'
@@ -394,6 +402,9 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
 	.title {
 		margin-bottom: 15px;
+		.el-select{
+			min-width: 300px;
+		}
 	}
 	.search {
 		background: #f4f4f4;

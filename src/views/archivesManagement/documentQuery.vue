@@ -8,12 +8,69 @@
 						<el-button  type="primary" @click="closeAnAbccount" style="margin-right: 20px;">
 							<svg-icon icon-class="add" style="margin-right: 10px;" /> <span>添加档案</span>
 						</el-button>
-						<el-input placeholder="档案搜索" style="width:350px;margin-right: 20px;">
+						<!-- <el-input placeholder="档案搜索" style="width:350px;margin-right: 20px;">
 							<el-button slot="append" type="primary" @click='ajaxjson' style="background-color: #e0e0e0;border-radius: 0px;">
 								<svg-icon style="margin-right: 5px;" icon-class="icon_search"/><span>搜索</span>
 							</el-button>
-						</el-input>
+						</el-input> -->
+						<el-button type="primary" @click="select">
+							<svg-icon style="margin-right: 10px;" icon-class="filter"/><span>筛选</span>
+						</el-button>
 					</el-col>
+				</el-row>
+				<el-row v-show="showSelect" class="search">
+						<el-form :model="searchfrom" ref="searchfrom" label-width="100px" class="demo-ruleForm">
+							<el-col :span="6">
+								<el-form-item label="名称" prop="smipleName">
+									<el-input v-model="searchfrom.smipleName"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="档案室名称" prop="boxName">
+									<el-input v-model="searchfrom.boxName"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="档案柜名称" prop="room">
+									<el-input v-model="searchfrom.room"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="档案盒名称" prop="room">
+									<el-input v-model="searchfrom.room"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item  label="年度" prop="time">
+									<el-date-picker type="date" placeholder="选择日期" v-model="searchfrom.time" style="width: 220px;"></el-date-picker>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="编号" prop="smipleName">
+									<el-input v-model="searchfrom.smipleName"></el-input>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="保密等级" prop="smipleName">
+									<el-select placeholder="请选择" v-model="accountFrom.fileroom">
+										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="6">
+								<el-form-item label="状态" prop="smipleName">
+									<el-select placeholder="请选择" v-model="accountFrom.fileroom">
+										<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+										</el-option>
+									</el-select>
+								</el-form-item>
+							</el-col>
+							<el-col :span="24" style="text-align: center;">
+								<el-button type="primary" @click="submitForm('searchfrom')">搜索</el-button>
+								<el-button @click="resetForm('searchfrom')">重置</el-button>
+							</el-col>
+						</el-form>
 				</el-row>
 			</div>
 			<!--展示出来的表格-->
@@ -285,6 +342,13 @@
 	export default {
 		data() {
 			return {
+				showSelect:false,
+				searchfrom: {
+					room: "", //档案室
+					boxName: "", //
+					time: "", //时间
+					smipleName: "", //简称
+				},
 				 options: [{
 					  value: '选项1',
 					  label: '黄金糕'
@@ -400,6 +464,23 @@
 			this.permission = permission;
 		},
 		methods: {
+			select(){
+				this.showSelect = !this.showSelect;
+			},
+			submitForm(formName) {
+				this.$refs[formName].validate((valid) => {
+					if (valid) {
+						alert('submit!');
+					} else {
+						console.log('error submit!!');
+						return false;
+					}
+				});
+			},
+			// 重置表单
+			resetForm(formName) {
+				this.$refs[formName].resetFields();
+			},
 			ajaxjson() {
 				//合并提交
 				let postData = Object.assign({
@@ -543,20 +624,15 @@
 	}
 	.search {
 		background: #f4f4f4;
-		padding: 20px 20px 20px;
+		padding: 20px;
+		margin-top: 20px;
 	}
-	.search .el-input{
-		min-width: 220px;
+	.search .el-input {
+		width: 220px;
 	}
-	.search .el-select{
-		min-width: 220px;
+	.search .el-select {
+		width: 220px;
 	}
-	.search span {
-		display: inline-block;
-		margin-left: 50px;
-		margin-top: 30px;
-	}
-	
 	.tTable {
 		margin-top: 20px;
 	}
