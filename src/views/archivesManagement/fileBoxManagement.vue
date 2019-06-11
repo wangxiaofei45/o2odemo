@@ -244,7 +244,7 @@
 	export default {
 		data() {
 			return {
-				imageUrl:"",
+				
 				showSelect: false,
 				searchfrom: {
 					room: "", //档案室
